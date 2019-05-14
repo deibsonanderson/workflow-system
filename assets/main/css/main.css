@@ -1,0 +1,56 @@
+/* CSS FORM UPDALOAD*/
+.upload-wrapper {cursor:pointer; 
+                 display:inline-block; 
+                 position:relative; 
+                 overflow:hidden;
+}
+.upload-file {cursor:pointer; 
+              position:absolute; 
+              filter:alpha(opacity=0); 
+              -moz-opacity:0.01; 
+              opacity:0.01; 
+              font-size:20px;
+}
+.upload-button {cursor:pointer; 
+                height:30px; 
+                width:30px;
+}
+
+/* CSS Loading */
+.loader {
+    display:none;
+    z-index:999;
+    position:absolute;
+    left:49%;
+    top:49%;
+}
+
+/* Mensagem Alerta Styles */
+div.growlUI { background: url(../../images/check48.png) no-repeat 10px 10px; opacity: 1.0; }
+div.growlUI h1, div.growlUI h2 {color: white; padding: 5px 5px 5px 75px; text-align: left;font-size: 14px;}
+/* Mensagem Alerta  Styles */
+
+/* Mensagem Alerta Styles */
+div.grow2UI { background: url(../../images/close48.png) no-repeat 10px 10px; opacity: 1.0; }
+div.grow2UI h1, div.growlUI h2 {color: white; padding: 5px 5px 5px 75px; text-align: left;font-size: 14px;}
+
+div.dataTables_paginate a.button {
+    margin-right: 5px;
+}
+
+div.dataTables_paginate a {
+    margin-right: 5px;
+}
+
+.cd-timeline__img.cd-timeline__img--ativo {
+    background: #4656e9;
+}
+
+.cd-timeline__img.cd-timeline__img--desativo {
+    background: #ffffff;
+}
+
+.time-line-btn-action {
+	width: 20px;
+}
+
