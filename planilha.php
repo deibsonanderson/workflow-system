@@ -9,14 +9,14 @@ header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header ("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");
 header ("Cache-Control: no-cache, must-revalidate");
 header ("Pragma: no-cache");
-header ("Content-type: application/x-msexcel;charset=UTF-8;");
+header ("Content-type: application/x-msexcel; charset=UTF-8;");
 header ("Content-Disposition: attachment; filename=\"{$arquivo}\"" );
 header ("Content-Description: PHP Generated Data" );
 // Criamos uma tabela HTML com o formato da planilha
 $daoProcesso = new DaoProcesso();
 $objProcesso = $daoProcesso->buscarFluxoProcesso($_GET["id"], null);
 ?>
-<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
+<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%;" border="1">
 	<thead>
 		<tr>
 			<th>T&iacute;tulo</th>
@@ -42,8 +42,9 @@ $objProcesso = $daoProcesso->buscarFluxoProcesso($_GET["id"], null);
 			
 			?>    
 				<tr>
-					<td width="400px" ><?php echo limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
+					<td width="400px" ><?php echo utf8_decode(limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30)); ?></td> 
 					<td style="<?php echo $colorcss; ?>" ><?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?></td> 
+					<td style="text-align: center;"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 				</tr>	
 			<?php
 		}

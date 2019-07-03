@@ -605,6 +605,7 @@ class ViewProcesso {
 			                            <th>Imagem</th>
 			                            <th>Título</th> 
 			                            <th>Valor</th>
+										<th>Status</th>
 			                        </tr>
 								</thead>
 			                    <tbody>
@@ -629,38 +630,40 @@ class ViewProcesso {
 		                        			$imagem = './imagens/atividade/'.$fluxoProcesso->getAtividade()->getImagem();
 		                        		}
 		                        		
+										//debug($fluxoProcesso);
 				                        ?>    
 											<tr>
 												<td style="text-align: center;"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
 					                            <td ><?php echo limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
 					                            <td style="<?php echo $colorcss; ?>" ><?php echo 'R$ '.$sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?></td> 
-					                        </tr>	
+												<td style="text-align: center;"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
+											</tr>	
 										<?php
 			                        }
 									$negativo = $negativo*(-1);
 			                    }
 				                ?>
 					                <tr>
-										<td style="" colspan="3">&nbsp;</td> 
+										<td style="" colspan="4">&nbsp;</td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="2">Provisão:</td> 
+										<td style="" colspan="3">Provisão:</td> 
 						                <td style="" ><?php echo 'R$ '.valorMonetario($objProcesso[0]->getProvisao(),'2'); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="2">Total Positivo:</td> 
+										<td style="" colspan="3">Total Positivo:</td> 
 						                <td style="" ><?php echo 'R$ '.valorMonetario($positivo,'2'); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="2">Total Negativo:</td> 
+										<td style="" colspan="3">Total Negativo:</td> 
 						                <td style="" ><?php echo 'R$ '.valorMonetario($negativo,'2'); ?></td> 
 						            </tr>  
 					                <tr>
-										<td style="" colspan="2">Total Geral:</td> 
+										<td style="" colspan="3">Total Geral:</td> 
 						                <td style="" ><?php echo 'R$ '.valorMonetario(($positivo+$negativo),'2'); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="2">Provisão x Total Geral:</td> 
+										<td style="" colspan="3">Provisão x Total Geral:</td> 
 						                <td style="" ><?php echo 'R$ '.valorMonetario(($objProcesso[0]->getProvisao()+($positivo+$negativo)),'2'); ?></td> 
 						            </tr>     				
 			                    </tbody> 
