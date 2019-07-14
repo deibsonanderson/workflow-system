@@ -197,7 +197,13 @@ class ViewProcesso {
 							funcao="telaVisualizarAtividadeProcesso" 
 							controlador="controladorAtividade" 
 							retorno="div_central"
-							style="cursor: pointer;"><?php echo $fluxoProcesso->getAtividade()->getDescricao(); ?></p>
+							style="cursor: pointer;"><?php echo $fluxoProcesso->getAtividade()->getDescricao(); ?>
+							<br />
+							Valor: <?php 
+							$propriedade = ($fluxoProcesso->getAtividade()->getPropriedade() == '1')?'':'-';
+							echo 'R$ '.$propriedade.moneyFormat($fluxoProcesso->getAtividade()->getValor()); 
+							?>
+							</p>
 						<a  href="#" 
 							id_processo_fluxo="<?php echo $fluxoProcesso->getId(); ?>"
 							id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
@@ -613,7 +619,9 @@ class ViewProcesso {
 		                        if ($objProcesso != null && $objProcesso[0]->getFluxoProcesso() != null) {
 		                        	$positivo = 0;
 		                        	$negativo = 0;
-		                        	
+		                        	$aberto = 0;
+									$fechado = 0;
+									
 		                        	foreach ($objProcesso[0]->getFluxoProcesso() as $fluxoProcesso) {
 		                        		if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
 		                        			$positivo += $fluxoProcesso->getAtividade()->getValor();
@@ -625,6 +633,22 @@ class ViewProcesso {
 		                        			$colorcss = 'color:RED;';
 		                        		}
 		                        		
+										if($fluxoProcesso->getAtivo() == '1' ){
+											if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
+												$aberto += $fluxoProcesso->getAtividade()->getValor();
+											}else{
+												$aberto -= $fluxoProcesso->getAtividade()->getValor();
+											}
+											$colorStatus = 'color:RED;';
+										}else{
+											if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
+												$fechado += $fluxoProcesso->getAtividade()->getValor();
+											}else{
+												$fechado -= $fluxoProcesso->getAtividade()->getValor();
+											}
+											$colorStatus = 'color:BLUE;';
+										}	
+											
 		                        		$imagem = './assets/images/avatar-1.jpg';
 		                        		if($fluxoProcesso->getAtividade()->getImagem() != null && $fluxoProcesso->getAtividade()->getImagem() != ''){
 		                        			$imagem = './imagens/atividade/'.$fluxoProcesso->getAtividade()->getImagem();
@@ -635,8 +659,8 @@ class ViewProcesso {
 											<tr>
 												<td style="text-align: center;"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
 					                            <td ><?php echo limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
-					                            <td style="<?php echo $colorcss; ?>" ><?php echo 'R$ '.$sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?></td> 
-												<td style="text-align: center;"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
+					                            <td style="<?php echo $colorcss; ?>" ><?php echo 'R$ '.$sinal.moneyFormat($fluxoProcesso->getAtividade()->getValor()); ?></td> 
+												<td style="text-align: center; <?php echo $colorStatus; ?>"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 											</tr>	
 										<?php
 			                        }
@@ -648,23 +672,31 @@ class ViewProcesso {
 						            </tr>
 						            <tr>
 										<td style="" colspan="3">Provisão:</td> 
-						                <td style="" ><?php echo 'R$ '.valorMonetario($objProcesso[0]->getProvisao(),'2'); ?></td> 
+						                <td style="" ><?php echo 'R$ '.moneyFormat($objProcesso[0]->getProvisao()); ?></td> 
+						            </tr>
+						            <tr>
+										<td style="" colspan="3">Total Aberto:</td> 
+						                <td style="color:RED;" ><?php echo 'R$ '.moneyFormat($aberto); ?></td> 
+						            </tr>
+						            <tr>
+										<td style="" colspan="3">Total Fechado:</td> 
+						                <td style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($fechado); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" colspan="3">Total Positivo:</td> 
-						                <td style="" ><?php echo 'R$ '.valorMonetario($positivo,'2'); ?></td> 
+						                <td style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($positivo); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" colspan="3">Total Negativo:</td> 
-						                <td style="" ><?php echo 'R$ '.valorMonetario($negativo,'2'); ?></td> 
+						                <td style="color:RED;" ><?php echo 'R$ '.moneyFormat($negativo); ?></td> 
 						            </tr>  
 					                <tr>
-										<td style="" colspan="3">Total Geral:</td> 
-						                <td style="" ><?php echo 'R$ '.valorMonetario(($positivo+$negativo),'2'); ?></td> 
+										<td style="" colspan="3">Total Geral (Positivo x Negativo):</td> 
+						                <td style="" ><?php echo 'R$ '.moneyFormat(($positivo+$negativo)); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" colspan="3">Provisão x Total Geral:</td> 
-						                <td style="" ><?php echo 'R$ '.valorMonetario(($objProcesso[0]->getProvisao()+($positivo+$negativo)),'2'); ?></td> 
+						                <td style="color:#008000;" ><?php echo 'R$ '.moneyFormat(($objProcesso[0]->getProvisao()+($positivo+$negativo))); ?></td> 
 						            </tr>     				
 			                    </tbody> 
 							</table>

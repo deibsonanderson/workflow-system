@@ -107,6 +107,10 @@ function valorMonetario($valor, $conversao) {
     return $valor;
 }
 
+function moneyFormat($number){
+	return number_format($number, 2, ',', '.');  
+}
+
 /**
  * 
  * Função reponsavel Retornar a String que reprensenta o Sexo

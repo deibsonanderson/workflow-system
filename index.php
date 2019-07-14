@@ -39,7 +39,17 @@ unset($_SESSION["login"]);
 	<div id="msgSlide" class="msgSlide"></div>
     <div class="splash-container">
         <div class="card ">
-            <div class="card-header text-center"><a href="./index.php"><img class="logo-img" src="./assets/images/logo.png" alt="logo"></a><span class="splash-description">Please enter your user information.</span></div>
+            <div class="card-header text-center">
+				<a href="./index.php"><img class="logo-img" src="./assets/images/logo.png" alt="logo"></a>
+				<?php 
+				
+				if(isset($_GET["i"]) && $_GET["i"] == '1'){
+					echo '<span style="color:RED;" class="splash-description">Usuário e/ou senha inválido!</span>';
+				} else {	
+					echo '<span class="splash-description">Por favor, insira suas informações de usuário.</span>';
+				}				
+				?>
+			</div>
             <div class="card-body">
 				<form action="login.php" method="post" name="formLogin" id="formLogin" >
 					<input type="hidden" name="retorno" id="retorno" value="msgSlide"/>
