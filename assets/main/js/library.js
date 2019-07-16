@@ -857,9 +857,15 @@ function fcnScrollTop(){
 	$("html, body").animate({ scrollTop: $(document).height()-$(window).height() });
 }
 
+function limparListFilter(){
+	$('.list-filter').remove();
+}
 
-function filtrarTimeline(texto){
-	if(texto == undefined || texto == ''){
+function filtrarTimeline(texto, isDiv){
+	limparListFilter();
+	$('#filtro').val(texto.trim());
+
+	if(texto === undefined || texto === ''){
 		$('.cd-timeline__block').show();
 	}else{
 		$('.cd-timeline__block').hide();
@@ -867,7 +873,11 @@ function filtrarTimeline(texto){
 			var divs = $(this).children();
 			var titulo = $(divs[1]).children().html();
 			if(titulo.trim().toUpperCase().indexOf(texto.trim().toUpperCase()) !== -1){
-			//if(texto.trim() === titulo.trim() ){
+				
+				if(isDiv === false){
+					var html = '<div class="list-filter col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="background-color: #ffffff;min-height: 2.5rem;border: 1px solid #d2d2e4;padding-top: 8px;" onClick="filtrarTimeline(\''+titulo.trim()+'\', true)" >'+titulo.trim()+'</div>';
+					$('#filter').append(html);
+				}
 				$(this).show();
 			}
 		});
