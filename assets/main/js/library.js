@@ -858,4 +858,18 @@ function fcnScrollTop(){
 }
 
 
-
+function filtrarTimeline(texto){
+	if(texto == undefined || texto == ''){
+		$('.cd-timeline__block').show();
+	}else{
+		$('.cd-timeline__block').hide();
+		$('.cd-timeline__block').each(function() {
+			var divs = $(this).children();
+			var titulo = $(divs[1]).children().html();
+			if(titulo.trim().toUpperCase().indexOf(texto.trim().toUpperCase()) !== -1){
+			//if(texto.trim() === titulo.trim() ){
+				$(this).show();
+			}
+		});
+	}
+}

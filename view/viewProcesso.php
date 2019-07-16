@@ -97,25 +97,33 @@ class ViewProcesso {
                 delay: 0,
                 showURL: true,
                 opacity: 0.85
-            });*/
-
+			});*/
         </script>
 		<div id="timeline-top" class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
-				<div class="card-header d-flex">
-		            <h4 class="card-header-title">
-		            <?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 10);?>
-		            </h4>
-		            <div class="toolbar ml-auto">
-		            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
-		            	<?php if($objProcesso != null && $objProcesso[0]->getId() != null ){ ?>
-		            	<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" retorno="div_central" class="btn btn-primary btn-sm formCadastro">Ordernar</a>
-		            	<?php } ?>
-		            </div>
-		        </div>	
+					<div class="card-header d-flex">
+						<h4 class="card-header-title">
+						<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 10);?>
+						</h4>
+						<div class="toolbar ml-auto">
+							<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+							<?php if($objProcesso != null && $objProcesso[0]->getId() != null ){ ?>
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" retorno="div_central" class="btn btn-primary btn-sm formCadastro">Ordernar</a>
+							<?php } ?>
+						</div>
+					</div>
+					<div class="card-header d-flex">
+						<div class="input-group">
+							<input type="text" id="filtro" onKeyUp="filtrarTimeline($(this).val())" class="form-control" placeholder="Informe aqui o título da atividades...">
+							<div class="input-group-append">
+								<button type="button" onClick="filtrarTimeline('')" class="btn btn-light">Limpar</button>
+							</div>
+						</div>
+					</div>						
 		     	</div>
 		     </div>
+
 		</div>
 		<section class="cd-timeline js-cd-timeline">
 			<div class="cd-timeline__container">
