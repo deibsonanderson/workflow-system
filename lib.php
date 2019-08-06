@@ -156,6 +156,16 @@ function desformataData($date) {
     return $ano . "-" . $mes . "-" . $dia;
 }
 
+function validarDate($date){
+	if ($date == "") {
+		return false;
+	}
+	$ano = substr($date, 6, 4);
+	$mes = substr($date, 3, 2);
+	$dia = substr($date, 0, 2);
+	return checkdate($mes,$dia,$ano);
+}
+
 function recuperaData($date) {
     if ($date == "") {
         return "";

@@ -13,7 +13,12 @@ class ViewProcesso {
     }
 
     public function telaCadastrarProcesso($post) {
-        ?>
+     	date_default_timezone_set('America/Sao_Paulo');
+     	$dataIn = date("d/m/Y");
+    	?>
+		<script src="./assets/vendor/datepicker/moment.js"></script>
+	    <script src="./assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
+	    <script src="./assets/vendor/datepicker/datepicker.js"></script>        
         <script type="text/javascript">
         <?php
         echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
@@ -22,6 +27,13 @@ class ViewProcesso {
 			$('#div_usuario').append($('#'+elemento).val()+'-'+$('#'+elemento).attr('descricao')+'<br/>');
 		}
 		 $('.money').mask('000.000.000.000.000,00', {reverse: true});
+
+		 function validarCampo(elemento){
+			 if(validateDate($(elemento).val()) == false){
+			 	msgSlide("17");
+			 	$(elemento).val('<?php echo $dataIn; ?>');
+			 }
+		 }
         </script>
 <div class="row">
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -52,6 +64,16 @@ class ViewProcesso {
 					<label for="provisao" class="col-form-label">Provisão R$</label>
 					<input id="provisao" name="provisao" type="text" value="0,00" class="form-control money" >
 				</div>
+				
+				<div class="form-group">
+				    <label for="fluxo">Vigencia *</label>
+					<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+	                    <input type="text" id="vigencia" onblur="validarCampo(this)" onkeypress="return mascara(event, this, '##/##/####');" maxlength="10" name="vigencia" value="<?php echo $dataIn; ?>" class="form-control datetimepicker-input mgs_alerta" data-target="#datetimepicker4">
+	                    <div class="input-group-append" id="datepicker" name="datepicker" data-target="#datetimepicker4" data-toggle="datetimepicker">
+	                  		<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+	                    </div>
+	                </div>
+                </div>				
 				
 				<div class="form-group">
 					<label for="fluxo">Fluxo *</label>

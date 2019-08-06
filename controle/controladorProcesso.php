@@ -74,8 +74,14 @@ class ControladorProcesso {
             $processo->setTitulo($post["titulo"]);
             $processo->setProvisao(valorMonetario($post["provisao"], "1"));
             $processo->setStatus('1');
+			
+            if($post["vigencia"] == null || $post["vigencia"] == '' || !validarDate($post["vigencia"])){
+				$processo->setData("NOW()");
+			}else{
+				$processo->setData("'".desformataData($post["vigencia"])."'");
+			}
 
-            $fluxo = new Fluxo();
+			$fluxo = new Fluxo();
             $fluxo->setId($post["fluxo"]);
             $processo->setFluxo($fluxo);
 

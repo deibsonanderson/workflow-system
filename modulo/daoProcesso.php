@@ -159,7 +159,7 @@ class DaoProcesso extends Dados {
     public function incluirProcesso($processo,$listFluxoAtividade) {
         try {
             $conexao = $this->ConectarBanco();
-            $sql_processo = "INSERT INTO tb_workflow_processo(id_usuario,id_titulo_fluxo,titulo, descricao,provisao,data, status) VALUES ('" . $processo->getUsuario()->getId() . "','" . $processo->getFluxo()->getId() . "','" . $processo->getTitulo() . "','" . $processo->getDescricao() . "','" . $processo->getProvisao() . "',NOW(),'" . $processo->getStatus() . "')";
+            $sql_processo = "INSERT INTO tb_workflow_processo(id_usuario,id_titulo_fluxo,titulo, descricao,provisao,data, status) VALUES ('" . $processo->getUsuario()->getId() . "','" . $processo->getFluxo()->getId() . "','" . $processo->getTitulo() . "','" . $processo->getDescricao() . "','" . $processo->getProvisao() . "',".$processo->getData().",'" . $processo->getStatus() . "')";
             mysqli_query($conexao, $sql_processo) or die('Erro na execução  do insert!');
             sleep(1);
             $id_processo = mysqli_insert_id($conexao);

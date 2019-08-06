@@ -883,3 +883,44 @@ function filtrarTimeline(texto, isDiv){
 		});
 	}
 }
+
+function mascara(e,src,mask){
+	_TXT = "";
+	if (window.event){
+		_TXT = e.keyCode;
+	} else if (e.which){
+		_TXT = e.which;
+	}
+	if (_TXT == ""){
+		return true;
+	}
+	if (_TXT > 47 && _TXT < 58) {
+		var i = src.value.length;
+		var saida = "#"; //mask.substring(0,1);
+		var texto = mask.substring(i);
+		//alert(texto +" - "+ texto.substring(0,1))
+		if (texto.substring(0,1) != saida){
+			src.value += texto.substring(0,1);
+			if (texto.substring(0,1) == ")"){
+				src.value += " ";
+			}
+		}
+		return true;
+	} else {
+		if (_TXT != 8){
+			return false;
+		} else {
+			return true;
+		}
+	}
+}
+
+function validateDate(data) {
+	var RegExPattern = /^((((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])      [\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))|(((0[1-9]|[12]\d|3[01])(0[13578]|1[02])((1[6-9]|[2-9]\d)?\d{2}))|((0[1-9]|[12]\d|30)(0[13456789]|1[012])((1[6-9]|[2-9]\d)?\d{2}))|((0[1-9]|1\d|2[0-8])02((1[6-9]|[2-9]\d)?\d{2}))|(2902((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00))))$/;
+
+	if (!((data.match(RegExPattern)) && (data != ''))) {
+		return false;
+	} else {
+		return true;
+	}
+}
