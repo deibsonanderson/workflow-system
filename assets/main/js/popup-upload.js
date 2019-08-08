@@ -11,7 +11,6 @@ function fncSubmitArquivo(btnSubmit,objeto) {
 }
 
 function fncInserirArquivo(fomulario, progress, porcentagem, inputFile, arquivoExibicao, caminhoArquivo, tipoArquivo, button) {
-    console.log(button);
     if (fomulario === null) {
         alert('O ID do formulario não foi informado');
     } else {
@@ -25,12 +24,17 @@ function fncInserirArquivo(fomulario, progress, porcentagem, inputFile, arquivoE
                 
                 if(button != null && button != 'undefined'){
                 	$('#'+button).attr("disabled", true);
+                	$('#'+button+'-img').css("display", 'block');
+                	$('#'+button+'-text').css("display", 'none');
                 }                
                 $('#loader').css({display: "block"});
             },
             success: function(data) {
                 if(button != null && button != 'undefined'){
                 	$('#'+button).attr("disabled", false);
+                	$('#'+button+'-img').css("display", 'none');
+                	$('#'+button+'-text').css("display", 'block');
+                	
                 }
                 $('#loader').css({display: "none"});
                 
@@ -73,7 +77,7 @@ function fncRemoverArquivo(inputFile, caminhoArquivo, tipoArquivo, arquivoExibic
         $('#' + arquivoExibicao).css('display', '');
         
     } else if (tipoArquivo === "arquivo") {
-        $('#' + arquivoExibicao).html("<br />Adicione um arquivo clicando no <img src='./img/img_upload.png' border='0' style='float:none;margin:0;width: 20px;' /> ao lado.");
+        $('#' + arquivoExibicao).html("<br />Adicione um arquivo clicando no <img src='./assets/images/img_upload.png' border='0' style='float:none;margin:0;width: 20px;' /> ao lado.");
         $('#' + arquivoExibicao).css('cursor', 'default');
         $('#' + arquivoExibicao).css('text-decoration', 'none');        
     }
@@ -106,7 +110,7 @@ function fncRemoverArquivoAuto(inputFile, caminhoArquivo, tipoArquivo, arquivoEx
         $('#' + arquivoExibicao).attr('src', imagemDefault);
        
     } else if (tipoArquivo === "arquivo") {
-        $('#' + arquivoExibicao).html("<br />Adicione um arquivo clicando no <img src='./img/img_upload.png' border='0' style='float:none;margin:0;width: 20px;' /> ao lado.");
+        $('#' + arquivoExibicao).html("<br />Adicione um arquivo clicando no <img src='./assets/images/img_upload.png' border='0' style='float:none;margin:0;width: 20px;' /> ao lado.");
         $('#' + arquivoExibicao).css('cursor', 'default');
         $('#' + arquivoExibicao).css('text-decoration', 'none');        
     }

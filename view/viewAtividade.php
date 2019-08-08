@@ -560,247 +560,243 @@ class ViewAtividade {
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">          
-		        <div class="card-header d-flex">
-		            <h4 class="card-header-title">Detalhamento</h4>
-		            <div class="toolbar ml-auto">
-		            	<a href="#" onclick="getId(this)" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" id="<?php echo $processoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
-		                <?php
-		                if ($processoFluxo->getAtuante() == 1) {
-		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Desmarcar</a>
-		                <?php
-		                } else if ($processoFluxo->getAtivo() == 1 && $processoFluxo->getAtuante() != 1) {
-		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Marcar</a>
-		                <?php
-		                }
-		
-		                if ($processoFluxo->getAtivo() == 1) {
-		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Fechar</a>
-		                <?php
-		                } else {
-		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Abrir</a>
-		                <?php
-		                }
-		                ?>		                      
-		            </div>
-		        </div>
-			<div class="card-footer">
-				<div class="table-responsive">
-					<table id="example"
-						class="tablesorter table table-striped table-bordered second"
-						style="width: 100%">
-						<thead>
-							<tr>
-								<th>Código</th>
-								<th>Data</th>
-								<th>Título</th>
-								<th>Tipo</th>
-								<th>Processos</th>
-								<th>Valor</th>
-							</tr>
-						</thead>
-						<tbody>
-			                    <?php
-			                    $controladorProcesso = new ControladorProcesso();
-			                    $objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
-			                    if ($objProcesso != null && $objProcesso[0]->getId() != null) {
-			                        foreach ($objProcesso as $processo) {
-			                            ?>    
-			                            <tr>
-								<td class="getId dimensions" style="cursor: pointer"
-									id="<?php echo $processo->getId(); ?>"
-									funcao="telaVisualizarProcesso"
-									controlador="ControladorProcesso" retorno="div_central"
-									style=""
-									title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo str_pad($processo->getId(), 5, '0', STR_PAD_LEFT); ?></td>
-								<td class="getId dimensions" style="cursor: pointer"
-									id="<?php echo $processo->getId(); ?>"
-									funcao="telaVisualizarProcesso"
-									controlador="ControladorProcesso" retorno="div_central"
-									style=""
-									title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo recuperaData($processo->getData()); ?></td>
-								<td class="getId dimensions" style="cursor: pointer"
-									id="<?php echo $processo->getId(); ?>"
-									funcao="telaVisualizarProcesso"
-									controlador="ControladorProcesso" retorno="div_central"
-									style=""
-									title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo limitarTexto($processo->getTitulo(), 40); ?></td>
-								<td class="getId dimensions" style="cursor: pointer"
-									id="<?php echo $processo->getId(); ?>"
-									funcao="telaVisualizarProcesso"
-									controlador="ControladorProcesso" retorno="div_central"
-									style=""
-									title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo ($processo->getFluxo()) ? limitarTexto($processo->getFluxo()->getTitulo(), 40) : ''; ?></td>
-								<td class="" style="text-align: center;"><span>
-				                                    <?php
-				                                    $atividadeFluxoProcesso = null;
-				                                    if ($processo != null && $processo->getFluxoProcesso() != null) {
-				                                        foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
-				                                        	if($fluxoProcesso->getAtividade()->getId() == $objAtividade[0]->getId()){
-				                                        		$atividadeFluxoProcesso = $fluxoProcesso->getAtividade();
-					                                            if ($fluxoProcesso->getAtividade()->getImagem() == "" || $fluxoProcesso->getAtividade()->getImagem() == null) {
-					                                                $imagem = "assets/images/atividade.png";
-					                                            } else {
-					                                                $imagem = "imagens/atividade/" . $fluxoProcesso->getAtividade()->getImagem();
-					                                            }
-					                                            ?>
-					                                            <div style="">
-											<a class="dimensions"
-												atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
-												style="text-decoration: none;"
-												title="<?php echo 'Título: ' . $fluxoProcesso->getAtividade()->getTitulo() . '<br/>Descrição: ' . nl2br($fluxoProcesso->getAtividade()->getDescricao()); ?>">
-
-												<img class="" 
-					                                                    <?php
-					                                                    $estilo = '';
-					                                                    if ($fluxoProcesso->getAtividade()->getId() != $objAtividade[0]->getId()) {
-					                                                        $estilo = 'opacity: 0.1;z-index: 1;';
-					                                                    } else {
-					                                                        $estilo = ';z-index: 1;border: 3px solid #00F;cursor:pointer;';
-					                                                    }
-					                                                    ?>
-					                                                         style="width: 32px; height: 33px; <?php echo $estilo; ?>"                                                         
-					                                                         src="<?php echo $imagem; ?>" />
-											</a>
-										</div>
-					                                            <?php
-				                                        	}
-				                                        }
-				                                    }
-				                                    ?>                                            
-				                                </span></td>
-								<td id="valueChange" class="getId dimensions"
-									style="cursor: pointer"
-									title="<?php echo nl2br($processo->getDescricao()); ?>">
-									<div
-										onclick="inputShow(
-			                                    '<?php echo $processoFluxo->getId(); ?>',
-			                                    '<?php echo $simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');?>',
-			                                    '<?php echo $atividadeFluxoProcesso->getPropriedade();?>')">
+			        <div class="card-header d-flex">
+			            <h4 class="card-header-title">Detalhamento</h4>
+			            <div class="toolbar ml-auto">
+			            	<a href="#" onclick="getId(this)" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" id="<?php echo $processoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+			                <?php
+			                if ($processoFluxo->getAtuante() == 1) {
+			                ?>
+			                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Desmarcar</a>
+			                <?php
+			                } else if ($processoFluxo->getAtivo() == 1 && $processoFluxo->getAtuante() != 1) {
+			                ?>
+			                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Marcar</a>
+			                <?php
+			                }
+			
+			                if ($processoFluxo->getAtivo() == 1) {
+			                ?>
+			                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Fechar</a>
+			                <?php
+			                } else {
+			                ?>
+			                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Abrir</a>
+			                <?php
+			                }
+			                ?>		                      
+			            </div>
+			        </div>
+					
+					<div class="card-footer">
+						<div class="table-responsive">
+							<table id="example" class="tablesorter table table-striped table-bordered second" style="width: 100%">
+								<thead>
+									<tr>
+										<th>Código</th>
+										<th>Data</th>
+										<th>Título</th>
+										<th>Tipo</th>
+										<th>Processos</th>
+										<th>Valor</th>
+									</tr>
+								</thead>
+								<tbody>
+				                    <?php
+				                    $controladorProcesso = new ControladorProcesso();
+				                    $objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
+				                    if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+				                        foreach ($objProcesso as $processo) {
+				                    ?>    
+				                    <tr>
+										<td class="getId dimensions" style="cursor: pointer"
+											id="<?php echo $processo->getId(); ?>"
+											funcao="telaVisualizarProcesso"
+											controlador="ControladorProcesso" retorno="div_central"
+											style=""
+											title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo str_pad($processo->getId(), 5, '0', STR_PAD_LEFT); ?></td>
+										<td class="getId dimensions" style="cursor: pointer"
+											id="<?php echo $processo->getId(); ?>"
+											funcao="telaVisualizarProcesso"
+											controlador="ControladorProcesso" retorno="div_central"
+											style=""
+											title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo recuperaData($processo->getData()); ?></td>
+										<td class="getId dimensions" style="cursor: pointer"
+											id="<?php echo $processo->getId(); ?>"
+											funcao="telaVisualizarProcesso"
+											controlador="ControladorProcesso" retorno="div_central"
+											style=""
+											title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo limitarTexto($processo->getTitulo(), 40); ?></td>
+										<td class="getId dimensions" style="cursor: pointer"
+											id="<?php echo $processo->getId(); ?>"
+											funcao="telaVisualizarProcesso"
+											controlador="ControladorProcesso" retorno="div_central"
+											style=""
+											title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo ($processo->getFluxo()) ? limitarTexto($processo->getFluxo()->getTitulo(), 40) : ''; ?></td>
+										<td class="" style="text-align: center;">
+											<span>
 			                                    <?php
-			                                    if($atividadeFluxoProcesso->getPropriedade() == '1'){
-			                                    	$simbolo = '';
-			                                    }else{
-			                                    	$simbolo = '-';
+			                                    $atividadeFluxoProcesso = null;
+			                                    if ($processo != null && $processo->getFluxoProcesso() != null) {
+			                                        foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
+			                                        	if($fluxoProcesso->getAtividade()->getId() == $objAtividade[0]->getId()){
+			                                        		$atividadeFluxoProcesso = $fluxoProcesso->getAtividade();
+				                                            if ($fluxoProcesso->getAtividade()->getImagem() == "" || $fluxoProcesso->getAtividade()->getImagem() == null) {
+				                                                $imagem = "assets/images/atividade.png";
+				                                            } else {
+				                                                $imagem = "imagens/atividade/" . $fluxoProcesso->getAtividade()->getImagem();
+				                                            }
+				                                            ?>
+				                                            <div style="">
+																<a class="dimensions"
+																	atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+																	style="text-decoration: none;"
+																	title="<?php echo 'Título: ' . $fluxoProcesso->getAtividade()->getTitulo() . '<br/>Descrição: ' . nl2br($fluxoProcesso->getAtividade()->getDescricao()); ?>">
+				                                                    <?php
+				                                                    $estilo = '';
+				                                                    if ($fluxoProcesso->getAtividade()->getId() != $objAtividade[0]->getId()) {
+				                                                        $estilo = 'opacity: 0.1;z-index: 1;';
+				                                                    } else {
+				                                                        $estilo = ';z-index: 1;border: 3px solid #00F;cursor:pointer;';
+				                                                    }
+				                                                    ?>
+																	<img class="" style="width: 32px; height: 33px; <?php echo $estilo; ?>" src="<?php echo $imagem; ?>" />
+																</a>
+															</div>
+				                                            <?php
+			                                        	}
+			                                        }
 			                                    }
-			                                    echo 'R$ '.$simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');
-			                                    ?>
-			                                    </div>
-								</td>
-							</tr> 
-			                            <?php
-			                        }
-			                    }
-			                    ?>    				
-			                </tbody>
-					</table>
-				</div>
-			</div>
-			<div class="card-body">
-				<div class="form-group">
-					<label for="nome" class="col-form-label">Nome *</label> <input
-						id="titulo" name="titulo" type="text" disabled
-						value="<?php echo $objAtividade[0]->getTitulo(); ?>"
-						class="form-control mgs_alerta"
-						onkeyup="this.value=this.value.toUpperCase();">
-				</div>
-				<div class="form-group">
-					<label for="descricao">Descrição</label>
-					<textarea class="form-control" id="descricao" disabled rows="3"><?php echo $objAtividade[0]->getDescricao(); ?></textarea>
-				</div>
-		            <?php
-		            if ($objAtividade != null && $objAtividade[0]->getLink()) {
-		            ?>			
-					<div class="form-group">
-					<label for="link" class="col-form-label">Link</label> <input
-						id="link" type="text" class="form-control" disabled
-						value="<?php echo $objAtividade[0]->getLink(); ?>"
-						onkeyup="this.value=this.value.toLowerCase();">
-				</div>
-		            <?php
-		            }
-		            ?>
-					<div class="form-group">
-					<label>Arquivo Tamanho Máximo: 2MB</label> <input type="hidden"
-						name="arquivo_atividade" id="arquivo_atividade"
-						value="<?php echo $objAtividade[0]->getArquivo(); ?>" /> <span name="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')" style="<?php echo ($objAtividade[0]->getArquivo()) ? 'cursor: pointer; text-decoration: underline;' : '' ?>">
-		                    <?php
-		                    if ($objAtividade != null && $objAtividade[0]->getArquivo()) {
-		                        echo $objAtividade[0]->getArquivo();
-		                    } else {
-		                        ?>Adicione um arquivo clicando no <img
-						src="./assets/images/img_upload.png" border="0"
-						style="float: none; margin: 0; width: 20px;" /><?php
-		                    }
-		                    ?>                                                    
-		                </span>
-				</div>
-
-
-			</div>
-			<div class="card-footer" id="div_comentarios">
-        		<?php 
-        		   echo $this->telaComentariosAtividadeProcesso($processoFluxo->getId());
-        		?>
-		        </div>
-		        <div class="card-body">
-			       	<form action="#" method="post" id="formCadastro" class="">
-		                <input type="hidden" name="retorno" id="retorno" value="div_central"/>
-		                <input type="hidden" name="controlador" id="controlador" value="ControladorComentarioFluxoProcesso"/>
-		                <input type="hidden" name="funcao" id="funcao" value="incluirComentarioFluxoProcesso"/>
-		                <input type="hidden" name="mensagem" id="mensagem" value="1"/>
-		                <input type="hidden" name="id_processo_fluxo" id="id_fluxo_processo" value="<?php echo $processoFluxo->getId(); ?>" />
-		                <input type="hidden" name="id_processo" id="id_processo" value="<?php echo $processoFluxo->getProcesso()->getId(); ?>" />				
-		                <input type="hidden" name="id" id="id_atividade" value="<?php echo ($objAtividade != null) ? $objAtividade[0]->getId() : ''; ?>" />  
-		                <input type="hidden" name="ativo" id="ativo" value="<?php echo $processoFluxo->getAtivo(); ?>" />
-		                <input type="hidden" name="arquivo" id="arquivo" value="" />						
+			                                    ?>                                            
+						                    </span>
+						                </td>
+										<td id="valueChange" class="getId dimensions"
+											style="cursor: pointer"
+											title="<?php echo nl2br($processo->getDescricao()); ?>">
+											<div
+												onclick="inputShow(
+					                                    '<?php echo $processoFluxo->getId(); ?>',
+					                                    '<?php echo $simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');?>',
+					                                    '<?php echo $atividadeFluxoProcesso->getPropriedade();?>')">
+					                                    <?php
+						                                    if($atividadeFluxoProcesso->getPropriedade() == '1'){
+						                                    	$simbolo = '';
+						                                    }else{
+						                                    	$simbolo = '-';
+						                                    }
+						                                    echo 'R$ '.$simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');
+					                                    ?>
+					                        </div>
+										</td>
+									</tr> 
+				                    <?php
+				                        }
+				                    }
+				                    ?>    				
+				                </tbody>
+							</table>
+						</div>
+					</div>
+						
+					<div class="card-body">
+						<div class="form-group">
+							<label for="nome" class="col-form-label">Nome *</label> 
+							<input id="titulo" name="titulo" type="text" disabled value="<?php echo $objAtividade[0]->getTitulo(); ?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+						</div>
 						<div class="form-group">
 							<label for="descricao">Descrição</label>
-							<textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+							<textarea class="form-control" id="descricao" disabled rows="3"><?php echo $objAtividade[0]->getDescricao(); ?></textarea>
 						</div>
-					</form>	       
-			        <div class="form-group">
-		                <table border="0" style="width: 100%">
-		                    <tr>
-		                        <td colspan="3">
-		                            <label>Tamanho Máxima: 2 Megas.</label>&nbsp;&nbsp; 
-		                        </td>
-		                    </tr> 
-		                    <tr style="">
-		                        <td style="width: 20%;text-align: right;">
-		                            <span id="span-teste" class="upload-wrapper" >                                                        
-		                                <form action="./post-imagem.php" method="post" id="form_arquivo">
-		                                    <input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
-		                                    <input name="largura" type="hidden" value="640">
-		                                    <input name="opcao" type="hidden" value="1">
-		                                    <input name="tipoArq" type="hidden" value="arquivo">
-		                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
-		                                    <input type="submit" id="enviar_arquivo" style="display:none;">
-		                                    <img src="./assets/images/img_upload.png" class="upload-button" />
-		
-		                                </form>
-		                            </span>
-		                        </td>
-		                        <td style="width: 20%">
-		                            <img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;margin-bottom:7px;" class="upload-button" />
-		                        </td>
-		                        <td style="width: 60%;">
-		                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
-		                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
-		                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
-		                        </td>                    
-		                    </tr>
-		                </table>	        
+			            <?php
+			            if ($objAtividade != null && $objAtividade[0]->getLink()) {
+			            ?>			
+						<div class="form-group">
+							<label for="link" class="col-form-label">Link</label> 
+							<input id="link" type="text" class="form-control" disabled value="<?php echo $objAtividade[0]->getLink(); ?>" onkeyup="this.value=this.value.toLowerCase();">
+						</div>
+			            <?php
+			            }
+			            ?>
+						<div class="form-group">
+							<label>Arquivo Tamanho Máximo: 2MB</label> 
+							<input type="hidden" name="arquivo_atividade" id="arquivo_atividade" value="<?php echo $objAtividade[0]->getArquivo(); ?>" /> 
+							<span name="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')" style="<?php echo ($objAtividade[0]->getArquivo()) ? 'cursor: pointer; text-decoration: underline;' : '' ?>">
+			                    <?php
+			                    if ($objAtividade != null && $objAtividade[0]->getArquivo()) {
+			                        echo $objAtividade[0]->getArquivo();
+			                    } else {
+			                        ?>Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float: none; margin: 0; width: 20px;" />
+								<?php
+			                    }
+			                    ?>                                                    
+			                </span>
+						</div>
+					</div>
+					<div class="card-footer" id="div_comentarios">
+		        		<?php 
+		        		   echo $this->telaComentariosAtividadeProcesso($processoFluxo->getId());
+		        		?>
+				    </div>
+			        <div class="card-body">
+				       	<form action="#" method="post" id="formCadastro" class="">
+			                <input type="hidden" name="retorno" id="retorno" value="div_central"/>
+			                <input type="hidden" name="controlador" id="controlador" value="ControladorComentarioFluxoProcesso"/>
+			                <input type="hidden" name="funcao" id="funcao" value="incluirComentarioFluxoProcesso"/>
+			                <input type="hidden" name="mensagem" id="mensagem" value="1"/>
+			                <input type="hidden" name="id_processo_fluxo" id="id_fluxo_processo" value="<?php echo $processoFluxo->getId(); ?>" />
+			                <input type="hidden" name="id_processo" id="id_processo" value="<?php echo $processoFluxo->getProcesso()->getId(); ?>" />				
+			                <input type="hidden" name="id" id="id_atividade" value="<?php echo ($objAtividade != null) ? $objAtividade[0]->getId() : ''; ?>" />  
+			                <input type="hidden" name="ativo" id="ativo" value="<?php echo $processoFluxo->getAtivo(); ?>" />
+			                <input type="hidden" name="arquivo" id="arquivo" value="" />						
+							<div class="form-group">
+								<label for="descricao">Descrição</label>
+								<textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+							</div>
+						</form>	       
+				        <div class="form-group">
+			                <table border="0" style="width: 100%">
+			                    <tr>
+			                        <td colspan="3">
+			                            <label>Tamanho Máxima: 2 Megas.</label>&nbsp;&nbsp; 
+			                        </td>
+			                    </tr> 
+			                    <tr style="">
+			                        <td style="width: 20%;text-align: right;">
+			                            <span id="span-teste" class="upload-wrapper" >                                                        
+			                                <form action="./post-imagem.php" method="post" id="form_arquivo">
+			                                    <input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
+			                                    <input name="largura" type="hidden" value="640">
+			                                    <input name="opcao" type="hidden" value="1">
+			                                    <input name="tipoArq" type="hidden" value="arquivo">
+			                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
+			                                    <input type="submit" id="enviar_arquivo" style="display:none;">
+			                                    <img src="./assets/images/img_upload.png" class="upload-button" />
+			
+			                                </form>
+			                            </span>
+			                        </td>
+			                        <td style="width: 20%">
+			                            <img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;margin-bottom:7px;" class="upload-button" />
+			                        </td>
+			                        <td style="width: 60%;">
+			                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
+			                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
+			                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
+			                        </td>                    
+			                    </tr>
+			                </table>	        
+				        </div>
 			        </div>
-		        </div>
-		        <div class="card-header d-flex">
-		            <div class="toolbar ml-auto">
-			            <button id="anexo-btn" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Anexo</button>            	
-		            </div>
-		        </div>	        
+			        <div class="card-header d-flex">
+			            <div class="toolbar ml-auto">
+				            <button id="anexo-btn" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 66px;text-align: center;">
+				            	<span id="anexo-btn-text" style="display: block;">
+				            		Anexo
+				            	</span>
+				            	<img id="anexo-btn-img" src="./assets/images/preloader.gif" style="display: none;width: 20px;margin-left: 10px;" />
+				            </button>            	
+			            </div>
+			        </div>	        
 				</div>
 			</div>
 		</div>
