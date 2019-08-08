@@ -318,6 +318,12 @@ class ControladorProcesso {
     		$processo->setTitulo($post["titulo"]);
     		$processo->setProvisao(valorMonetario($post["provisao"], "1"));
     		
+    		if($post["vigencia"] == null || $post["vigencia"] == '' || !validarDate($post["vigencia"])){
+    			$processo->setData("NOW()");
+    		}else{
+    			$processo->setData("'".desformataData($post["vigencia"])."'");
+    		}
+    		
     		$daoProcesso = new DaoProcesso();
     		if ($daoProcesso->alterarProcesso($processo)) {
     			return $this->telaListarProcesso();

@@ -8,6 +8,13 @@ class ViewMain{
 	//destruidor
 	public function __destruct(){}
 
+	public function checkStyleVencido($date){
+		$result = "";
+		if(strtotime(desformataData($date)) < strtotime(date("Y")."-".date("m")."-".date("d"))){
+			$result = "color:#F0346E;";
+		}
+		return $result;
+	}
 	
 	public function telaListarAtividadesProcessosHaVencer($processos){
 		$isShow = false;
@@ -34,18 +41,18 @@ class ViewMain{
 								</tr>
 							</thead>
 							<tbody>
-							<?php 
+							<?php
 							if($processos != null){
 								foreach ($processos as $processo){
 									if($processo->getFluxoProcesso() != null){
 										foreach($processo->getFluxoProcesso() as $fluxoProcesso){
-		                    ?>    
-								<tr>
-									<td style="text-align:center"><?php echo $fluxoProcesso->getAtividade()->getVencimento(); ?></td> 
-		                            <td style="text-align:center"><?php echo $processo->getTitulo(); ?></td> 
-		                            <td style="text-align:center"><?php echo $fluxoProcesso->getAtividade()->getTitulo(); ?></td>								
-								</tr>	
-							<?php
+											?>    
+												<tr>
+													<td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;"><?php echo $fluxoProcesso->getAtividade()->getVencimento(); ?></td> 
+						                            <td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;"><?php echo $processo->getTitulo(); ?></td> 
+						                            <td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;"><?php echo $fluxoProcesso->getAtividade()->getTitulo(); ?></td>								
+												</tr>	
+											<?php
 										}
 										$isShow = true;
 									}
@@ -57,10 +64,6 @@ class ViewMain{
 					</div>
 				</div>
 		      </div>
-		      <!--div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" id="1" >Não</button>
-		        <button type="button" class="btn btn-primary" id="2" >Sim</button>
-		      </div-->
 		    </div>
 		  </div>
 		</div>

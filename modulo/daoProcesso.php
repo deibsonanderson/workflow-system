@@ -40,7 +40,8 @@ class DaoProcesso extends Dados {
                 $processo->setDescricao($objetoProcesso->descricao);
                 $processo->setStatus($objetoProcesso->status);
                 $processo->setProvisao($objetoProcesso->provisao);
-
+                $processo->setData($objetoProcesso->data);
+                
                 $fluxo = new Fluxo();
                 $fluxo->setId($objetoProcesso->id_titulo_fluxo);
 				
@@ -393,8 +394,7 @@ class DaoProcesso extends Dados {
     public function alterarProcesso($processo){
     	try {
     		$conexao = $this->ConectarBanco();
-    		$sql = "UPDATE tb_workflow_processo SET titulo = '".$processo->getTitulo()."', provisao = '".$processo->getProvisao()."', descricao = '".$processo->getDescricao()."' WHERE id =".$processo->getId()."";
-    		//debug($sql);
+    		$sql = "UPDATE tb_workflow_processo SET titulo = '".$processo->getTitulo()."', provisao = '".$processo->getProvisao()."', descricao = '".$processo->getDescricao()."', data = ".$processo->getData()." WHERE id =".$processo->getId()."";
     		$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do update!');
     		$this->FecharBanco($conexao);
     		return $retorno;
@@ -429,8 +429,8 @@ class DaoProcesso extends Dados {
 							wpf.propriedade_atividade AS propriedade,
                             wp.id_usuario,
 							wa.vencimento,
-                            CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(NOW())) THEN DAY(LAST_DAY(NOW())) ELSE wa.vencimento END ), 2, 0) ,'/',LPAD( MONTH(NOW()), 2, 0),'/',YEAR(NOW())) as vencimento_format,
-							CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(NOW())) THEN DAY(LAST_DAY(NOW())) ELSE wa.vencimento END ), 2, 0),'/',LPAD( MONTH(NOW()+ INTERVAL ".$limitDay." DAY), 2, 0),'/', YEAR(NOW()+ INTERVAL ".$limitDay." DAY)) as vencimento_next
+                            CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0) ,'/',LPAD( MONTH(wp.data), 2, 0),'/',YEAR(wp.data)) as vencimento_format,
+							CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0),'/',LPAD( MONTH(wp.data+ INTERVAL ".$limitDay." DAY), 2, 0),'/', YEAR(wp.data+ INTERVAL ".$limitDay." DAY)) as vencimento_next
 					FROM tb_workflow_processo_fluxo wpf
                     INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
                     INNER JOIN tb_workflow_titulo_fluxo wtf ON (wtf.id = wp.id_titulo_fluxo)
@@ -439,19 +439,19 @@ class DaoProcesso extends Dados {
                     WHERE wpf.status = '1' AND wpf.ativo = '1' AND wp.status = '1' AND wa.vencimento != '' AND wa.vencimento IS NOT NULL 
                     AND ( 
                     
-                    STR_TO_DATE(CONCAT(YEAR(NOW()),'-',MONTH(NOW()),'-', 
-                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(NOW())) THEN DAY(LAST_DAY(NOW())) ELSE wa.vencimento END ) 
-                    ), '%Y-%m-%d') BETWEEN 
-                    STR_TO_DATE(CONCAT(YEAR(NOW()),'-',MONTH(NOW()),'-',DAY(NOW())), '%Y-%m-%d') AND                   
-                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') 
+	                    STR_TO_DATE(CONCAT(YEAR(wp.data),'-',MONTH(wp.data),'-', 
+	                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ) 
+	                    ), '%Y-%m-%d') BETWEEN 
+	                    STR_TO_DATE(CONCAT(YEAR(NOW() - INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() - INTERVAL ".$limitDay." DAY),'-',DAY(NOW() - INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') AND                   
+	                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') 
 
 					OR
 
-					STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-', 
-                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(NOW())) THEN DAY(LAST_DAY(NOW())) ELSE wa.vencimento END ) 
-                    ), '%Y-%m-%d') BETWEEN 
-                    STR_TO_DATE(CONCAT(YEAR(NOW()),'-',MONTH(NOW()),'-',DAY(NOW())), '%Y-%m-%d') AND                   
-                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d')
+						STR_TO_DATE(CONCAT(YEAR(wp.data + INTERVAL ".$limitDay." DAY),'-',MONTH(wp.data + INTERVAL ".$limitDay." DAY),'-', 
+	                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ) 
+	                    ), '%Y-%m-%d') BETWEEN 
+	                    STR_TO_DATE(CONCAT(YEAR(NOW() - INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() - INTERVAL ".$limitDay." DAY),'-',DAY(NOW() - INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') AND                   
+	                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d')
 
 					)";    		
     		

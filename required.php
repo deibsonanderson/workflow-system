@@ -17,3 +17,8 @@
 	<script src="./assets/vendor/charts/morris-bundle/raphael.min.js"></script>
    	<script src="./assets/vendor/charts/morris-bundle/morris.js"></script>
 	<script src="./assets/vendor/charts/charts-bundle/Chart.bundle.js"></script>
+	
+	<script src="./assets/vendor/datepicker/moment.js"></script>
+	<script src="./assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
+	<!--script src="./assets/vendor/datepicker/datepicker.js"></script-->        
+	

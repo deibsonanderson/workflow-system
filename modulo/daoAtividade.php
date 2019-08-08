@@ -59,7 +59,7 @@ class DaoAtividade extends Dados {
     	try {
     		$retorno = array();
     		$conexao = $this->ConectarBanco();
-    		$sql = "SELECT id,titulo,descricao,link,arquivo,imagem,valor,propriedade,status,id_categoria FROM tb_workflow_atividade WHERE status = '1' ";
+    		$sql = "SELECT id,titulo,descricao,link,arquivo,imagem,valor,propriedade,status,id_categoria,vencimento FROM tb_workflow_atividade WHERE status = '1' ";
 			$sql .= ($id_usuario != null) ? " AND id_usuario = " . $id_usuario : "";
     		$sql .= ($id != null) ? " AND id_categoria = " . $id : "";
     		
@@ -130,7 +130,7 @@ class DaoAtividade extends Dados {
         try {
             $retorno = array();
             $conexao = $this->ConectarBanco();
-            $sql = "SELECT a.id,a.titulo,a.descricao,a.link,a.arquivo,a.imagem,a.valor,a.propriedade,a.status,
+            $sql = "SELECT a.id,a.titulo,a.descricao,a.link,a.arquivo,a.imagem,a.valor,a.propriedade,a.status,LPAD(a.vencimento, 2, 0) as vencimento,
                     a.id_categoria,c.nome as nome_categoria, c.status as status_categoria 
 					FROM tb_workflow_atividade a 
 					INNER JOIN tb_workflow_categoria_atividade c ON (a.id_categoria = c.id) ";

@@ -16,9 +16,6 @@ class ViewProcesso {
      	date_default_timezone_set('America/Sao_Paulo');
      	$dataIn = date("d/m/Y");
     	?>
-		<script src="./assets/vendor/datepicker/moment.js"></script>
-	    <script src="./assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
-	    <script src="./assets/vendor/datepicker/datepicker.js"></script>        
         <script type="text/javascript">
         <?php
         echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
@@ -34,6 +31,13 @@ class ViewProcesso {
 			 	$(elemento).val('<?php echo $dataIn; ?>');
 			 }
 		 }
+
+	    if ($("#datetimepicker4").length) {
+	        $('#datetimepicker4').datetimepicker({
+	            format: 'L'
+	        });
+	    }
+		 
         </script>
 <div class="row">
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -748,9 +752,24 @@ class ViewProcesso {
     
     
     public function telaAlterarProcesso($objProcesso) {
+    	date_default_timezone_set('America/Sao_Paulo');
+    	$dataIn = date("d/m/Y");
     	?>
         <script type="text/javascript">
-        <?php
+		function validarCampo(elemento){
+			 if(validateDate($(elemento).val()) == false){
+			 	msgSlide("17");
+			 	$(elemento).val('<?php echo $dataIn; ?>');
+			 }
+		}    	
+
+	    if ($("#datetimepicker4").length) {
+	        $('#datetimepicker4').datetimepicker({
+	            format: 'L'
+	        });
+	    }
+			
+    	<?php
             echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
         ?>
 		$(document).ready(function() {
@@ -790,7 +809,16 @@ class ViewProcesso {
 						<div class="form-group">
 							<label for="provisao" class="col-form-label">Provisão R$</label>
 							<input id="provisao" name="provisao" value="<?php echo valorMonetario($objProcesso[0]->getProvisao(), '2'); ?>" type="text" class="form-control money" >
-						</div>					
+						</div>
+						<div class="form-group">
+						    <label for="fluxo">Vigencia *</label>
+							<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+			                    <input type="text" id="vigencia" onblur="validarCampo(this)" onkeypress="return mascara(event, this, '##/##/####');" maxlength="10" name="vigencia" value="<?php echo recuperaData($objProcesso[0]->getData()); ?>" class="form-control datetimepicker-input mgs_alerta" data-target="#datetimepicker4">
+			                    <div class="input-group-append" id="datepicker" name="datepicker" data-target="#datetimepicker4" data-toggle="datetimepicker">
+			                  		<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+			                    </div>
+			                </div>
+		                </div>													
 					</div>
 				</form>
 				</div>

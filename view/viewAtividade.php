@@ -548,7 +548,7 @@ class ViewAtividade {
     }
 
     public function telaVisualizarAtividadeProcesso($objAtividade, $processoFluxo) {
-        ?>
+    	?>
         <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
         <script type="text/javascript" >
@@ -597,6 +597,7 @@ class ViewAtividade {
 										<th>Data</th>
 										<th>Título</th>
 										<th>Tipo</th>
+										<th>Vencimento</th>
 										<th>Processos</th>
 										<th>Valor</th>
 									</tr>
@@ -633,6 +634,17 @@ class ViewAtividade {
 											controlador="ControladorProcesso" retorno="div_central"
 											style=""
 											title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo ($processo->getFluxo()) ? limitarTexto($processo->getFluxo()->getTitulo(), 40) : ''; ?></td>
+										<td class="getId dimensions" style="cursor: pointer"
+											id="<?php echo $processo->getId(); ?>"
+											funcao="telaVisualizarProcesso"
+											controlador="ControladorProcesso" retorno="div_central"
+											style=""
+											title="<?php echo nl2br($processo->getDescricao()); ?>">
+											<?php 
+												$date = strtotime($processo->getData());
+												echo $objAtividade[0]->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
+											?>
+										</td>
 										<td class="" style="text-align: center;">
 											<span>
 			                                    <?php
