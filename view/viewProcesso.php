@@ -635,6 +635,13 @@ class ViewProcesso {
     
     public function telaRelatorioProcessosAtividades($objProcesso){
     	?>
+        <script type="text/javascript">
+        	$('.tablesorter').dataTable({
+        		"info": false,
+                "paging":false
+            });
+            $('#tooltip').hide();
+        </script>    	
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
@@ -647,12 +654,12 @@ class ViewProcesso {
 			        </div>		
 					<div class="card-body">
 						<div class="table-responsive">
-							<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
+							<table id="rel-atividades" class="tablesorter table table-striped table-bordered second" style="width:100%">
 								<thead>
 									<tr>
 			                            <th>Imagem</th>
 			                            <th>Título</th> 
-			                            <th>Valor</th>
+			                            <th>Valor (R$)</th>
 										<th>Status</th>
 			                        </tr>
 								</thead>
@@ -696,12 +703,11 @@ class ViewProcesso {
 		                        			$imagem = './imagens/atividade/'.$fluxoProcesso->getAtividade()->getImagem();
 		                        		}
 		                        		
-										//debug($fluxoProcesso);
-				                        ?>    
+		                        		?>    
 											<tr>
 												<td style="text-align: center;"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
 					                            <td ><?php echo limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
-					                            <td style="<?php echo $colorcss; ?>" ><?php echo 'R$ '.$sinal.moneyFormat($fluxoProcesso->getAtividade()->getValor()); ?></td> 
+					                            <td style="<?php echo $colorcss; ?>" ><?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?></td> 
 												<td style="text-align: center; <?php echo $colorStatus; ?>"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 											</tr>	
 										<?php
@@ -709,39 +715,42 @@ class ViewProcesso {
 									$negativo = $negativo*(-1);
 			                    }
 				                ?>
+			                    </tbody> 
+							</table>
+							<br/>
+							<br/>
+							<table id="rel-totais" class="tablesorter table table-striped table-bordered second" style="width:100%">
+			                    <tbody>
 					                <tr>
-										<td style="" colspan="4">&nbsp;</td> 
-						            </tr>
-						            <tr>
-										<td style="" colspan="3">Provisão:</td> 
+										<td style="" >Provisão:</td> 
 						                <td style="" ><?php echo 'R$ '.moneyFormat($objProcesso[0]->getProvisao()); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="3">Total Aberto:</td> 
+										<td style="" >Total Aberto:</td> 
 						                <td style="color:RED;" ><?php echo 'R$ '.moneyFormat($aberto); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="3">Total Fechado:</td> 
+										<td style="" >Total Fechado:</td> 
 						                <td style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($fechado); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="3">Total Positivo:</td> 
+										<td style="" >Total Positivo:</td> 
 						                <td style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($positivo); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="3">Total Negativo:</td> 
+										<td style="" >Total Negativo:</td> 
 						                <td style="color:RED;" ><?php echo 'R$ '.moneyFormat($negativo); ?></td> 
 						            </tr>  
 					                <tr>
-										<td style="" colspan="3">Total Geral (Positivo x Negativo):</td> 
+										<td style="" >Total Geral (Positivo x Negativo):</td> 
 						                <td style="" ><?php echo 'R$ '.moneyFormat(($positivo+$negativo)); ?></td> 
 						            </tr>
 						            <tr>
-										<td style="" colspan="3">Provisão x Total Geral:</td> 
+										<td style="" >Provisão x Total Geral:</td> 
 						                <td style="color:#008000;" ><?php echo 'R$ '.moneyFormat(($objProcesso[0]->getProvisao()+($positivo+$negativo))); ?></td> 
-						            </tr>     				
-			                    </tbody> 
-							</table>
+						            </tr>   
+						        </tbody>
+						     </table>       			                    
 						</div>
 					</div>
 				</div>
