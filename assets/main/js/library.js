@@ -924,3 +924,31 @@ function validateDate(data) {
 		return true;
 	}
 }
+
+function findOrigemList(id){
+	var result = null; 
+	$("#sortable li").each(function( index ) {
+	  if($(this).attr("id") == "listArray_"+id){
+		  result = index;
+		  return false;
+	  } 	
+	});
+	return result;
+}
+
+function listUp(id) {
+	var origem = findOrigemList(id);
+	if(origem != null && origem != 0){
+		var destino = parseInt(origem)-1;
+		$("#sortable li:eq("+origem+")").after($("#sortable li:eq("+destino+")"));
+	}
+}
+
+function listDown(id) {
+	var origem = findOrigemList(id);
+	var total = $("#sortable li");
+	if(origem != null && origem != (total.length-1)){
+		var destino = parseInt(origem)+1;
+		$("#sortable li:eq("+origem+")").before($("#sortable li:eq("+destino+")"));
+	}
+}

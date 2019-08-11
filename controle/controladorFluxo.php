@@ -149,8 +149,10 @@ class ControladorFluxo {
             $listAtividades = $controladorAtividade->listarAtividadeByCategoria($id);
             
             if($listAtividades){
+				$indice = 0;
                 foreach ($listAtividades as $atividade){
-                	if($atividade->getPropriedade() == '1'){
+                	
+					if($atividade->getPropriedade() == '1'){
                 		$simbolo = '';
                 		$colorcss = 'color:#4656E9;';
                 	}else{
@@ -164,16 +166,27 @@ class ControladorFluxo {
 					}	
                     ?>
                     <div id="recordsArray_<?php echo $atividade->getId(); ?>" style="margin-bottom: 1px;">
-	                    <li class="list-group-item align-items-center drag-handle">
-	                        <label class="custom-control custom-checkbox">
-							    <input type="checkbox" id="atividades[]" name="atividades[]" class="custom-control-input check-fluxo" value="<?php echo $atividade->getId(); ?>">
-	                            <span class="custom-control-label"><img src="<?php echo $imagem; ?>" style="width: 38px;border: 3px solid #c8c8c8;"></span>
-								<span class="custom-control-label"><?php echo $atividade->getTitulo(); ?> | </span>
-	                            <span class="custom-control-label" style="<?php echo $colorcss; ?>"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></span>
-	                    	</label>   
+	                    <li id="listArray_<?php echo $atividade->getId(); ?>" class="list-group-item align-items-center drag-handle">
+							<div class="row">
+								<div style="margin-top: 10px;" class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+									<label class="custom-control custom-checkbox">
+										<input type="checkbox" id="atividades[]" name="atividades[]" class="custom-control-input check-fluxo" value="<?php echo $atividade->getId(); ?>">
+										<span class="custom-control-label"><img src="<?php echo $imagem; ?>" style="width: 38px;border: 3px solid #c8c8c8;"></span>
+										<span class="custom-control-label"><?php echo $atividade->getTitulo(); ?> | </span>
+										<span class="custom-control-label" style="<?php echo $colorcss; ?>"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></span>
+									</label>
+								</div>
+								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
+									<div style="float:right" class="btn-group-vertical">
+										<i class="btn btn-light btn-sm fa fa-arrow-up" aria-hidden="true" onclick="listUp(<?php echo $atividade->getId(); ?>)"></i>
+										<i class="btn btn-light btn-sm fa fa-arrow-down" aria-hidden="true" onclick="listDown(<?php echo $atividade->getId(); ?>)"></i>
+									</div>
+								</div>
+							</div>
 	                    </li>
                     </div>
                     <?php
+					++$indice;
                 }
             }
             
@@ -222,13 +235,23 @@ class ControladorFluxo {
     				}
     				?>
                     <div id="recordsArray_<?php echo $atividade->getId(); ?>" style="margin-bottom: 1px;">
-	                    <li class="list-group-item align-items-center drag-handle">
-	                        <label class="custom-control custom-checkbox">
-							    <input type="checkbox" id="atividades[]" name="atividades[]" class="custom-control-input check-fluxo" value="<?php echo $atividade->getId(); ?>" <?php echo $checked; ?>>
-	                            <span class="custom-control-label"><img src="<?php echo $imagem; ?>" style="width: 38px;border: 3px solid #c8c8c8;"></span>
-								<span class="custom-control-label"><?php echo $atividade->getTitulo(); ?> | </span>
-	                            <span class="custom-control-label" style="<?php echo $colorcss; ?>"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></span>
-	                    	</label>   
+	                    <li id="listArray_<?php echo $atividade->getId(); ?>" class="list-group-item align-items-center drag-handle">
+	                        <div class="row">
+							<div style="margin-top: 10px;" class="col-xl-10 col-lg-10 col-md-10 col-sm-10 col-10">
+								<label class="custom-control custom-checkbox">
+									<input type="checkbox" id="atividades[]" name="atividades[]" class="custom-control-input check-fluxo" value="<?php echo $atividade->getId(); ?>" <?php echo $checked; ?>>
+									<span class="custom-control-label"><img src="<?php echo $imagem; ?>" style="width: 38px;border: 3px solid #c8c8c8;"></span>
+									<span class="custom-control-label"><?php echo $atividade->getTitulo(); ?> | </span>
+									<span class="custom-control-label" style="<?php echo $colorcss; ?>"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></span>
+								</label>
+								</div>
+								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">
+									<div style="float:right" class="btn-group-vertical">
+										<i class="btn btn-light btn-sm fa fa-arrow-up" aria-hidden="true" onclick="listUp(<?php echo $atividade->getId(); ?>)"></i>
+										<i class="btn btn-light btn-sm fa fa-arrow-down" aria-hidden="true" onclick="listDown(<?php echo $atividade->getId(); ?>)"></i>
+									</div>
+								</div>
+							</div>							
 	                    </li>
                     </div>
                     <?php
