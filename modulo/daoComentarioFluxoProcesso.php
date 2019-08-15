@@ -128,7 +128,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     public function incluirComentarioFluxoProcesso($comentarioFluxoProcesso) {
         try {
             $conexao = $this->ConectarBanco();
-            $sql = "INSERT INTO tb_workflow_comentario(descricao,arquivo,id_processo_fluxo,data,status) VALUES ('" . $comentarioFluxoProcesso->getDescricao() . "','" . $comentarioFluxoProcesso->getArquivo() . "','" . $comentarioFluxoProcesso->getFluxoProcesso()->getId() . "',NOW(),'" . $comentarioFluxoProcesso->getStatus() . "')";
+            $sql = "INSERT INTO tb_workflow_comentario(descricao,arquivo,id_processo_fluxo,data,status) VALUES ('" . $comentarioFluxoProcesso->getDescricao() . "','" . $comentarioFluxoProcesso->getArquivo() . "','" . $comentarioFluxoProcesso->getFluxoProcesso()->getId() . "',".$comentarioFluxoProcesso->getData().",'" . $comentarioFluxoProcesso->getStatus() . "')";
             $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do insert!');
             $this->FecharBanco($conexao);
             return $retorno;

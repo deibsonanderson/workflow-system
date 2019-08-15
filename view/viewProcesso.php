@@ -39,68 +39,68 @@ class ViewProcesso {
 	    }
 		 
         </script>
-<div class="row">
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-		<div class="card">        
-        <form action="#" method="post" id="formCadastro" class="">
-            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
-            <input type="hidden" name="controlador" id="controlador" value="ControladorProcesso"/>
-            <input type="hidden" name="funcao" id="funcao" value="incluirProcesso"/>
-            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
-			<div class="card-header d-flex">
-	            <h4 class="card-header-title">Cadatro de Processo</h4>
-	            <div class="toolbar ml-auto">
-	            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
-	            	<a href="#" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Cadastrar</a>
-	            </div>
-            </div>
-			<div class="card-body">				
-				<div class="form-group">
-					<label for="titulo" class="col-form-label">Titulo *</label>
-					<input id="titulo" name="titulo" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card">        
+		        <form action="#" method="post" id="formCadastro" class="">
+		            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
+		            <input type="hidden" name="controlador" id="controlador" value="ControladorProcesso"/>
+		            <input type="hidden" name="funcao" id="funcao" value="incluirProcesso"/>
+		            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
+					<div class="card-header d-flex">
+			            <h4 class="card-header-title">Cadatro de Processo</h4>
+			            <div class="toolbar ml-auto">
+			            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+			            	<a href="#" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Cadastrar</a>
+			            </div>
+		            </div>
+					<div class="card-body">				
+						<div class="form-group">
+							<label for="titulo" class="col-form-label">Titulo *</label>
+							<input id="titulo" name="titulo" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+						</div>
+						<div class="form-group">
+							<label for="descricao">Descrição</label>
+							<textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea>
+						</div>				
+						
+						<div class="form-group">
+							<label for="provisao" class="col-form-label">Provisão R$</label>
+							<input id="provisao" name="provisao" type="text" value="0,00" class="form-control money" >
+						</div>
+						
+						<div class="form-group">
+						    <label for="fluxo">Vigencia *</label>
+							<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+			                    <input type="text" id="vigencia" onblur="validarCampo(this)" onkeypress="return mascara(event, this, '##/##/####');" maxlength="10" name="vigencia" value="<?php echo $dataIn; ?>" class="form-control datetimepicker-input mgs_alerta" data-target="#datetimepicker4">
+			                    <div class="input-group-append" id="datepicker" name="datepicker" data-target="#datetimepicker4" data-toggle="datetimepicker">
+			                  		<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+			                    </div>
+			                </div>
+		                </div>				
+						
+						<div class="form-group">
+							<label for="fluxo">Fluxo *</label>
+							<select id="fluxo" name="fluxo" class="mgs_alerta form-control" >
+		                        <?php
+		                        $controladorFluxo = new ControladorFluxo();
+		                        $listFluxo = $controladorFluxo->listarFluxo();
+		                        if ($listFluxo) {
+		                            foreach ($listFluxo as $fluxo) {
+		                                ?>
+		                                <option value="<?php echo $fluxo->getId() ?>"><?php echo $fluxo->getTitulo(); ?></option>
+		                                <?php
+		                            }
+		                        }
+		                        ?>                               
+							</select>						
+							
+						</div>				
+					</div>
+				</form>
 				</div>
-				<div class="form-group">
-					<label for="descricao">Descrição</label>
-					<textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea>
-				</div>				
-				
-				<div class="form-group">
-					<label for="provisao" class="col-form-label">Provisão R$</label>
-					<input id="provisao" name="provisao" type="text" value="0,00" class="form-control money" >
-				</div>
-				
-				<div class="form-group">
-				    <label for="fluxo">Vigencia *</label>
-					<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-	                    <input type="text" id="vigencia" onblur="validarCampo(this)" onkeypress="return mascara(event, this, '##/##/####');" maxlength="10" name="vigencia" value="<?php echo $dataIn; ?>" class="form-control datetimepicker-input mgs_alerta" data-target="#datetimepicker4">
-	                    <div class="input-group-append" id="datepicker" name="datepicker" data-target="#datetimepicker4" data-toggle="datetimepicker">
-	                  		<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
-	                    </div>
-	                </div>
-                </div>				
-				
-				<div class="form-group">
-					<label for="fluxo">Fluxo *</label>
-					<select id="fluxo" name="fluxo" class="mgs_alerta form-control" >
-                        <?php
-                        $controladorFluxo = new ControladorFluxo();
-                        $listFluxo = $controladorFluxo->listarFluxo();
-                        if ($listFluxo) {
-                            foreach ($listFluxo as $fluxo) {
-                                ?>
-                                <option value="<?php echo $fluxo->getId() ?>"><?php echo $fluxo->getTitulo(); ?></option>
-                                <?php
-                            }
-                        }
-                        ?>                               
-					</select>						
-					
-				</div>				
 			</div>
-		</form>
-		</div>
-	</div>
-</div>		
+		</div>		
         <?php
     }
 

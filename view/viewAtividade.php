@@ -548,6 +548,8 @@ class ViewAtividade {
     }
 
     public function telaVisualizarAtividadeProcesso($objAtividade, $processoFluxo) {
+    	date_default_timezone_set('America/Sao_Paulo');
+    	$dataIn = date("d/m/Y");
     	?>
         <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
@@ -556,6 +558,20 @@ class ViewAtividade {
     	        $('#tooltip').hide();
     	        fncInserirArquivo("form_arquivo", "progress_arquivo", "porcentagem_arquivo", "arquivo", "arquivoAtual", "./arquivos/atividade/", "arquivo", "anexo-btn");
             });
+
+   			function validarCampo(elemento){
+				if(validateDate($(elemento).val()) == false){
+					msgSlide("17");
+					$(elemento).val('<?php echo $dataIn; ?>');
+				}
+			}
+		
+		    if ($("#datetimepicker4").length) {
+		        $('#datetimepicker4').datetimepicker({
+		            format: 'L'
+		        });
+		    }            
+           
         </script>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -728,21 +744,18 @@ class ViewAtividade {
 						</div>
 			            <?php
 			            }
+			            
+			            if ($objAtividade != null && $objAtividade[0]->getArquivo()) {
 			            ?>
 						<div class="form-group">
-							<label>Arquivo Tamanho Máximo: 2MB</label> 
+							<label for="arquivoAtual" class="col-form-label">Arquivo da atividade disponivel:&nbsp;</label> 
 							<input type="hidden" name="arquivo_atividade" id="arquivo_atividade" value="<?php echo $objAtividade[0]->getArquivo(); ?>" /> 
-							<span name="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')" style="<?php echo ($objAtividade[0]->getArquivo()) ? 'cursor: pointer; text-decoration: underline;' : '' ?>">
-			                    <?php
-			                    if ($objAtividade != null && $objAtividade[0]->getArquivo()) {
-			                        echo $objAtividade[0]->getArquivo();
-			                    } else {
-			                        ?>Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float: none; margin: 0; width: 20px;" />
-								<?php
-			                    }
-			                    ?>                                                    
+							<span name="arquivoAtual" onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')" style="cursor: pointer; text-decoration: underline;">
+			                    <?php echo $objAtividade[0]->getArquivo(); ?>       
 			                </span>
+			                &nbsp; <img src="./assets/images/img_upload.png" border="0" style="float: none; margin: 0; width: 20px;" />
 						</div>
+						<?php } ?>
 					</div>
 					<div class="card-footer" id="div_comentarios">
 		        		<?php 
@@ -760,12 +773,43 @@ class ViewAtividade {
 			                <input type="hidden" name="id" id="id_atividade" value="<?php echo ($objAtividade != null) ? $objAtividade[0]->getId() : ''; ?>" />  
 			                <input type="hidden" name="ativo" id="ativo" value="<?php echo $processoFluxo->getAtivo(); ?>" />
 			                <input type="hidden" name="arquivo" id="arquivo" value="" />						
-							<div class="form-group">
-								<label for="descricao">Descrição</label>
-								<textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+							<div class="form-row">
+								<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+									<label for="fluxo">Data Comentário *</label>
+									<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+					                    <input type="text" id="data_comentario" name="data_comentario" onblur="validarCampo(this)" onkeypress="return mascara(event, this, '##/##/####');" maxlength="10" name="vigencia" value="<?php echo $dataIn; ?>" class="form-control datetimepicker-input mgs_alerta" data-target="#datetimepicker4">
+					                    <div class="input-group-append" id="datepicker" name="datepicker" data-target="#datetimepicker4" data-toggle="datetimepicker">
+					                  		<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+					                    </div>
+					                </div>
+								</div>
+								<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+									<label for="descricao">Descrição</label>
+									<textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+								</div>
 							</div>
-						</form>	       
-				        <div class="form-group">
+						</form>
+						<div class="form-row">
+							<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+							    <label>Tamanho Máxima: 2 Megas.</label>&nbsp;&nbsp; 
+								<form action="./post-imagem.php" method="post" id="form_arquivo">
+									<input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
+									<input name="largura" type="hidden" value="640">
+									<input name="opcao" type="hidden" value="1">
+									<input name="tipoArq" type="hidden" value="arquivo">
+									<input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
+									<input type="submit" id="enviar_arquivo" style="display:none;">
+									<img src="./assets/images/img_upload.png" class="upload-button" />
+									<img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;" class="upload-button" />
+								</form>
+							</div>
+							<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+	                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
+	                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
+	                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
+							</div>
+						</div>
+				        <!-- div class="form-group">
 			                <table border="0" style="width: 100%">
 			                    <tr>
 			                        <td colspan="3">
@@ -783,7 +827,6 @@ class ViewAtividade {
 			                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
 			                                    <input type="submit" id="enviar_arquivo" style="display:none;">
 			                                    <img src="./assets/images/img_upload.png" class="upload-button" />
-			
 			                                </form>
 			                            </span>
 			                        </td>
@@ -797,7 +840,7 @@ class ViewAtividade {
 			                        </td>                    
 			                    </tr>
 			                </table>	        
-				        </div>
+				        </div-->
 			        </div>
 			        <div class="card-header d-flex">
 			            <div class="toolbar ml-auto">
@@ -832,7 +875,7 @@ class ViewAtividade {
                 ++$cont;
                 ?>
                     <tr>
-                        <td><label style="width: 170px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
+                        <td id="valueDateChange" onclick="inputDateShow();"><label style="width: 170px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
                         <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
                         <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
