@@ -625,7 +625,7 @@ class ViewAtividade {
 				                    if ($objProcesso != null && $objProcesso[0]->getId() != null) {
 				                        foreach ($objProcesso as $processo) {
 				                    ?>    
-				                    <tr>
+				                    <tr style="text-align:center;">
 										<td class="getId dimensions" style="cursor: pointer"
 											id="<?php echo $processo->getId(); ?>"
 											funcao="telaVisualizarProcesso"
@@ -656,9 +656,13 @@ class ViewAtividade {
 											controlador="ControladorProcesso" retorno="div_central"
 											style=""
 											title="<?php echo nl2br($processo->getDescricao()); ?>">
-											<?php 
-												$date = strtotime($processo->getData());
-												echo $objAtividade[0]->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
+											<?php
+												if($objAtividade[0]->getVencimento() != "" && $objAtividade[0]->getVencimento() != null && $objAtividade[0]->getVencimento() != "00"){
+													$date = strtotime($processo->getData());
+													echo $objAtividade[0]->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
+												}else{
+													echo "-";
+												}
 											?>
 										</td>
 										<td class="" style="text-align: center;">
