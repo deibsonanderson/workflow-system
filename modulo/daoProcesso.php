@@ -96,13 +96,13 @@ class DaoProcesso extends Dados {
                     WHERE wpf.status = '1' AND wp.status = '1' ";
             $sql .= ($id_usuario != null) ? " AND wp.id_usuario = " . $id_usuario : "";
 
-            $sql .= " ORDER BY wp.data DESC, wpf.ativo ASC ";
+            $sql .= " ORDER BY wp.data DESC, wpf.ativo ASC, wp.id DESC ";
 
             $query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
             $ultimo_id = 0;
             $processo = new Processo();
             while ($objetoFluxoProcesso = mysqli_fetch_object($query)) {
-                if ($ultimo_id != $objetoFluxoProcesso->id_processo) {
+                if ($ultimo_id !== $objetoFluxoProcesso->id_processo) {
                     if ($ultimo_id !== 0) {
                         $processo->setFluxoProcesso($aux);
                         $aux = null;
@@ -149,7 +149,6 @@ class DaoProcesso extends Dados {
             $processo->setFluxoProcesso($aux);
 
             $retorno[] = $processo;
-
             $this->FecharBanco($conexao);
             return $retorno;
         } catch (Exception $e) {
