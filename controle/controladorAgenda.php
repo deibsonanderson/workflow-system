@@ -26,7 +26,8 @@ class ControladorAgenda {
     public function visualiAgenda($post = null) {
         try {
             $daoAgenda = new DaoAgenda();
-            $retorno = $daoAgenda->listarAgenda(desformataData($post["data"]),true);
+            $retorno = $daoAgenda->listarAgenda($post["data"],true);
+            //$retorno = $daoAgenda->listarAgenda(desformataData($post["data"]),true);
             $daoAgenda->__destruct();
             return $retorno;
         } catch (Exception $e) {

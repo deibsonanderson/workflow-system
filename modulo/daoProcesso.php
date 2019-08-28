@@ -85,6 +85,7 @@ class DaoProcesso extends Dados {
                             wa.imagem AS imagem_atividade,
                             wa.arquivo AS arquivo_atividade,
                             wa.descricao AS descricao_atividade,
+							wa.vencimento AS vencimento_atividade,
 							wpf.valor_atividade AS valor,
 							wpf.propriedade_atividade AS propriedade,
                             wp.id_usuario
@@ -141,6 +142,7 @@ class DaoProcesso extends Dados {
                 $atividade->setImagem($objetoFluxoProcesso->imagem_atividade);
                 $atividade->setValor($objetoFluxoProcesso->valor);
                 $atividade->setPropriedade($objetoFluxoProcesso->propriedade);
+                $atividade->setVencimento($objetoFluxoProcesso->vencimento_atividade);
                 
                 $fluxoProcesso->setAtividade($atividade);
 

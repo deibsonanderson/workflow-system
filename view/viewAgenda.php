@@ -11,27 +11,169 @@ class ViewAgenda {
     public function __destruct() {
         
     }
-
+    
     public function telaCadastrarAgenda($post) {
         date_default_timezone_set('America/Sao_Paulo');
 		$dataIn = date("d/m/Y");
 		if($post["data"] !== null){
 			$dataIn = $post["data"];
-		}					
+		}
+		$controladorProcesso = new ControladorProcesso();
+		$objProcesso = $controladorProcesso->listarFluxoProcesso($_SESSION["login"]->getId());
+
+		$html = "";
+		if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+			foreach ($objProcesso as $processo) {
+				if ($processo->getFluxoProcesso() != null) {
+					foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
+						if(($fluxoProcesso->getAtividade()->getVencimento() != null || 
+								$fluxoProcesso->getAtividade()->getVencimento() != "" || 
+								$fluxoProcesso->getAtividade()->getVencimento() != "00") && 
+								($fluxoProcesso->getAtividade()->getTitulo() != null || 
+										trim($fluxoProcesso->getAtividade()->getTitulo()) != "")){
+							
+							    $date = strtotime($processo->getData());
+								$html .= "{
+				                        title: '".trim($processo->getTitulo())."-".trim($fluxoProcesso->getAtividade()->getTitulo())."',
+				                        start: '".date('Y',$date)."-".date('m',$date)."-".$fluxoProcesso->getAtividade()->getVencimento()."',
+				                        backgroundColor: '#4285F4',
+				                        borderColor: '#4285F4'
+				                      },";
+						}						
+					}
+				}
+			}
+			
+			$controladorAgenda = new ControladorAgenda();
+			$agendas = $controladorAgenda->listarAgenda(null);
+			//debug($agendas);
+			if ($agendas != null) {
+				foreach ($agendas as $agenda) {
+					if($agenda->getStatus() == '1'){
+						if($agenda->getAtivo()){
+							$color = "#82db76";	
+						}else{
+							$color = "#ef172c";
+						}	
+						$html .= "{
+			                        title: '".trim($agenda->getDescricao())."',
+			                        start: '".$agenda->getData()."',
+			                        backgroundColor: '".$color."',
+			                        borderColor: '".$color."'
+			                      },";
+						
+					}
+				}
+			}
+			$html = substr($html, 0, strlen($html)-1);
+		}
+		
         ?>
-		<!-- script src="./assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-	    <script src="./assets/vendor/datepicker/moment.js"></script>
-	    <script src="./assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
-	    <script src="./assets/vendor/datepicker/datepicker.js"></script-->
         <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
         <script type="text/javascript" >
             $(document).ready(function() {
-                $('#tooltip').hide();
+                //$('#tooltip').hide();
                 fncInserirArquivo("form_arquivo", "progress_arquivo", "porcentagem_arquivo", "arquivo", "arquivoAtual", "./arquivos/agenda/", "arquivo");
-            });
-        </script> 
 
+	            $('#calendar1').fullCalendar({
+	                header: {
+	                    left: 'prev,next today',
+	                    center: 'title',
+	                    right: 'month,agendaWeek,agendaDay,listWeek'
+	                },
+	                dayClick: function(date, jsEvent, view) {
+	                	//alert('Clicked on: ' + date.format());
+	                	visualizarAgenda(date.format());
+			        },
+	                defaultDate: Date(),//'2018-03-12',
+	                locale: 'pt-br',
+	                navLinks: true, // can click day/week names to navigate views
+	                editable: true,
+	                eventLimit: true, // allow "more" link when too many events
+	                events: [ <?php echo $html; ?> 
+		                /*
+		                {
+	                        title: 'All Day Event',
+	                        start: '2018-03-01',
+	                    },
+	                    {
+	                        title: 'Long Event',
+	                        start: '2018-03-07',
+	                        end: '2018-03-10'
+	                    },
+	                    {
+	                        id: 999,
+	                        title: 'Repeating Event',
+	                        start: '2018-03-09T16:00:00',
+	                        backgroundColor: '#ffc108',
+	                        borderColor: '#ffc108'
+	
+	                    },
+	                    {
+	                        id: 999,
+	                        title: 'Repeating Event',
+	                        start: '2018-03-16T16:00:00',
+	                        backgroundColor: '#ffc108',
+	                        borderColor: '#ffc108'
+	
+	                    },
+	                    {
+	                        title: 'Conference',
+	                        start: '2018-03-11',
+	                        end: '2018-03-13',
+	                        backgroundColor: '#ff407b',
+	                        borderColor: '#ff407b'
+	
+	                    },
+	                    {
+	                        title: 'Meeting',
+	                        start: '2018-03-12T10:30:00',
+	                        end: '2018-03-12T12:30:00',
+	                        backgroundColor: '#25d5f2',
+	                        borderColor: '#25d5f2'
+	                    },
+	                    {
+	                        title: 'Lunch',
+	                        start: '2018-03-12T12:00:00',
+	                        backgroundColor: '#ff407b',
+	                        borderColor: '#ff407b'
+	
+	                    },
+	                    {
+	                        title: 'Meeting',
+	                        start: '2018-03-12T14:30:00',
+	                        backgroundColor: '#25d5f2',
+	                        borderColor: '#25d5f2'
+	                    },
+	                    {
+	                        title: 'Happy Hour',
+	                        start: '2018-03-12T17:30:00'
+	                    },
+	                    {
+	                        title: 'Dinner',
+	                        start: '2018-03-12T20:00:00'
+	                    },
+	                    {
+	                        title: 'Birthday Party',
+	                        start: '2018-03-13T07:00:00',
+	                        backgroundColor: '#ef172c',
+	                        borderColor: '#ef172c'
+	                    },
+	                    {
+	                        title: 'Click for Google qeqewqweq qwe qweqwe qweqweq',
+	                        url: 'http://google.com/',
+	                        start: '2019-08-14',
+	                        backgroundColor: '#4285F4',
+	                        borderColor: '#4285F4'
+	                    }*/
+	                    
+	                ]
+	            });
+
+
+                });
+        </script> 
         <script type="text/javascript">
         <?php
         	echo ($post && $post["isView"] !== "s") ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
@@ -40,37 +182,45 @@ class ViewAgenda {
         <script type="text/javascript" >
             $(document).ready(function() {
                 ordenar();
-                $("#datepicker").datepicker({
+                /*$("#datepicker").datepicker({
                     onSelect: function(dateText, inst) {
-                        $("#txt_data_cad").val(dateText);
+                    	//alert(dateText+'---'+dia+'/'+mes+'/'+ano);
+                    	var mes = dateText.substring(0, 2);
+                    	var dia = dateText.substring(3, 5);
+                    	var ano = dateText.substring(6, 10);
+        				visualizarAgenda(dia+'/'+mes+'/'+ano);
+                    }
+                });*/
+            });
 
-                        $.ajax({
-                            url: 'controlador.php',
-                            type: 'POST',
-                            data: 'retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=telaVisualizarAgenda&data=' + dateText,
-                            success: function(result) {
-                                $('#div_agenda_retorno').html(result);
-                            },
-                            beforeSend: function() {
-                                $('#loader').css({
-                                    display: "block"
-                                });
-                                $('#div-loader').css({
-                                    opacity: 0.5
-                                });
-                            },
-                            complete: function() {
-                                $('#loader').css({
-                                    display: "none"
-                                });
-                                $('#div-loader').css({
-                                    opacity: 1.0
-                                });
-                            }
+            function visualizarAgenda(dateText){
+                $("#txt_data_cad").val(dateText);
+                
+                $.ajax({
+                    url: 'controlador.php',
+                    type: 'POST',
+                    data: 'retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=telaVisualizarAgenda&data=' + dateText,
+                    success: function(result) {
+                        $('#div_agenda_retorno').html(result);
+                    },
+                    beforeSend: function() {
+                        $('#loader').css({
+                            display: "block"
+                        });
+                        $('#div-loader').css({
+                            opacity: 0.5
+                        });
+                    },
+                    complete: function() {
+                        $('#loader').css({
+                            display: "none"
+                        });
+                        $('#div-loader').css({
+                            opacity: 1.0
                         });
                     }
                 });
-            });
+            }
 
             function ordenar() {
                 $("#div_agenda").sortable({opacity: 0.6, cursor: 'move', update: function() {
@@ -180,14 +330,11 @@ class ViewAgenda {
 				<input type="hidden" name="txt_data_cad" id="txt_data_cad" value="<?php echo $dataIn; ?>" />
                 <input type="hidden" name="arquivo" id="arquivo" value="" />					
 				<div class="form-group">
-					<div id="datepicker" ></div>
-				<!-- div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1">
-                    <div class="input-group-append" id="datepicker" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                  		<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
-                    </div>
-                </div-->					
+					<div id='calendar1'></div>
 				</div>
+				<!-- div class="form-group">
+					<div id="datepicker" ></div>
+				</div-->
 				<div class="form-group">
 					<label for="link" class="col-form-label">Link *</label>
 					<input id="link" name="link" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toLowerCase();">

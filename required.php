@@ -2,6 +2,12 @@
     <script src="./assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="./assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <script src="./assets/vendor/multi-select/js/jquery.multi-select.js"></script>
+    
+    <script src='./assets/vendor/full-calendar/js/moment-pt-br.js'></script>    
+    <script src='./assets/vendor/full-calendar/js/fullcalendar.js'></script>
+    <script src='./assets/vendor/full-calendar/js/jquery-ui.min.js'></script>
+    <script src='./assets/vendor/full-calendar/js/calendar.js'></script>
+    
     <script src="./assets/libs/js/main-js.js"></script>
 	<script src="./assets/main/js/library.js"></script>
 	<script src="./assets/main/js/datatables-dt-1.10.18.min.js"></script>
@@ -20,5 +26,4 @@
 	
 	<script src="./assets/vendor/datepicker/moment.js"></script>
 	<script src="./assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
-	<!--script src="./assets/vendor/datepicker/datepicker.js"></script-->        
-	
+	<!--script src="./assets/vendor/datepicker/datepicker.js"></script-->

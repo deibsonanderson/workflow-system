@@ -26,7 +26,6 @@ class DaoAgenda extends Dados {
 			}else{
 				$sql .= " ORDER BY ordem ASC ";
 			}
-            
 			$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
 			while ($objetoAgenda = mysqli_fetch_object($query)) {
                 $agenda = new Agenda();

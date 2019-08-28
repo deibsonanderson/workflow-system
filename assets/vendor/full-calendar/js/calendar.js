@@ -9,6 +9,9 @@ $(function() {
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay,listWeek'
             },
+            dateClick: function(info) {
+                alert('clicked ' + info.dateStr);
+            },            
             defaultDate: '2018-03-12',
             navLinks: true, // can click day/week names to navigate views
             editable: true,

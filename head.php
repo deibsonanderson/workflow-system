@@ -16,6 +16,9 @@
 	<link rel="stylesheet" href="assets/vendor/datatables/css/dataTables.bootstrap4.css">
 	<link rel="stylesheet" href="assets/main/css/main.css">
 	<link rel="stylesheet" href="assets/vendor/datepicker/tempusdominus-bootstrap-4.css" />
+	
+	<link href='./assets/vendor/full-calendar/css/fullcalendar.css' rel='stylesheet' />
+    <link href='./assets/vendor/full-calendar/css/fullcalendar.print.css' rel='stylesheet' media='print' />
     <title>WorkFLow DX</title>
 	
 </head>
