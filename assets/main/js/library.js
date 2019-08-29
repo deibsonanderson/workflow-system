@@ -952,3 +952,126 @@ function listDown(id) {
 		$("#sortable li:eq("+origem+")").before($("#sortable li:eq("+destino+")"));
 	}
 }
+
+
+function visualizarAgenda(dateText){
+	$("#txt_data_cad").val(dateText);
+	
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: 'retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=telaVisualizarAgenda&data=' + dateText,
+		success: function(result) {
+			$('#div_agenda_retorno').html(result);
+		},
+		beforeSend: function() {
+			$('#loader').css({
+				display: "block"
+			});
+			$('#div-loader').css({
+				opacity: 0.5
+			});
+		},
+		complete: function() {
+			$('#loader').css({
+				display: "none"
+			});
+			$('#div-loader').css({
+				opacity: 1.0
+			});
+		}
+	});
+}
+
+function ordenarAgenda() {
+	$("#div_agenda").sortable({opacity: 0.6, cursor: 'move', update: function() {
+			var txt_data_cad = document.getElementById("txt_data_cad").value;
+			var order = $(this).sortable("serialize") + '&action=updateRecordsListings&txt_data_cad=' + txt_data_cad + '&retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=ordernarAgenda';
+			$.ajax({
+				url: 'controlador.php',
+				type: 'POST',
+				data: order,
+				success: function(result) {
+					//$('#div_agenda_retorno').html(result);
+				},
+				beforeSend: function() {
+					$('#loader').css({
+						display: "block"
+					});
+					$('#div-loader').css({
+						opacity: 0.5
+					});
+				},
+				complete: function() {
+					$('#loader').css({
+						display: "none"
+					});
+					$('#div-loader').css({
+						opacity: 1.0
+					});
+				}
+			});
+		}
+	});
+}
+
+function desativarAgenda(id, ativo) {
+	var txt_data_cad = document.getElementById("txt_data_cad").value;
+	var dados = 'id=' + id + '&retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=alterarAgenda&txt_data_cad=' + txt_data_cad + '&ativo=' + ativo;
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: dados,
+		success: function(result) {
+			$('#div_agenda_retorno').html(result);
+		},
+		beforeSend: function() {
+			$('#loader').css({
+				display: "block"
+			});
+			$('#div-loader').css({
+				opacity: 0.5
+			});
+		},
+		complete: function() {
+			$('#loader').css({
+				display: "none"
+			});
+			$('#div-loader').css({
+				opacity: 1.0
+			});
+		}
+	});
+}
+
+function removerAgenda(id) {
+	var dados = 'id=' + id + '&retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=excluirAgenda&mensagem=4';
+	fncRemoverArquivoAuto('arquivo' + id, './arquivos/agenda/', 'arquivo', '', '');
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: dados,
+		success: function(result) {
+			$('#recordsArray_' + id).fadeOut();
+			setTimeout(function() {
+				$('#recordsArray_' + id).remove();
+			}, 3000);
+		},
+		beforeSend: function() {
+			$('#loader').css({
+				display: "block"
+			});
+			$('#div-loader').css({
+				opacity: 0.5
+			});
+		},
+		complete: function() {
+			$('#loader').css({
+				display: "none"
+			});
+			$('#div-loader').css({
+				opacity: 1.0
+			});
+		}
+	});
+}
