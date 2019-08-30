@@ -27,13 +27,86 @@ class ControladorAgenda {
         try {
             $daoAgenda = new DaoAgenda();
             $retorno = $daoAgenda->listarAgenda($post["data"],true);
-            //$retorno = $daoAgenda->listarAgenda(desformataData($post["data"]),true);
             $daoAgenda->__destruct();
             return $retorno;
         } catch (Exception $e) {
             return $e;
         }
-    }	
+    }
+    
+    public function eventosAgenda($id_usuario){
+    	$controladorProcesso = new ControladorProcesso();
+    	$objProcesso = $controladorProcesso->listarFluxoProcesso($id_usuario);
+    	
+    	$eventos = "";
+    	if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+    		foreach ($objProcesso as $processo) {
+    			if ($processo->getFluxoProcesso() != null) {
+    				foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
+    					if(($fluxoProcesso->getAtividade()->getVencimento() != null ||
+    							$fluxoProcesso->getAtividade()->getVencimento() != "" ||
+    							$fluxoProcesso->getAtividade()->getVencimento() != "00") &&
+    							($fluxoProcesso->getAtividade()->getTitulo() != null ||
+    									trim($fluxoProcesso->getAtividade()->getTitulo()) != "")){
+    										
+    										$date = strtotime($processo->getData());
+    										
+    										$eventos .= "{
+									                        title: '".trim($processo->getTitulo())."-".trim($fluxoProcesso->getAtividade()->getTitulo())."',
+									                        start: '".date('Y',$date)."-".date('m',$date)."-".$fluxoProcesso->getAtividade()->getVencimento()."',
+									                        backgroundColor: '#4285F4',
+									                        borderColor: '#4285F4'
+									                      },";
+											
+    					}
+    					//$eventos .= $this->eventosAgendaComentarios($fluxoProcesso->getId());
+    				}
+    			}
+    		}
+    		
+    		$controladorAgenda = new ControladorAgenda();
+    		$agendas = $controladorAgenda->listarAgenda(null);
+    		if ($agendas != null) {
+    			foreach ($agendas as $agenda) {
+    				if($agenda->getStatus() == '1'){
+    					if($agenda->getAtivo()){
+    						$color = "#82db76";
+    					}else{
+    						$color = "#ef172c";
+    					}
+    					$eventos .= "{
+				                        title: '".trim($agenda->getDescricao())."',
+				                        start: '".$agenda->getData()."',
+				                        backgroundColor: '".$color."',
+				                        borderColor: '".$color."'
+				                      },";
+    					
+    				}
+    			}
+    		}
+    		$eventos = substr($eventos, 0, strlen($eventos)-1);
+    	}
+    	
+    	return $eventos;
+    }
+    
+    public function eventosAgendaComentarios($processoFluxoId){
+    	$eventos = '';
+    	$controladorComentario = new ControladorComentarioFluxoProcesso();
+    	$listComentario = $controladorComentario->listarComentarioFluxoProcesso($processoFluxoId);
+    	if($listComentario != null){
+    		foreach ($listComentario as $comentario){
+    			$date = strtotime($comentario->getData());
+    			$eventos .= "{
+		                        title: '".trim(limitarTexto($comentario->getDescricao(),40))."',
+		                        start: '".date('Y-m-d',$date)."',
+		                        backgroundColor: '#FFC108',
+		                        borderColor: '#FFC108'
+		                      },";
+    		}
+    	}
+    	return $eventos;
+    }
 
     public function incluirAgenda($post) {
         try {
@@ -41,14 +114,12 @@ class ControladorAgenda {
             $agenda->setDescricao($post["txt_descricao"]);
             $agenda->setArquivo($post["arquivo"]);
             $agenda->setLink($post["link"]);
-            //date_default_timezone_set('America/Sao_Paulo');
             $agenda->setData(desformataData($post["txt_data_cad"]));
             $agenda->setStatus('1');
             $daoAgenda = new DaoAgenda();
             
             if ($daoAgenda->incluirAgenda($agenda)) {
-                $postVisual = array("data" => $post["txt_data_cad"]);  
-                return $this->telaVisualizarAgenda($postVisual);
+            	return $this->telaCadastrarAgenda(array("data" => desformataData($post["txt_data_cad"])));
             }
             $daoAgenda->__destruct();
         } catch (Exception $e) {
@@ -63,8 +134,7 @@ class ControladorAgenda {
             $agenda->setAtivo($post["ativo"]);
             $daoAgenda = new DaoAgenda();
             if ($daoAgenda->alterarAgenda($agenda)) {
-                $postVisual = array("data" => $post["txt_data_cad"]);  
-                return $this->telaVisualizarAgenda($postVisual);
+                return $this->telaCadastrarAgenda(array("data" => $post["txt_data_cad"]));
             }
             $daoAgenda->__destruct();
         } catch (Exception $e) {
@@ -82,13 +152,42 @@ class ControladorAgenda {
             $daoAgenda = new DaoAgenda();
             if ($daoAgenda->ordernarAgenda($agenda,$updateRecordsArray)) {
                 $postVisual = array("data" => $post["txt_data_cad"]);  
-                return $this->telaVisualizarAgenda($postVisual);
+                return $this->telaVisualizarEventosAgenda($postVisual);
             }
             $daoAgenda->__destruct();
         } catch (Exception $e) {
             return $e;
         }
-    } 
+    }
+    
+    public function telaFullCalendar(){
+    	$controladorAgenda = new ControladorAgenda();
+    	$eventos = $controladorAgenda->eventosAgenda($_SESSION["login"]->getId());
+    	?>
+	     <script type="text/javascript" >
+	     	var txt_data_cad = document.getElementById("txt_data_cad").value;
+
+         	$('#calendar1').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay,listWeek'
+                },
+                dayClick: function(date, jsEvent, view) {
+	                $("#txt_data_cad").val(fncRecuperarData(date.format()));
+                	telaVisualizarEventosAgenda(date.format());
+                	telaVisualizarComentariosAgenda(date.format());
+		        },
+                defaultDate: fncRecuperarData(txt_data_cad),//'2018-03-12',
+                locale: 'pt-br',
+                navLinks: true, // can click day/week names to navigate views
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                events: [ <?php echo $eventos; ?> ]
+            });
+	     </script>	
+    	<?php
+    }
     
     public function excluirAgenda($post) {
         try {
@@ -96,10 +195,21 @@ class ControladorAgenda {
             $daoAgenda = new DaoAgenda();
             $daoAgenda->excluirAgenda($id);
             $daoAgenda->__destruct();
-            return $this->telaListarAgenda();
+            return $this->telaCadastrarAgenda(array("data" => desformataData($post["data"])));
         } catch (Exception $e) {
             return $e;
         }
+    }
+    
+    public function listarComentarioFluxoProcessoByData($post = null) {
+    	try {
+    		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
+    		$retorno = $daoComentarioFluxoProcesso->listarComentarioFluxoProcessoByData(recuperaData($post["data"]));
+    		$daoComentarioFluxoProcesso->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
     }
 
     public function telaCadastrarAgenda($post = null) {
@@ -113,22 +223,32 @@ class ControladorAgenda {
         }
     }
 
-    
-    public function telaVisualizarAgenda($post = null) {
-        try {
-            $viewAgenda = new ViewAgenda();
-            $retorno = $viewAgenda->telaVisualizarAgenda($this->visualiAgenda($post),$post["data"]);
-            $viewAgenda->__destruct();
-            return $retorno;
-        } catch (Exception $e) {
-            return $e;
-        }
+    public function telaVisualizarEventosAgenda($post = null) {
+    	try {
+    		$viewAgenda = new ViewAgenda();
+    		$retorno = $viewAgenda->telaVisualizarEventosAgenda($this->visualiAgenda($post));
+    		$viewAgenda->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
     }
-	
-	
+    
+    public function telaVisualizarComentariosAgenda($post = null) {
+    	try {
+    		$viewAgenda = new ViewAgenda();
+    		$retorno = $viewAgenda->telaVisualizarComentariosAgenda(
+    				$this->listarComentarioFluxoProcessoByData($post));
+    		$viewAgenda->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+     
     public function telaListarAgenda($post = null) {
         try {
-            $viewAgenda = new ViewAgenda();
+        	$viewAgenda = new ViewAgenda();
             $retorno = $viewAgenda->telaListarAgenda($this->listarAgenda(null));
             $viewAgenda->__destruct();
             return $retorno;

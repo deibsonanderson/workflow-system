@@ -116,7 +116,7 @@ class ViewAtividade {
                                     <input name="largura" type="hidden" value="128">
                                     <input name="opcao" type="hidden" value="1">
                                     <input name="tipoArq" type="hidden" value="imagem">
-                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar', this);" >
+                                    <input type="file" name="file" class="upload-file" style="width: 30px;" onchange="javascript: fncSubmitArquivo('enviar', this);" >
                                     <input type="submit" id="enviar" style="display:none;">   
                                     <img src="./assets/images/img_upload.png" class="upload-button" />
                                 </form> 
@@ -796,16 +796,24 @@ class ViewAtividade {
 						<div class="form-row">
 							<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
 							    <label>Tamanho Máxima: 2 Megas.</label>&nbsp;&nbsp; 
-								<form action="./post-imagem.php" method="post" id="form_arquivo">
-									<input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
-									<input name="largura" type="hidden" value="640">
-									<input name="opcao" type="hidden" value="1">
-									<input name="tipoArq" type="hidden" value="arquivo">
-									<input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
-									<input type="submit" id="enviar_arquivo" style="display:none;">
-									<img src="./assets/images/img_upload.png" class="upload-button" />
-									<img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;" class="upload-button" />
-								</form>
+								<table border="0">
+									<tr>
+										<td>
+											<form action="./post-imagem.php" method="post" id="form_arquivo" style="cursor:pointer;">
+												<input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
+												<input name="largura" type="hidden" value="640">
+												<input name="opcao" type="hidden" value="1">
+												<input name="tipoArq" type="hidden" value="arquivo">
+												<input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
+												<input type="submit" id="enviar_arquivo" style="display:none;">
+												<img src="./assets/images/img_upload.png" class="upload-button" />
+											</form>										
+										</td>
+										<td>
+											<img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;" class="upload-button" />
+										</td>
+									</tr>
+								</table>
 							</div>
 							<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
 	                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
@@ -813,38 +821,6 @@ class ViewAtividade {
 	                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
 							</div>
 						</div>
-				        <!-- div class="form-group">
-			                <table border="0" style="width: 100%">
-			                    <tr>
-			                        <td colspan="3">
-			                            <label>Tamanho Máxima: 2 Megas.</label>&nbsp;&nbsp; 
-			                        </td>
-			                    </tr> 
-			                    <tr style="">
-			                        <td style="width: 20%;text-align: right;">
-			                            <span id="span-teste" class="upload-wrapper" >                                                        
-			                                <form action="./post-imagem.php" method="post" id="form_arquivo">
-			                                    <input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
-			                                    <input name="largura" type="hidden" value="640">
-			                                    <input name="opcao" type="hidden" value="1">
-			                                    <input name="tipoArq" type="hidden" value="arquivo">
-			                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
-			                                    <input type="submit" id="enviar_arquivo" style="display:none;">
-			                                    <img src="./assets/images/img_upload.png" class="upload-button" />
-			                                </form>
-			                            </span>
-			                        </td>
-			                        <td style="width: 20%">
-			                            <img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;margin-bottom:7px;" class="upload-button" />
-			                        </td>
-			                        <td style="width: 60%;">
-			                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
-			                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
-			                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
-			                        </td>                    
-			                    </tr>
-			                </table>	        
-				        </div-->
 			        </div>
 			        <div class="card-header d-flex">
 			            <div class="toolbar ml-auto">

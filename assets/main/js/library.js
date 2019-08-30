@@ -29,9 +29,52 @@
 
 // JavaScript 
 
+	/**
+	 * Função responsavel por gerar ação atraves de um bottao ou ate mesmo imagem
+	 * com o diferencial de enviar apenas o id no caso de edição ou exclusao
+	 */
+	function fcnGetData(element) {
+		data = $(element).attr('data');
+		controlador = $(element).attr('controlador');
+		funcao = $(element).attr('funcao');
+		retorno = $(element).attr('retorno');
+		mensagem = $(element).attr('mensagem');
+	
+		$.ajax({
+			url : 'controlador.php',
+			type : 'POST',
+			data : 'retorno=' + retorno + '&controlador=' + controlador
+					+ '&funcao=' + funcao + '&data=' + data + '&isView=s',
+			success : function(result) {
+				$('#' + retorno).html(result);
+			},
+			beforeSend : function() {
+				$('#loader').css({
+					display : "block"
+				});
+				$('#div-loader').css({
+					opacity : 0.5
+				});
+			},
+			complete : function() {
+				$('#loader').css({
+					display : "none"
+				});
+				$('#div-loader').css({
+					opacity : 1.0
+				});
+				$('#div_a').remove();
+				$('#' + retorno).css('display', '');
+				if (mensagem) {
+					msgSlide(mensagem);
+				}
+			}
+		});
+	}	
+
     /**
-     * Função reponsavel por cadastros de formulario
-     */    
+	 * Função reponsavel por cadastros de formulario
+	 */    
     function fncFormCadastro(element){    
 
         valido = true;
@@ -254,6 +297,29 @@
     };
 
 
+    function fncRecuperarData(data){
+        if (data == "" || data == null || data == undefined) {
+            return "";
+        }
+        
+        var ano = data.substring(0, 4);
+        var mes = data.substring(5, 7);
+        var dia = data.substring(8, 11);
+
+        return dia + "/" + mes + "/" + ano;
+    }
+    
+    function fncDesformataData(data){
+        if (data == "" || data == null || data == undefined) {
+            return "";
+        }
+        
+        var dia = data.substring(0, 2);
+        var mes = data.substring(3, 5);
+        var ano = data.substring(6, 10);
+
+        return ano + "-" + mes + "-" + dia;    	
+    }
 
 
     /**
@@ -954,15 +1020,40 @@ function listDown(id) {
 }
 
 
-function visualizarAgenda(dateText){
-	$("#txt_data_cad").val(dateText);
-	
+function telaVisualizarEventosAgenda(dateText){
 	$.ajax({
 		url: 'controlador.php',
 		type: 'POST',
-		data: 'retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=telaVisualizarAgenda&data=' + dateText,
+		data: 'retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=telaVisualizarEventosAgenda&data=' + dateText,
 		success: function(result) {
 			$('#div_agenda_retorno').html(result);
+		},
+		beforeSend: function() {
+			$('#loader').css({
+				display: "block"
+			});
+			$('#div-loader').css({
+				opacity: 0.5
+			});
+		},
+		complete: function() {
+			$('#loader').css({
+				display: "none"
+			});
+			$('#div-loader').css({
+				opacity: 1.0
+			});
+		}
+	});
+}
+
+function telaVisualizarComentariosAgenda(dateText){
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: 'retorno=div_comentario_retorno&controlador=controladorAgenda&funcao=telaVisualizarComentariosAgenda&data=' + dateText,
+		success: function(result) {
+			$('#div_comentario_retorno').html(result);
 		},
 		beforeSend: function() {
 			$('#loader').css({
@@ -1017,13 +1108,13 @@ function ordenarAgenda() {
 
 function desativarAgenda(id, ativo) {
 	var txt_data_cad = document.getElementById("txt_data_cad").value;
-	var dados = 'id=' + id + '&retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=alterarAgenda&txt_data_cad=' + txt_data_cad + '&ativo=' + ativo;
+	var dados = 'id=' + id + '&retorno=div_central&controlador=controladorAgenda&funcao=alterarAgenda&txt_data_cad=' + fncDesformataData(txt_data_cad) + '&ativo=' + ativo;
 	$.ajax({
 		url: 'controlador.php',
 		type: 'POST',
 		data: dados,
 		success: function(result) {
-			$('#div_agenda_retorno').html(result);
+			$('#div_central').html(result);
 		},
 		beforeSend: function() {
 			$('#loader').css({
@@ -1044,18 +1135,78 @@ function desativarAgenda(id, ativo) {
 	});
 }
 
-function removerAgenda(id) {
-	var dados = 'id=' + id + '&retorno=div_agenda_retorno&controlador=controladorAgenda&funcao=excluirAgenda&mensagem=4';
-	fncRemoverArquivoAuto('arquivo' + id, './arquivos/agenda/', 'arquivo', '', '');
+function incluirAgenda(element){    
+
+    valido = true;
+    $('#formCadastro').each(function() {
+        campos = $(this).serialize();
+        retorno = $('[name=retorno]', this).val();
+        mensagem = $('[name=mensagem]', this).val();
+
+    });
+    //Bloco localiza todos os campos da classo mensagem Aleta e exibe o span correpondente
+    $('.mgs_alerta').each(function() {
+
+        if ($(this).val() == '' || $(this).val() == null) {
+            valido = false;
+            $(this).addClass('error');
+
+            if ($('#span_' + $(this).attr('name'))) {
+                $('#span_' + $(this).attr('name')).css('display', '');
+                msgSlide("14");
+            }
+        } else {
+            $(this).removeClass('error');
+            if ($('#span_' + $(this).attr('name'))) {
+                $('#span_' + $(this).attr('name')).css('display', 'none');
+            }
+        }
+    });
+
+    //Caso todos os campos obrigatorios tenham sido preenchido a ação sera execultada
+    if (valido == true) {
+
+        $('#' + retorno).css('display', '');
+        $.ajax({
+            url: 'controlador.php',
+            type: 'POST',
+            data: campos,
+            success: function(result) {
+                $('#' + retorno).html(result);
+            },
+            beforeSend: function() {
+                $('#loader').css({
+                    display: "block"
+                });
+            },
+            complete: function() {
+                $('#loader').css({
+                    display: "none"
+                });
+                if (mensagem) {
+                    msgSlide(mensagem);
+                }
+
+            }
+        });
+    }
+};
+
+
+function removerAgenda(id, arquivo) {
+	var txt_data_cad = document.getElementById("txt_data_cad").value;
+	var dados = 'id=' + id + '&retorno=div_central&controlador=controladorAgenda&funcao=excluirAgenda&data='+txt_data_cad;
 	$.ajax({
 		url: 'controlador.php',
 		type: 'POST',
 		data: dados,
 		success: function(result) {
-			$('#recordsArray_' + id).fadeOut();
-			setTimeout(function() {
-				$('#recordsArray_' + id).remove();
-			}, 3000);
+			$.ajax({
+		        url: 'popup-upload.php',
+		        type: 'GET',
+		        data: 'opcao=2&pastaArquivo=./arquivos/agenda/&arquivo=' + arquivo
+		    });
+			$('#div_central').html(result);
 		},
 		beforeSend: function() {
 			$('#loader').css({
@@ -1072,6 +1223,9 @@ function removerAgenda(id) {
 			$('#div-loader').css({
 				opacity: 1.0
 			});
+            if (mensagem) {
+                msgSlide("4");
+            }
 		}
 	});
 }
