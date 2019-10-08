@@ -226,8 +226,9 @@ class ViewAgenda {
 							<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
 								<thead>
 									<tr>
-										<th>Codigo</th>
-										<th>Título</th>
+										<th>Data</th>
+										<th>Processo</th>
+										<th>Atividade</th>
 										<th>Descri&ccedil;&atilde;o</th> 
 										<th class="sorting_disabled">Arquivo</th> 
 									</tr>
@@ -241,7 +242,8 @@ class ViewAgenda {
 			                    ?>    
 									<tr>
 										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 100px;cursor: pointer;" ><?php echo recuperaData($comentario->getData()); ?></label></td>
-										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 170px;cursor: pointer;"><?php echo limitarTexto($comentario->getProcesso()->getTitulo(), 20); ?></label></td>
+										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 170px;cursor: pointer;"><?php echo limitarTexto($comentario->getProcesso()->getTitulo(), 40); ?></label></td>
+										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 170px;cursor: pointer;"><?php echo limitarTexto($comentario->getFluxoProcesso()->getAtividade()->getTitulo(), 40); ?></label></td>
 										<td <?php echo $getIdProcessoStr; ?> ><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
 										<td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
 											<input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 

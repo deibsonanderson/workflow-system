@@ -39,6 +39,7 @@ class ControladorAgenda {
     	$objProcesso = $controladorProcesso->listarFluxoProcesso($id_usuario);
     	
     	$eventos = "";
+    	$processoFluxoIds = array();
     	if ($objProcesso != null && $objProcesso[0]->getId() != null) {
     		foreach ($objProcesso as $processo) {
     			if ($processo->getFluxoProcesso() != null) {
@@ -59,10 +60,12 @@ class ControladorAgenda {
 									                      },";
 											
     					}
-    					//$eventos .= $this->eventosAgendaComentarios($fluxoProcesso->getId());
+    					$processoFluxoIds[] = $fluxoProcesso->getId();
     				}
     			}
     		}
+    		
+    		$eventos .= $this->eventosAgendaComentarios($processoFluxoIds);
     		
     		$controladorAgenda = new ControladorAgenda();
     		$agendas = $controladorAgenda->listarAgenda(null);
@@ -90,10 +93,10 @@ class ControladorAgenda {
     	return $eventos;
     }
     
-    public function eventosAgendaComentarios($processoFluxoId){
+    public function eventosAgendaComentarios($processoFluxoIds){
     	$eventos = '';
     	$controladorComentario = new ControladorComentarioFluxoProcesso();
-    	$listComentario = $controladorComentario->listarComentarioFluxoProcesso($processoFluxoId);
+    	$listComentario = $controladorComentario->listarComentarioByIdsFluxoProcesso($processoFluxoIds);
     	if($listComentario != null){
     		foreach ($listComentario as $comentario){
     			$date = strtotime($comentario->getData());

@@ -41,6 +41,35 @@ class DaoComentarioFluxoProcesso extends Dados {
         }
     }
     
+    public function listarComentarioByIdsFluxoProcesso($ids = null) {
+    	try {
+    		$retorno = array();
+    		$conexao = $this->ConectarBanco();
+    		$sql = "SELECT id,descricao,arquivo,id_processo_fluxo,data,status FROM tb_workflow_comentario WHERE status = '1' AND descricao != '' ";
+    		$sql .= ($ids != null) ? " AND id_processo_fluxo IN (" . implode(',', array_map('intval', $ids)). ")" : "";
+    		$sql .= " ORDER BY id DESC ";
+    		
+    		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
+    		while ($objetoComentarioFluxoProcesso = mysqli_fetch_object($query)) {
+    			$comentarioFluxoProcesso = new ComentarioFluxoProcesso();
+    			$comentarioFluxoProcesso->setId($objetoComentarioFluxoProcesso->id);
+    			$comentarioFluxoProcesso->setDescricao($objetoComentarioFluxoProcesso->descricao);
+    			$comentarioFluxoProcesso->setArquivo($objetoComentarioFluxoProcesso->arquivo);
+    			$comentarioFluxoProcesso->setStatus($objetoComentarioFluxoProcesso->status);
+    			$comentarioFluxoProcesso->setData($objetoComentarioFluxoProcesso->data);
+    			$fluxoProcesso = new FluxoProcesso();
+    			$fluxoProcesso->setId($objetoComentarioFluxoProcesso->id_processo_fluxo);
+    			$comentarioFluxoProcesso->setFluxoProcesso($fluxoProcesso);
+    			
+    			$retorno[] = $comentarioFluxoProcesso;
+    		}
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
     public function checarComentarioExistent($id = null) {
     	try {
     		$retorno = array();
@@ -75,18 +104,18 @@ class DaoComentarioFluxoProcesso extends Dados {
                            wc.data,
                            wc.status,
                            wpf.id_processo,
-                           wp.titulo,
+						   wpf.titulo_atividade as titulo_atividade_processo,	
+                           wp.titulo as processo_titulo,
                            wp.descricao as processo_descricao,
-						   
-						   wpf.ativo, wpf.atuante,wf.id_atividade
-						   
+						   wpf.ativo, 
+						   wpf.atuante,
+						   wf.id_atividade,
+						   wa.titulo as titulo_atividade						   
                  FROM tb_workflow_comentario wc
-                 LEFT JOIN tb_workflow_processo_fluxo wpf 
-                                         ON (wpf.id = wc.id_processo_fluxo) 
-				 LEFT JOIN tb_workflow_fluxo wf 
-				                         ON ( wf.id = wpf.id_fluxo ) 										 										 
-                 LEFT JOIN tb_workflow_processo wp 
-                                         ON (wp.id = wpf.id_processo) 
+                 LEFT JOIN tb_workflow_processo_fluxo wpf ON (wpf.id = wc.id_processo_fluxo) 
+				 LEFT JOIN tb_workflow_fluxo wf ON ( wf.id = wpf.id_fluxo ) 										 										 
+                 LEFT JOIN tb_workflow_processo wp ON (wp.id = wpf.id_processo) 
+                 LEFT JOIN tb_workflow_atividade wa ON (wa.id = wf.id_atividade)
                  WHERE wc.status = '1' ";
             $sql .= ($data != null) ? " AND DATE_FORMAT(wc.data,'%d/%m/%Y') = '".$data."'" : " AND DATE_FORMAT(wc.data,'%Y-%m-%d') = CURDATE() ";
             $sql .= " ORDER BY wc.id DESC ";
@@ -106,6 +135,9 @@ class DaoComentarioFluxoProcesso extends Dados {
 
                 $atividade = new Atividade();
                 $atividade->setId($objetoComentarioFluxoProcesso->id_atividade);
+                $tituloAtividade = ($objetoComentarioFluxoProcesso->titulo_atividade_processo == null)?
+                $objetoComentarioFluxoProcesso->titulo_atividade:$objetoComentarioFluxoProcesso->titulo_atividade_processo;
+                $atividade->setTitulo($tituloAtividade);
                 $fluxoProcesso->setAtividade($atividade);				
 				
                 $comentarioFluxoProcesso->setFluxoProcesso($fluxoProcesso);
@@ -113,7 +145,7 @@ class DaoComentarioFluxoProcesso extends Dados {
                 $processo = new Processo();
                 $processo->setId($objetoComentarioFluxoProcesso->id_processo);
                 $processo->setDescricao($objetoComentarioFluxoProcesso->processo_descricao);
-                $processo->setTitulo($objetoComentarioFluxoProcesso->titulo);
+                $processo->setTitulo($objetoComentarioFluxoProcesso->processo_titulo);
                 $comentarioFluxoProcesso->setProcesso($processo);
                 
                 $retorno[] = $comentarioFluxoProcesso;

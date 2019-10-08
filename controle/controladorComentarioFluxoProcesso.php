@@ -23,6 +23,17 @@ class ControladorComentarioFluxoProcesso {
         }
     }
     
+    public function listarComentarioByIdsFluxoProcesso($ids = null) {
+    	try {
+    		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
+    		$retorno = $daoComentarioFluxoProcesso->listarComentarioByIdsFluxoProcesso($ids);
+    		$daoComentarioFluxoProcesso->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
     public function checarComentarioExistent($id = null) {
     	try {
     		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
