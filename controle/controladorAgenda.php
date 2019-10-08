@@ -53,7 +53,7 @@ class ControladorAgenda {
     										$date = strtotime($processo->getData());
     										
     										$eventos .= "{
-									                        title: '".trim($processo->getTitulo())."-".trim($fluxoProcesso->getAtividade()->getTitulo())."',
+									                        title: '".trim($fluxoProcesso->getAtividade()->getTitulo())."-".trim($processo->getTitulo())."',
 									                        start: '".date('Y',$date)."-".date('m',$date)."-".$fluxoProcesso->getAtividade()->getVencimento()."',
 									                        backgroundColor: '#4285F4',
 									                        borderColor: '#4285F4'
@@ -100,7 +100,7 @@ class ControladorAgenda {
     		foreach ($listComentario as $comentario){
     			$date = strtotime($comentario->getData());
     			$eventos .= "{
-		                        title: '".trim(limitarTexto(preg_replace("/[^a-zA-Z0-9-_]/", "", $comentario->getDescricao()),15))."',
+		                        title: '".trim(limitarTexto(preg_replace("/[^a-zA-Z0-9-_ ]/", "", $comentario->getDescricao()),40))."',
 		                        start: '".date('Y-m-d',$date)."',
 		                        backgroundColor: '#FFC108',
 		                        borderColor: '#FFC108'
