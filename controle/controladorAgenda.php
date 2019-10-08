@@ -64,7 +64,6 @@ class ControladorAgenda {
     				}
     			}
     		}
-    		
     		$eventos .= $this->eventosAgendaComentarios($processoFluxoIds);
     		
     		$controladorAgenda = new ControladorAgenda();
@@ -101,7 +100,7 @@ class ControladorAgenda {
     		foreach ($listComentario as $comentario){
     			$date = strtotime($comentario->getData());
     			$eventos .= "{
-		                        title: '".trim(limitarTexto($comentario->getDescricao(),40))."',
+		                        title: '".trim(limitarTexto(preg_replace("/[^a-zA-Z0-9-_]/", "", $comentario->getDescricao()),15))."',
 		                        start: '".date('Y-m-d',$date)."',
 		                        backgroundColor: '#FFC108',
 		                        borderColor: '#FFC108'
