@@ -1229,3 +1229,38 @@ function removerAgenda(id, arquivo) {
 		}
 	});
 }
+
+function telaModalAgendaProcessoFluxo(info){
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: 'retorno=div_modal_agenda_retorno&controlador=controladorAgenda&funcao=telaModalAgendaProcessoFluxo&id='+info.id+'&id_processo_fluxo='+info.id_processo_fluxo+'&ativo='+info.ativo+'&atuante='+info.atuante+'&id_processo=' + info.id_processo,
+		success: function(result) {
+			$('#div_modal_agenda_retorno').html(result);
+		    $.blockUI({
+	            message: $('#modalAgenda'),
+	        });
+	        $('#closeModalAgenda').click(function() {
+	            $.unblockUI();
+	            return false;
+	        });
+	        	
+		},
+		beforeSend: function() {
+			$('#loader').css({
+				display: "block"
+			});
+			$('#div-loader').css({
+				opacity: 0.5
+			});
+		},
+		complete: function() {
+			$('#loader').css({
+				display: "none"
+			});
+			$('#div-loader').css({
+				opacity: 1.0
+			});
+		}
+	});
+}

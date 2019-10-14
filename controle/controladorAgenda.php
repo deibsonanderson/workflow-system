@@ -14,7 +14,7 @@ class ControladorAgenda {
 
     public function listarAgenda($post = null) {
         try {
-            $daoAgenda = new DaoAgenda();
+        	$daoAgenda = new DaoAgenda();
             $retorno = $daoAgenda->listarAgenda(desformataData($post["data"]));
             $daoAgenda->__destruct();
             return $retorno;
@@ -52,13 +52,16 @@ class ControladorAgenda {
     										
     										$date = strtotime($processo->getData());
     										
-    										$eventos .= "{
+    										$eventos .= "{  id: '".$fluxoProcesso->getAtividade()->getId()."',
 									                        title: '".trim($fluxoProcesso->getAtividade()->getTitulo())."-".trim($processo->getTitulo())."',
 									                        start: '".date('Y',$date)."-".date('m',$date)."-".$fluxoProcesso->getAtividade()->getVencimento()."',
 									                        backgroundColor: '#4285F4',
-									                        borderColor: '#4285F4'
-									                      },";
-											
+									                        borderColor: '#4285F4',
+															tipo: 'P',
+															id_processo_fluxo:'".$fluxoProcesso->getId()."',
+															ativo:'".$fluxoProcesso->getAtivo()."',
+															atuante:'".$fluxoProcesso->getAtuante()."',
+															id_processo:'".$processo->getId()."' },";
     					}
     					$processoFluxoIds[] = $fluxoProcesso->getId();
     				}
@@ -66,27 +69,35 @@ class ControladorAgenda {
     		}
     		$eventos .= $this->eventosAgendaComentarios($processoFluxoIds);
     		
-    		$controladorAgenda = new ControladorAgenda();
-    		$agendas = $controladorAgenda->listarAgenda(null);
-    		if ($agendas != null) {
-    			foreach ($agendas as $agenda) {
-    				if($agenda->getStatus() == '1'){
-    					if($agenda->getAtivo()){
-    						$color = "#82db76";
-    					}else{
-    						$color = "#ef172c";
-    					}
-    					$eventos .= "{
-				                        title: '".trim($agenda->getDescricao())."',
-				                        start: '".$agenda->getData()."',
-				                        backgroundColor: '".$color."',
-				                        borderColor: '".$color."'
-				                      },";
-    					
+    		$eventos .= $this->montarEventosAgenda();
+
+    		$eventos = substr($eventos, 0, strlen($eventos)-1);
+    	}
+    	
+    	return $eventos;
+    }
+    
+    public function montarEventosAgenda(){
+    	$eventos = "";
+    	$controladorAgenda = new ControladorAgenda();
+    	$agendas = $controladorAgenda->listarAgenda(null);
+    	if ($agendas != null) {
+    		foreach ($agendas as $agenda) {
+    			if($agenda->getStatus() == '1'){
+    				if($agenda->getAtivo()){
+    					$color = "#82db76";
+    				}else{
+    					$color = "#ef172c";
     				}
+    				$eventos .= "{  id: '".$agenda->getId()."',
+			                        title: '".trim($agenda->getDescricao())."',
+			                        start: '".$agenda->getData()."',
+			                        backgroundColor: '".$color."',
+			                        borderColor: '".$color."',
+									tipo: 'A' },";
+    				
     			}
     		}
-    		$eventos = substr($eventos, 0, strlen($eventos)-1);
     	}
     	
     	return $eventos;
@@ -99,12 +110,12 @@ class ControladorAgenda {
     	if($listComentario != null){
     		foreach ($listComentario as $comentario){
     			$date = strtotime($comentario->getData());
-    			$eventos .= "{
+    			$eventos .= "{  id: '".$comentario->getId()."',
 		                        title: '".trim(limitarTexto(preg_replace("/[^a-zA-Z0-9-_ ]/", "", $comentario->getDescricao()),40))."',
 		                        start: '".date('Y-m-d',$date)."',
 		                        backgroundColor: '#FFC108',
-		                        borderColor: '#FFC108'
-		                      },";
+		                        borderColor: '#FFC108',
+								tipo: 'C' },";
     		}
     	}
     	return $eventos;
@@ -258,6 +269,29 @@ class ControladorAgenda {
             return $e;
         }
     }	
+    
+    public function telaModalAgendaProcessoFluxo($post = null) {
+    	try {    		   		
+    		$processoFluxo = new FluxoProcesso();
+    		$processoFluxo->setId($post["id_processo_fluxo"]);
+    		$processoFluxo->setAtivo($post["ativo"]);
+    		$processoFluxo->setAtuante($post["atuante"]);
+    		
+    		$processo = new Processo();
+    		$processo->setId($post["id_processo"]);
+    		$processoFluxo->setProcesso($processo);
+    		
+    		$controladorAtividade = new ControladorAtividade();
+    		$objAtividade = $controladorAtividade->buscarAtividade($post["id"]);
+    		
+    		$viewAgenda = new ViewAgenda(); 
+    		$retorno = $viewAgenda->telaModalAgendaProcessoFluxo($objAtividade,$processoFluxo);
+    		$viewAgenda->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 
 }
 

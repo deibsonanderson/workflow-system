@@ -72,9 +72,6 @@ class ViewMain{
 			$(document).ready(function() {
 			    $.blockUI({
 		            message: $('#vencimento'),
-		            //css: {
-		            //    width: '70%'
-		            //}
 		        });
 		        $('#close').click(function() {
 		            $.unblockUI();

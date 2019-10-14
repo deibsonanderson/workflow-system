@@ -12,8 +12,193 @@ class ViewAgenda {
         
     }
     
+    public function telaModalAgendaProcessoFluxo($objAtividade, $processoFluxo){
+    ?>
+    	<div class="modal" id="modalAgenda" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg" role="document" style="overflow-y: initial !important;">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title"></h5>
+		        <button type="button" id="closeModalAgenda" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">Fechar</span>
+		        </button>
+		      </div>
+		      <div class="modal-body" style="height: 450px; overflow-y: auto;">
+				<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<div class="card">          
+							<div class="card-footer">
+								<div class="table-responsive">
+									<table id="example" class="tablesorter table table-striped table-bordered second" style="width: 100%">
+										<thead>
+											<tr>
+												<th>Código</th>
+												<th>Data</th>
+												<th>Processo</th>
+												<th>Fluxo</th>
+												<th>Vencimento</th>
+												<th>Processos</th>
+												<th>Valor</th>
+											</tr>
+										</thead>
+										<tbody>
+						                    <?php
+						                    $controladorProcesso = new ControladorProcesso();
+						                    $objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
+						                    if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+						                        foreach ($objProcesso as $processo) {
+						                    ?>    
+						                    <tr style="text-align:center;">
+												<td class="getId dimensions" style="cursor: pointer"
+													id="<?php echo $processo->getId(); ?>"
+													funcao="telaVisualizarProcesso"
+													controlador="ControladorProcesso" retorno="div_central"
+													style=""
+													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo str_pad($processo->getId(), 5, '0', STR_PAD_LEFT); ?></td>
+												<td class="getId dimensions" style="cursor: pointer"
+													id="<?php echo $processo->getId(); ?>"
+													funcao="telaVisualizarProcesso"
+													controlador="ControladorProcesso" retorno="div_central"
+													style=""
+													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo recuperaData($processo->getData()); ?></td>
+												<td class="getId dimensions" style="cursor: pointer"
+													id="<?php echo $processo->getId(); ?>"
+													funcao="telaVisualizarProcesso"
+													controlador="ControladorProcesso" retorno="div_central"
+													style=""
+													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo limitarTexto($processo->getTitulo(), 40); ?></td>
+												<td class="getId dimensions" style="cursor: pointer"
+													id="<?php echo $processo->getId(); ?>"
+													funcao="telaVisualizarProcesso"
+													controlador="ControladorProcesso" retorno="div_central"
+													style=""
+													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo ($processo->getFluxo()) ? limitarTexto($processo->getFluxo()->getTitulo(), 40) : ''; ?></td>
+												<td class="getId dimensions" style="cursor: pointer"
+													id="<?php echo $processo->getId(); ?>"
+													funcao="telaVisualizarProcesso"
+													controlador="ControladorProcesso" retorno="div_central"
+													style=""
+													title="<?php echo nl2br($processo->getDescricao()); ?>">
+													<?php
+														if($objAtividade[0]->getVencimento() != "" && $objAtividade[0]->getVencimento() != null && $objAtividade[0]->getVencimento() != "00"){
+															$date = strtotime($processo->getData());
+															echo $objAtividade[0]->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
+														}else{
+															echo "-";
+														}
+													?>
+												</td>
+												<td class="" style="text-align: center;">
+													<span>
+					                                    <?php
+					                                    $atividadeFluxoProcesso = null;
+					                                    if ($processo != null && $processo->getFluxoProcesso() != null) {
+					                                        foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
+					                                        	if($fluxoProcesso->getAtividade()->getId() == $objAtividade[0]->getId()){
+					                                        		$atividadeFluxoProcesso = $fluxoProcesso->getAtividade();
+						                                            if ($fluxoProcesso->getAtividade()->getImagem() == "" || $fluxoProcesso->getAtividade()->getImagem() == null) {
+						                                                $imagem = "assets/images/atividade.png";
+						                                            } else {
+						                                                $imagem = "imagens/atividade/" . $fluxoProcesso->getAtividade()->getImagem();
+						                                            }
+						                                            ?>
+						                                            <div style="">
+																		<a class="dimensions"
+																			atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+																			style="text-decoration: none;"
+																			title="<?php echo 'Título: ' . $fluxoProcesso->getAtividade()->getTitulo() . '<br/>Descrição: ' . nl2br($fluxoProcesso->getAtividade()->getDescricao()); ?>">
+						                                                    <?php
+						                                                    $estilo = '';
+						                                                    if ($fluxoProcesso->getAtividade()->getId() != $objAtividade[0]->getId()) {
+						                                                        $estilo = 'opacity: 0.1;z-index: 1;';
+						                                                    } else {
+						                                                        $estilo = ';z-index: 1;border: 3px solid #00F;cursor:pointer;';
+						                                                    }
+						                                                    ?>
+																			<img class="" style="width: 32px; height: 33px; <?php echo $estilo; ?>" src="<?php echo $imagem; ?>" />
+																		</a>
+																	</div>
+						                                            <?php
+					                                        	}
+					                                        }
+					                                    }
+					                                    ?>                                            
+								                    </span>
+								                </td>
+												<td id="valueChange" class="getId dimensions"
+													style="cursor: pointer"
+													title="<?php echo nl2br($processo->getDescricao()); ?>">
+													<div>
+					                                    <?php
+						                                    if($atividadeFluxoProcesso->getPropriedade() == '1'){
+						                                    	$simbolo = '';
+						                                    }else{
+						                                    	$simbolo = '-';
+						                                    }
+						                                    echo 'R$ '.$simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');
+					                                    ?>
+							                        </div>
+												</td>
+											</tr> 
+						                    <?php
+						                        }
+						                    }
+						                    ?>    				
+						                </tbody>
+									</table>
+								</div>
+							</div>
+								
+							<div class="card-body">
+								<div class="form-group">
+									<label for="nome" class="col-form-label" style="float: left;">Nome *</label> 
+									<input id="titulo" name="titulo" type="text" disabled value="<?php echo $objAtividade[0]->getTitulo(); ?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+								</div>
+								<div class="form-group">
+									<label for="descricao" style="float: left;">Descrição</label>
+									<textarea class="form-control" id="descricao" disabled rows="3"><?php echo $objAtividade[0]->getDescricao(); ?></textarea>
+								</div>
+					            <?php
+					            if ($objAtividade != null && $objAtividade[0]->getLink()) {
+					            ?>			
+								<div class="form-group">
+									<label for="link" class="col-form-label" style="float: left;">Link</label> 
+									<br /><br />
+									<a style="float: left;" target="_blank" href="<?php echo $objAtividade[0]->getLink(); ?>"><?php echo $objAtividade[0]->getLink(); ?></a>
+								</div>
+					            <?php
+					            }								
+					            if ($objAtividade != null && $objAtividade[0]->getArquivo()) {
+					            ?>
+								<div class="form-group">
+									<label for="arquivoAtual" class="col-form-label">Arquivo da atividade disponivel:&nbsp;</label> 
+									<input type="hidden" name="arquivo_atividade" id="arquivo_atividade" value="<?php echo $objAtividade[0]->getArquivo(); ?>" /> 
+									<span name="arquivoAtual" onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')" style="cursor: pointer; text-decoration: underline;">
+					                    <?php echo $objAtividade[0]->getArquivo(); ?>       
+					                </span>
+					                &nbsp; <img src="./assets/images/img_upload.png" border="0" style="float: none; margin: 0; width: 20px;" />
+								</div>
+								<?php } ?>
+							</div>
+							<div class="card-footer" id="div_comentarios">
+				        		<?php 
+					        		$viewAtividade = new ViewAtividade();
+					        		echo $viewAtividade->telaComentariosAtividadeProcesso($processoFluxo->getId(), true);
+				        		?>
+						    </div>
+						</div>
+					</div>
+				</div>	
+		      </div>
+		    </div>
+		  </div>
+		</div>	
+	<?php     	
+    }
+    
     public function telaCadastrarAgenda($post) {
 		?>
+        <div id="div_modal_agenda_retorno"></div>
         <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
 		<?
@@ -41,6 +226,17 @@ class ViewAgenda {
 	                	telaVisualizarEventosAgenda(date.format());
 	                	telaVisualizarComentariosAgenda(date.format());
 			        },
+					eventClick: function(info) {
+					  if (info.url != undefined && info.url) {
+						window.open(info.url);
+						info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
+					  } else {
+						  //salert('Clicked ' + info.id +'-'+info.title);
+						  if(info.tipo == 'P'){
+						  	telaModalAgendaProcessoFluxo(info);
+						  }
+					  }
+					},			        
 	                defaultDate: '<?php echo $dataIn; ?>',//'2018-03-12',
 	                locale: 'pt-br',
 	                navLinks: true, // can click day/week names to navigate views

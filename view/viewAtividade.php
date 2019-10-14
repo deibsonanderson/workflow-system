@@ -744,7 +744,8 @@ class ViewAtividade {
 			            ?>			
 						<div class="form-group">
 							<label for="link" class="col-form-label">Link</label> 
-							<input id="link" type="text" class="form-control" disabled value="<?php echo $objAtividade[0]->getLink(); ?>" onkeyup="this.value=this.value.toLowerCase();">
+							<br />
+							<a style="float: left;" target="_blank" href="<?php echo $objAtividade[0]->getLink(); ?>"><?php echo $objAtividade[0]->getLink(); ?></a>
 						</div>
 			            <?php
 			            }
