@@ -13,15 +13,36 @@ class ViewAgenda {
     }
     
     public function telaModalAgendaProcessoFluxo($objAtividade, $processoFluxo){
+    	$controladorProcesso = new ControladorProcesso();
+    	$objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
     ?>
+    	<script type="text/javascript">
+			function closeModal(){
+		        $.unblockUI();
+		    }
+		</script>
     	<div class="modal" id="modalAgenda" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-lg" role="document" style="overflow-y: initial !important;">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h5 class="modal-title"></h5>
-		        <button type="button" id="closeModalAgenda" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">Fechar</span>
-		        </button>
+	            <div class="toolbar ml-auto">
+		            <button type="button" class="btn btn-light" 
+		            	 id_processo_fluxo="<?php echo $processoFluxo->getId(); ?>"
+						 id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
+						 id="<?php echo $objProcesso[0]->getFluxoProcesso()[0]->getAtividade()->getId(); ?>"
+						 ativo="<?php echo $objProcesso[0]->getFluxoProcesso()[0]->getAtivo(); ?>"
+						 atuante="<?php echo $objProcesso[0]->getFluxoProcesso()[0]->getAtuante(); ?>"
+						 onclick="getIdProcesso(this);closeModal();"
+						 funcao="telaVisualizarAtividadeProcesso" 
+						 controlador="controladorAtividade" 
+						 retorno="div_central">
+			          <span aria-hidden="true">Acessar Atividade</span>
+			        </button>
+			        <button type="button" id="closeModalAgenda" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">Fechar</span>
+			        </button>
+	            </div>		 
 		      </div>
 		      <div class="modal-body" style="height: 450px; overflow-y: auto;">
 				<div class="row">
@@ -43,8 +64,6 @@ class ViewAgenda {
 										</thead>
 										<tbody>
 						                    <?php
-						                    $controladorProcesso = new ControladorProcesso();
-						                    $objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
 						                    if ($objProcesso != null && $objProcesso[0]->getId() != null) {
 						                        foreach ($objProcesso as $processo) {
 						                    ?>    

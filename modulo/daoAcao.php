@@ -112,7 +112,7 @@ class DaoAcao extends Dados{
 					FROM tb_workflow_classe c
 					INNER JOIN tb_workflow_modulo m ON (c.id_modulo = m.id)
 					INNER JOIN tb_workflow_acao_usuario a ON (a.id_classe = c.id AND a.id_usuario = ".$usuario->getId().")
-					WHERE c.status = '1' AND a.perfil <> '0'";
+					WHERE c.status = '1' AND a.perfil <> '0' ORDER BY c.id_modulo, c.id ASC ";
 			
 			$query = mysqli_query($conexao,$sql) or die ('Erro na execução do listarClasseAcaoParaMenu!: '.$sql);
 			$ultimo_id = 0;
