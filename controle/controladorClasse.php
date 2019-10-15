@@ -29,8 +29,7 @@ class ControladorClasse {
 			$classe->setControlador($post["controlador_"]);
 			$classe->setFuncao($post["funcao_"]);
 			$classe->setModulo($post["modulo"]);			
-                        $classe->setSecao($post["secao"]);			
-			$classe->setStatus('1');
+            $classe->setStatus('1');
 			$moduloClasse = new DaoClasse();
 			
 			if($moduloClasse->incluirClasse($classe)){
@@ -52,8 +51,7 @@ class ControladorClasse {
 			$classe->setControlador($post["controlador_"]);
 			$classe->setFuncao($post["funcao_"]);
 			$classe->setModulo($post["modulo"]);
-                        $classe->setSecao($post["secao"]);
-			$classe->setStatus('1');		
+            $classe->setStatus('1');		
 			$moduloClasse = new DaoClasse();
 			if($moduloClasse->alterarClasse($classe)){
 				return $this->telaListarClasse();

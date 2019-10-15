@@ -23,6 +23,17 @@ class ControladorAtividade {
         }
     }
     
+    public function listarDistinctAtividade() {
+    	try {
+    		$daoAtividade = new DaoAtividade();
+    		$retorno = $daoAtividade->listarDistinctAtividade();
+    		$daoAtividade->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
     public function listarAtividadeByCategoria($id = null) {
     	try {
     		$daoAtividade = new DaoAtividade();
@@ -193,6 +204,19 @@ class ControladorAtividade {
         } catch (Exception $e) {
             return $e;
         }
+    }
+    
+    
+    public function telaListarComentariosAtividadeProcesso($post = null) {
+    	try {
+    		$viewAtividade = new ViewAtividade();
+    		$controladorComentarioFluxoProcesso = new ControladorComentarioFluxoProcesso();
+    		$retorno = $viewAtividade->telaListarComentariosAtividadeProcesso($controladorComentarioFluxoProcesso->listarComentarioFluxoProcessoByFilter($post));
+    		$viewAtividade->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
     }
 
 }

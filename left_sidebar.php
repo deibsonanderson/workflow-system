@@ -34,8 +34,7 @@
 														onclick="fncButtonMenu(this)"
 														funcao="<?php echo $classe->getFuncao();?>" 
 														controlador="<?php echo $classe->getControlador();?>" 
-														retorno="div_central" 
-														secao="<?php echo $classe->getSecao();?>">
+														retorno="div_central" >
 															<a class="nav-link" 
 															href="#">
 															<?php echo$classe->getNome();?>

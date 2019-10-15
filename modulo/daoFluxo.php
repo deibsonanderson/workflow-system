@@ -142,7 +142,26 @@ class DaoFluxo extends Dados {
             return $e;
         }
     }
-
+    
+    
+    public function listarDistinctFluxo() {
+    	try {
+    		$retorno = array();
+    		$conexao = $this->ConectarBanco();
+    		$sql = "SELECT DISTINCT id,titulo FROM tb_workflow_titulo_fluxo WHERE status = '1' AND id_usuario = " . $_SESSION["login"]->getId();
+    		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar tb_workflow_titulo_fluxo!');
+    		while ($objetoFluxo = mysqli_fetch_object($query)) {
+    			$fluxo = new Fluxo();
+    			$fluxo->setId($objetoFluxo->id);
+    			$fluxo->setTitulo($objetoFluxo->titulo);
+    			$retorno[] = $fluxo;
+    		}
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 }
 
 ?>

@@ -273,6 +273,17 @@ class ControladorFluxo {
             return $e;
         }
     }
+    
+    public function listarDistinctFluxo() {
+    	try {
+    		$daoFluxo = new DaoFluxo();
+    		$retorno = $daoFluxo->listarDistinctFluxo();
+    		$daoFluxo->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 }
 
 ?>

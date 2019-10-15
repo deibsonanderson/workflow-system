@@ -9,6 +9,7 @@ class FluxoProcesso {
     private $ativo;
     private $atuante;
     private $processo;
+    private $titulo;
     
     //construtor
     public function __construct() {
@@ -76,7 +77,14 @@ class FluxoProcesso {
         $this->processo = $processo;
     }
 
-
+    function getTitulo() {
+    	return $this->titulo;
+    }
+    
+    function setTitulo($titulo) {
+    	$this->titulo = $titulo;
+    }
+    
 
 }
 

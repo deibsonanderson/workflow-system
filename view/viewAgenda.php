@@ -594,7 +594,9 @@ class ViewAgenda {
 							<thead>
 								<tr>
 		                            <th>Data</th> 
-		                            <th>Descri&ccedil;&atilde;o</th> 
+		                            <th>Descri&ccedil;&atilde;o</th>
+		                            <th>Status</th>  
+		                            <th>Link</th> 
 		                            <th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th>  
 								</tr>
 							</thead>
@@ -606,6 +608,10 @@ class ViewAgenda {
 								<tr>
 									<td onclick="fcnGetData(this)" style="cursor:pointer"  data="<?php echo recuperaData($agenda->getData()); ?>" funcao="telaCadastrarAgenda" controlador="ControladorAgenda" retorno="div_central"><?php echo recuperaData($agenda->getData()); ?></td> 
 		                            <td onclick="fcnGetData(this)" style="cursor:pointer"  data="<?php echo recuperaData($agenda->getData()); ?>" funcao="telaCadastrarAgenda" controlador="ControladorAgenda" retorno="div_central"><?php echo limitarTexto($agenda->getDescricao(), 110); ?></td> 
+		                            <td onclick="fcnGetData(this)" style="cursor:pointer"  data="<?php echo recuperaData($agenda->getData()); ?>" funcao="telaCadastrarAgenda" controlador="ControladorAgenda" retorno="div_central"><?php echo ($agenda->getAtivo() == '1')?'Ativo':'Inativo'; ?></td> 
+		                            <td onclick="fcnGetData(this)" style="cursor:pointer; text-align: center;"  data="<?php echo recuperaData($agenda->getData()); ?>" funcao="telaCadastrarAgenda" controlador="ControladorAgenda" retorno="div_central">
+		                            	<?php echo ($agenda->getLink() != '' || $agenda->getLink() != null) ? '<a href="' . $agenda->getLink() . '" target="_blank" title="Acesso ao Link Clique aqui!" ><img src="assets/images/external_link29.png" ></a>' : ''; ?>
+		                            </td> 
 		                            <td style="text-align:center">
 		                            	<div class="btn-group ml-auto">
 				                            <?php 

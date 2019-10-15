@@ -12,7 +12,7 @@ class DaoClasse extends Dados{
 		try {	
 			$retorno = array();
 			$conexao = $this->ConectarBanco();
-			$sql = "SELECT c.id,c.nome,c.id_perfil,c.controlador,c.funcao,c.status,c.secao,
+			$sql = "SELECT c.id,c.nome,c.id_perfil,c.controlador,c.funcao,c.status,
 					       c.id_modulo, m.nome as nome_modulo, m.status as status_modulo
 					FROM tb_workflow_classe c
 					INNER JOIN tb_workflow_modulo m ON (c.id_modulo = m.id)
@@ -26,8 +26,7 @@ class DaoClasse extends Dados{
 				$classe->setPerfil($objetoClasse->id_perfil);
 				$classe->setControlador($objetoClasse->controlador);
 				$classe->setFuncao($objetoClasse->funcao);				
-                                $classe->setSecao($objetoClasse->secao);				
-				$classe->setStatus($objetoClasse->status);
+                $classe->setStatus($objetoClasse->status);
 				
 					$modulo = new Modulo();
 					$modulo->setId($objetoClasse->id_modulo);
@@ -47,7 +46,7 @@ class DaoClasse extends Dados{
 	public function incluirClasse($classe){
 		try {	
 			$conexao = $this->ConectarBanco();
-			$sql = "INSERT INTO tb_workflow_classe(nome,id_perfil,controlador,funcao,secao,id_modulo,status) VALUES ('".$classe->getNome()."',2,'".$classe->getControlador()."','".$classe->getFuncao()."','".$classe->getSecao()."','".$classe->getModulo()."','".$classe->getStatus()."')";
+			$sql = "INSERT INTO tb_workflow_classe(nome,id_perfil,controlador,funcao,id_modulo,status) VALUES ('".$classe->getNome()."',2,'".$classe->getControlador()."','".$classe->getFuncao()."','".$classe->getModulo()."','".$classe->getStatus()."')";
 			
 			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do insert!');
 			$this->FecharBanco($conexao);
@@ -61,7 +60,7 @@ class DaoClasse extends Dados{
 		try {	
 			
 			$conexao = $this->ConectarBanco();
-			$sql = "UPDATE tb_workflow_classe SET nome = '".$classe->getNome()."', secao = '".$classe->getSecao()."', funcao = '".$classe->getFuncao()."', id_perfil = 2, controlador = '".$classe->getControlador()."', id_modulo = '".$classe->getModulo()."', status = '".$classe->getStatus()."' WHERE id =".$classe->getId()."";
+			$sql = "UPDATE tb_workflow_classe SET nome = '".$classe->getNome()."', funcao = '".$classe->getFuncao()."', id_perfil = 2, controlador = '".$classe->getControlador()."', id_modulo = '".$classe->getModulo()."', status = '".$classe->getStatus()."' WHERE id =".$classe->getId()."";
 			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do update!');
 			$this->FecharBanco($conexao);
 			return $retorno;

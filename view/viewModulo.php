@@ -39,28 +39,6 @@ class ViewModulo {
 					<label for="nome" class="col-form-label">Nome *</label>
 					<input id="nome" name="nome" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
 				</div>
-				<div class="form-group">
-					<label for="pais">Pais *</label>
-					<select id="pais" name="pais" class="mgs_alerta form-control" >
-						<?php 
-						try {
-							$controladorPais = new ControladorPais();
-							$objPais = $controladorPais->listarPais();
-						} catch (Exception $e) { echo 'erro no listarPais'; }
-						?>					
-							<option value="">Selecione...</option>
-						<?php 
-						 foreach ($objPais as $pais){
-							if($pais->getId() == 17){
-								?><option value="<?php echo $pais->getId()?>" selected="selected"><?php echo $pais->getNome();?></option><?php 
-							}else{
-								?><option value="<?php echo $pais->getId()?>"><?php echo $pais->getNome();?></option><?php                                  	
-							}
-						 }
-						 ?>                                 
-					</select>						
-					
-				</div>				
 			</div>
 		</form>
 		</div>
@@ -94,7 +72,7 @@ class ViewModulo {
 					<thead>
 						<tr>
 							<th>Codigo</th>
-							<th>Descri&ccedil;&atilde;o</th>
+							<th>Nome</th>
 							<th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
 						</tr>
 					</thead>

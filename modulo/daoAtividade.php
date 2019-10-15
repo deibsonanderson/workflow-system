@@ -11,7 +11,26 @@ class DaoAtividade extends Dados {
     public function __destruct() {
         
     }
-
+    
+    public function listarDistinctAtividade() {
+    	try {
+    		$retorno = array();
+    		$conexao = $this->ConectarBanco();
+    		$sql = "SELECT DISTINCT id,titulo FROM tb_workflow_atividade WHERE status = '1' AND id_usuario = " . $_SESSION["login"]->getId();
+    		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
+    		while ($objetoAtividade = mysqli_fetch_object($query)) {
+    			$atividade = new Atividade();
+    			$atividade->setId($objetoAtividade->id);
+    			$atividade->setTitulo($objetoAtividade->titulo);
+    			$retorno[] = $atividade;
+    		}
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
     public function listarAtividade($id = null, $id_usuario = null) {
         try {
             $retorno = array();

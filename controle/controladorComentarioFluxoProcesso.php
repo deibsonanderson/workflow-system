@@ -145,6 +145,41 @@ class ControladorComentarioFluxoProcesso {
     		return $e;
     	}
     }
+    
+    public function listarComentarioFluxoProcessoByFilter($post = null) {
+    	try {
+    		$filtro = '';
+    		if($post["descricao"] != null && $post["descricao"] != ''){
+    			$filtro .= " AND wc.descricao LIKE '%".$post["descricao"]."%' ";
+    		}
+    		
+    		if($post["anexo"] == '1'){
+    			$filtro .= " AND (LENGTH(wc.arquivo) > 0) ";
+    		}else if($post["anexo"] == '2'){
+    			$filtro .= " AND (wc.arquivo = '' OR wc.arquivo IS NULL || LENGTH(wc.arquivo) = 0) ";
+    		}
+    		
+    		if($post["fluxo"] != null && $post["fluxo"] != ''){
+    			$filtro .= ' AND wtf.id = '.$post["fluxo"];
+    		}
+    		
+    		if($post["processo"] != null && $post["processo"] != ''){
+    			$filtro .= ' AND wp.id = '.$post["processo"];
+    		}
+    		
+    		if($post["atividade"] != null && $post["atividade"] != ''){
+    			$filtro .= ' AND wa.id = '.$post["atividade"];
+    		}
+
+    		$filtro .= ' ORDER BY wc.id DESC ';
+    		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
+    		$retorno = $daoComentarioFluxoProcesso->listarComentarioFluxoProcessoByFilter($filtro);
+    		$daoComentarioFluxoProcesso->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 
 }
 

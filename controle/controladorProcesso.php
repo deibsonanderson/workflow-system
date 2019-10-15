@@ -334,6 +334,15 @@ class ControladorProcesso {
         }
     }
 
-    
+    public function listarDistinctProcesso() {
+    	try {
+    		$daoProcesso = new DaoProcesso();
+    		$retorno = $daoProcesso->listarDistinctProcesso();
+    		$daoProcesso->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 }
 ?>

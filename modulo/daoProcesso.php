@@ -525,6 +525,25 @@ class DaoProcesso extends Dados {
     		return $e;
     	}
     }
+    
+    public function listarDistinctProcesso() {
+    	try {
+    		$retorno = array();
+    		$conexao = $this->ConectarBanco();
+    		$sql = "SELECT DISTINCT id,titulo FROM tb_workflow_processo WHERE status = '1' AND id_usuario = " . $_SESSION["login"]->getId();
+    		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
+    		while ($objetoProcesso = mysqli_fetch_object($query)) {
+    			$processo = new Processo();
+    			$processo->setId($objetoProcesso->id);
+    			$processo->setTitulo($objetoProcesso->titulo);
+    			$retorno[] = $processo;
+    		}
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 
 }
 

@@ -34,7 +34,7 @@ class ViewClasse{
 					<div class="card-body">				
 						<div class="form-group">
 							<label for="nome" class="col-form-label">Nome *</label>
-							<input id="nome" name="nome" type="text" class="form-control mgs_alerta" >
+							<input id="nome" name="nome" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();" >
 						</div>
 						<div class="form-group">
 							<label for="nome" class="col-form-label">Controlador *</label>
@@ -43,10 +43,6 @@ class ViewClasse{
 						<div class="form-group">
 							<label for="nome" class="col-form-label">Função *</label>
 							<input id="funcao_" name="funcao_" type="text" class="form-control mgs_alerta" >
-						</div>
-						<div class="form-group">
-							<label for="nome" class="col-form-label">Seção *</label>
-							<input id="secao" name="secao" type="text" class="form-control mgs_alerta" >
 						</div>
 						<div class="form-group">
 							<label for="pais">Módulo *</label>
@@ -105,8 +101,7 @@ class ViewClasse{
 									<th>Descri&ccedil;&atilde;o</th> 
 									<th>Controlador</th> 
 									<th>Fun&ccedil;&atilde;o</th> 
-		                            <th>Se&ccedil;&atilde;o</th> 
-									<th>Modulo</th> 							
+		                            <th>Modulo</th> 							
 									<th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
 								</tr>
 							</thead>
@@ -120,8 +115,7 @@ class ViewClasse{
 									<td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $classe->getId(); ?>" funcao="telaVisualizarClasse" controlador="ControladorClasse" retorno="div_central"><?php echo $classe->getNome(); ?></td> 
 									<td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $classe->getId(); ?>" funcao="telaVisualizarClasse" controlador="ControladorClasse" retorno="div_central"><?php echo ($classe->getControlador())?$classe->getControlador():"-";?></td> 
 									<td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $classe->getId(); ?>" funcao="telaVisualizarClasse" controlador="ControladorClasse" retorno="div_central"><?php echo ($classe->getFuncao())?$classe->getFuncao():"-";?></td> 
-									<td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $classe->getId(); ?>" funcao="telaVisualizarClasse" controlador="ControladorClasse" retorno="div_central"><?php echo ($classe->getSecao())?$classe->getSecao():"-";?></td> 
-		                            <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $classe->getId(); ?>" funcao="telaVisualizarClasse" controlador="ControladorClasse" retorno="div_central"><?php echo ($classe->getModulo())?$classe->getModulo()->getNome():"-";?></td> 
+									<td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $classe->getId(); ?>" funcao="telaVisualizarClasse" controlador="ControladorClasse" retorno="div_central"><?php echo ($classe->getModulo())?$classe->getModulo()->getNome():"-";?></td> 
 									<td style="text-align:center">
 										<div class="btn-group ml-auto">
 				                            <button onclick="getId(this)" id="<?php echo $classe->getId(); ?>" funcao="telaAlterarClasse" controlador="ControladorClasse" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>
@@ -169,15 +163,11 @@ class ViewClasse{
 				</div>
 				<div class="form-group">
 					<label for="nome" class="col-form-label">Controlador *</label>
-					<input id="controlador_" name="controlador_" value="<?php echo $objClasse[0]->getControlador();?>" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+					<input id="controlador_" name="controlador_" value="<?php echo $objClasse[0]->getControlador();?>" type="text" class="form-control mgs_alerta" >
 				</div>
 				<div class="form-group">
 					<label for="nome" class="col-form-label">Função *</label>
-					<input id="funcao_" name="funcao_" type="text" value="<?php echo $objClasse[0]->getFuncao();?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
-				</div>
-				<div class="form-group">
-					<label for="nome" class="col-form-label">Seção *</label>
-					<input id="secao" name="secao" type="text" value="<?php echo $objClasse[0]->getSecao();?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+					<input id="funcao_" name="funcao_" type="text" value="<?php echo $objClasse[0]->getFuncao();?>" class="form-control mgs_alerta" >
 				</div>
 				<div class="form-group">
 					<label for="pais">Módulo *</label>
@@ -241,18 +231,11 @@ class ViewClasse{
 					<input id="funcao_" name="funcao_" type="text" disabled value="<?php echo $objClasse[0]->getFuncao();?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
 				</div>
 				<div class="form-group">
-					<label for="nome" class="col-form-label">Seção *</label>
-					<input id="secao" name="secao" type="text" disabled value="<?php echo $objClasse[0]->getSecao();?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
-				</div>
-				<div class="form-group">
 					<label for="pais">Módulo *</label>
 					<select id="modulo" name="modulo"  disabled class="mgs_alerta form-control">
 					<?php 
-					try {
 						$controladorModulo = new ControladorModulo();
 						$objModulo = $controladorModulo->listarModulo();
-					} catch (Exception $e) {
-					}
 					?>
 						<option value="">Selecione...</option>
 					<?php 

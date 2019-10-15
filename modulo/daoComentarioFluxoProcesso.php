@@ -228,6 +228,74 @@ class DaoComentarioFluxoProcesso extends Dados {
     		return $e;
     	}
     }
+        
+    public function listarComentarioFluxoProcessoByFilter($filter = null) {
+    	try {
+    		$retorno = array();
+    		$conexao = $this->ConectarBanco();
+    		$sql = "SELECT wc.id,
+                           wc.descricao,
+                           wc.arquivo,
+                           wc.id_processo_fluxo,
+                           wc.data,
+                           wc.status,
+                           wpf.id_processo,
+						   wpf.titulo_atividade as titulo_atividade_processo,
+                           wp.titulo as processo_titulo,
+                           wp.descricao as processo_descricao,
+						   wpf.ativo,
+						   wpf.atuante,
+						   wf.id_atividade,
+						   wf.id_titulo_fluxo,
+						   wtf.titulo as titulo_fluxo,
+						   wa.titulo as titulo_atividade
+                 FROM tb_workflow_comentario wc
+                 LEFT JOIN tb_workflow_processo_fluxo wpf ON (wpf.id = wc.id_processo_fluxo)
+				 LEFT JOIN tb_workflow_fluxo wf ON ( wf.id = wpf.id_fluxo )
+				 LEFT JOIN tb_workflow_titulo_fluxo wtf ON ( wf.id_titulo_fluxo = wtf.id )
+                 LEFT JOIN tb_workflow_processo wp ON (wp.id = wpf.id_processo)
+                 LEFT JOIN tb_workflow_atividade wa ON (wa.id = wf.id_atividade)
+                 WHERE wc.status = '1' ";
+    		$sql .= $filter;
+    		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
+    		while ($objetoComentarioFluxoProcesso = mysqli_fetch_object($query)) {
+    			
+    			$comentario = new ComentarioFluxoProcesso();
+    			$comentario->setId($objetoComentarioFluxoProcesso->id);
+    			$comentario->setDescricao($objetoComentarioFluxoProcesso->descricao);
+    			$comentario->setArquivo($objetoComentarioFluxoProcesso->arquivo);
+    			$comentario->setStatus($objetoComentarioFluxoProcesso->status);
+    			$comentario->setData($objetoComentarioFluxoProcesso->data);
+    			
+    			$fluxoProcesso = new FluxoProcesso();
+    			$fluxoProcesso->setId($objetoComentarioFluxoProcesso->id_processo_fluxo);
+    			$fluxoProcesso->setAtivo($objetoComentarioFluxoProcesso->ativo);
+    			$fluxoProcesso->setAtuante($objetoComentarioFluxoProcesso->atuante);
+    			$fluxoProcesso->setTitulo($objetoComentarioFluxoProcesso->titulo_fluxo);
+    			
+    			$atividade = new Atividade();
+    			$atividade->setId($objetoComentarioFluxoProcesso->id_atividade);
+    			$tituloAtividade = ($objetoComentarioFluxoProcesso->titulo_atividade_processo == null)?
+    			$objetoComentarioFluxoProcesso->titulo_atividade:$objetoComentarioFluxoProcesso->titulo_atividade_processo;
+    			$atividade->setTitulo($tituloAtividade);
+    			$fluxoProcesso->setAtividade($atividade);
+    			
+    			$comentario->setFluxoProcesso($fluxoProcesso);
+    			
+    			$processo = new Processo();
+    			$processo->setId($objetoComentarioFluxoProcesso->id_processo);
+    			$processo->setDescricao($objetoComentarioFluxoProcesso->processo_descricao);
+    			$processo->setTitulo($objetoComentarioFluxoProcesso->processo_titulo);
+    			$comentario->setProcesso($processo);
+    			
+    			$retorno[] = $comentario;
+    		}
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 
 }
 

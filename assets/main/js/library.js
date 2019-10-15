@@ -330,7 +330,6 @@
         controlador = $(element).attr('controlador');
         funcao = $(element).attr('funcao');
         retorno = $(element).attr('retorno');
-        secao = $(element).attr('secao');
         
         $.ajax({
             url: 'controlador.php',

@@ -863,7 +863,7 @@ class ViewAtividade {
                         </td>
                         
                         <td style="text-align: center;">
-                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
+                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
                     </tr>
@@ -875,6 +875,196 @@ class ViewAtividade {
 			</table>
 		</div>     
 		<?php 
+    }
+    
+    public function telaComboFluxo(){
+    	?>
+		<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+			<label for="pais">Fluxo</label>
+			<select id="fluxo" name="fluxo"  class="form-control">
+			<?php 
+			try {
+				$controladorFluxo = new ControladorFluxo();
+				$objetos = $controladorFluxo->listarDistinctFluxo();
+			} catch (Exception $e) { echo 'erro no listarFluxo'; }
+			?>
+				<option value="">Selecione...</option>
+			<?php 
+			 foreach ($objetos as $objetos){
+			?>
+				<option value="<?php echo $objetos->getId()?>"><?php echo $objetos->getTitulo();?></option>
+			<?php                                  	
+			 }
+			 ?>                                 
+			</select>
+		</div>			
+		<?php     	
+    }
+    
+    public function telaComboProcesso(){
+    	?>
+		<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+			<label for="pais">Processo</label>
+			<select id="processo" name="processo"  class="form-control">
+			<?php 
+			try {
+				$controladorProcesso = new ControladorProcesso();
+				$objetos = $controladorProcesso->listarDistinctProcesso();
+			} catch (Exception $e) { echo 'erro no listar Processo'; }
+			?>
+				<option value="">Selecione...</option>
+			<?php 
+			 foreach ($objetos as $objetos){
+			?>
+				<option value="<?php echo $objetos->getId()?>"><?php echo $objetos->getTitulo();?></option>
+			<?php                                  	
+			 }
+			 ?>                                 
+			</select>
+		</div>			
+		<?php  
+    }
+    
+    public function telaComboAtividade(){
+    	?>
+		<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+			<label for="pais">Atividade</label>
+			<select id="atividade" name="atividade"  class="form-control">
+			<?php 
+			try {
+				$controladorAtividade = new ControladorAtividade();
+				$objetos = $controladorAtividade->listarDistinctAtividade();
+			} catch (Exception $e) { echo 'erro no listar Atividade'; }
+			?>
+				<option value="">Selecione...</option>
+			<?php 
+			 foreach ($objetos as $objetos){
+			?>
+				<option value="<?php echo $objetos->getId()?>"><?php echo $objetos->getTitulo();?></option>
+			<?php                                  	
+			 }
+			 ?>                                 
+			</select>
+		</div>			
+		<?php  
+    }
+    
+    public function telaListarComentariosAtividadeProcesso($listComentario){
+    	?>
+		<script type="text/javascript">
+			$('.tablesorter').dataTable({
+				"sPaginationType": "full_numbers",
+				"bFilter": false,
+				"bLengthChange" : false
+			});
+            $(document).ready(function() {
+	            $('#tooltip').hide();
+            });
+
+            function showHideFilter(element){
+				var isShow = $(element).attr("show");
+				if(isShow == 'D'){
+					$('#div_filter').slideDown('slow');
+					$(element).attr("show", 'U');
+				}else if(isShow == 'U'){
+					$('#div_filter').slideUp('slow');
+					$(element).attr("show", 'D');
+				}				
+            }
+
+            function hideFilter(){
+				$('#div_filter').slideUp('slow');
+				$('#btnFilter').attr("show", 'D');
+            }
+		</script>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card">		
+				<div class="card-header d-flex">
+		            <h4 class="card-header-title">Comentários e Anexos</h4>
+		            <div class="toolbar ml-auto">
+		            	<a href="#" id="btnFilter" onclick="showHideFilter(this)" show="D" class="btn btn-light btn-sm">Filtro</a>
+		             	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaCadastrarAgenda" controlador="ControladorAgenda" retorno="div_central" class="btn btn-primary btn-sm buttonCadastro">Agenda</a>
+		            </div>
+		        </div>	
+		        <div class="card-footer" style="display: none;" id="div_filter">
+	        	<form action="#" method="post" id="formCadastro" class="">
+		            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
+		            <input type="hidden" name="controlador" id="controlador" value="ControladorAtividade"/>
+		            <input type="hidden" name="funcao" id="funcao" value="telaListarComentariosAtividadeProcesso"/>
+		            <div class="form-group">
+						<label for="nome" class="col-form-label">Descrição</label> 
+						<input id="descricao" name="descricao" type="text" value="" class="form-control" placeholder="Informe um texto a ser filtrado..." >
+					</div>
+					<div class="form-row">
+						<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
+							<label for="anexo">Anexo</label>
+							<select id="anexo" name="anexo"  class="form-control" >
+								<option value="" selected="selected" >Selecione...</option>
+								<option value="1" >Com Anexo</option>
+		                        <option value="2" >Sem Anexo</option>
+		        			</select>
+						</div>
+						<?php echo $this->telaComboFluxo(); ?>
+					</div>
+					<div class="form-row">							
+		        		<?php 
+			        		echo $this->telaComboProcesso();
+			        		echo $this->telaComboAtividade();
+		        		?>	
+	        		</div>
+					<div class="form-group">
+						<a href="#" onclick="fncFormCadastro(this); hideFilter();" class="btn btn-secondary btn-sm formCadastro">Filtrar</a>  
+					</div>
+				</form>	
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
+							<thead>
+								<tr>
+									<th>Código</th> 
+									<th>Fluxo</th> 
+									<th>Processo</th> 
+									<th>Atividade</th> 
+									<th>Descri&ccedil;&atilde;o</th> 
+									<th>Anexo</th> 
+									<th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
+								</tr>
+							</thead>
+							<tbody>
+							<?php 
+					        if ($listComentario) {
+					            $cont = 0;
+					            foreach ($listComentario as $comentario) {
+					                ++$cont;
+					                ?>
+					                    <tr>
+					                        <td id="valueDateChange" onclick="inputDateShow();"><label style="width: 80px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
+					                        <td><?php echo $comentario->getFluxoProcesso()->getTitulo(); ?></td>
+					                        <td><?php echo $comentario->getProcesso()->getTitulo(); ?></td>
+					                        <td><?php echo $comentario->getFluxoProcesso()->getAtividade()->getTitulo(); ?></td>
+					                        <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
+					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
+					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
+					                        </td>
+					                        <td style="text-align: center;">
+					                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
+					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
+					                        </td>
+					                    </tr>
+					                <?php
+						                }
+						            }
+						            ?>	 				
+							</tbody> 
+						</table>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>        
+    	<?php 
     }
 
 }
