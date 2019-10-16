@@ -167,11 +167,10 @@ class DaoAcao extends Dados{
 					FROM tb_workflow_acao_usuario aue
 					WHERE aue.status = 1 AND 
 					      aue.id_usuario = ".$usuario->getId()."  AND 
-					      aue.id_classe  = (SELECT id FROM tb_workflow_classe WHERE status = '1' AND funcao LIKE '%".$acao."%' )";
+					      aue.id_classe  = (SELECT id FROM tb_workflow_classe WHERE status = '1' AND funcao = '".$acao."' )";
 			
 			
-			$query = mysqli_query($conexao,$sql) or die ('Erro na execução do listar!');
-			$ultimo_id = 0;
+			$query = mysqli_query($conexao,$sql) or die ('Erro na execução do listar ação!');
 			
 			if(mysqli_num_rows($query) > 0){	
 				if($objetoModulo =  mysqli_fetch_object($query)){

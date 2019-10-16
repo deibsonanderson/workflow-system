@@ -18,7 +18,7 @@ class DaoUsuario extends Dados{
 			$sql .= " GROUP BY u.id";
 			
 			
-			$query = mysqli_query($conexao,$sql) or die ('Erro na execução do listar!: '. $sql);
+			$query = mysqli_query($conexao,$sql) or die ('Erro na execução do listar usuario!: '. $sql);
 			while($objetoUsuario =  mysqli_fetch_object($query)){
 				$usuario = new Usuario();
 				$usuario->setId($objetoUsuario->id);
@@ -49,7 +49,7 @@ class DaoUsuario extends Dados{
 			$sql .= " GROUP BY u.id";
 			
 			
-			$query = mysqli_query($conexao,$sql) or die ('Erro na execução do listar!');
+			$query = mysqli_query($conexao,$sql) or die ('Erro na execução do listar usuario login!');
 			while($objetoUsuario =  mysqli_fetch_object($query)){
 				$usuario = new Usuario();
 				$usuario->setId($objetoUsuario->id);
