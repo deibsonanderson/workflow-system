@@ -54,7 +54,8 @@ class ViewCategoriaAtividade {
                 "sPaginationType": "full_numbers"
             });
             $(document).ready(function() {
-                $('#tooltip').hide();                
+                $('#tooltip').hide();
+                fixTableLayout('example');                
             });            
         </script>
 <div class="row">

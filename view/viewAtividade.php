@@ -182,6 +182,7 @@ class ViewAtividade {
             });
             $(document).ready(function() {
                 $('#tooltip').hide();
+                fixTableLayout('example');            
             });
         </script>
 <div class="row">
@@ -959,6 +960,7 @@ class ViewAtividade {
 			});
             $(document).ready(function() {
 	            $('#tooltip').hide();
+	            //fixTableLayout('example');  
             });
 
             function showHideFilter(element){

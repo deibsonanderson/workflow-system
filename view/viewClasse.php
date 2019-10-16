@@ -80,6 +80,7 @@ class ViewClasse{
 				});
                 $(document).ready(function() {
                     $('#tooltip').hide();
+                    fixTableLayout('example');
                 });
                                 
 		</script>

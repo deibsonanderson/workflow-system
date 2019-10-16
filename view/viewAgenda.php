@@ -577,6 +577,7 @@ class ViewAgenda {
             });
             $(document).ready(function() {
                 $('#tooltip').hide();
+                fixTableLayout('example');
             });
         </script>
 		<div class="row">

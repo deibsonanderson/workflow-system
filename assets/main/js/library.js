@@ -1263,3 +1263,17 @@ function telaModalAgendaProcessoFluxo(info){
 		}
 	});
 }
+
+function fixTableLayout(tableName){
+    $('#'+tableName+'_wrapper').addClass('form-row');
+    $('#'+tableName+'_filter').addClass('form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2');
+    $('#'+tableName+'_filter input').addClass('form-control');
+    $('#'+tableName+'_length').addClass('form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2');
+    $('#'+tableName+'_length select').addClass('form-control');
+
+    $('#'+tableName+'_info').addClass('form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2');
+    $('#'+tableName+'_paginate').addClass('form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2');
+    $('#'+tableName+'_paginate').css('padding-top','0.85em');
+    $('#'+tableName+'_wrapper').css('margin-left','0');
+    $('#'+tableName+'_wrapper').css('margin-right','0');
+}

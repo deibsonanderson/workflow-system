@@ -314,8 +314,10 @@ class ViewProcesso {
                 "sPaginationType": "full_numbers",
                 "aaSorting": [[0, 'desc']]
             });
-            $('#tooltip').hide();
-
+            $(document).ready(function() {
+                $('#tooltip').hide();
+                fixTableLayout('example');                
+            });  
             /*$('.dimensions').tooltip({
                 track: true,
                 delay: 0,
