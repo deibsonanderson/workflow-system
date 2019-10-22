@@ -447,4 +447,39 @@ function exibirQuestion($identificador,$sim,$nao, $titulo, $frase) {
     <?php 
 }
 
+
+function paginacao($pagina,$numPaginas,$funcao,$controlador,$retorno){
+	?>
+<div class="text-center">
+	<nav aria-label="Page navigation">
+		<ul class="pagination">
+			<li class="page-item <?php echo ($pagina <= 1)?'disabled':'';?>"><a
+				class="page-link" href="#" onclick="fncButtonCadastro(this)"
+				pagina="<?php echo ($pagina <= 1)?1:($pagina-1); ?>"
+				funcao="<?php echo $funcao; ?>"
+				controlador="<?php echo $controlador; ?>"
+				retorno="<?php echo $retorno; ?>">Anterior</a></li>
+						    <?php 
+			for($i=1; $i <= $numPaginas; $i++){
+		    ?>
+		    <li class="page-item <?php echo ($pagina == $i)?'active':''; ?>"><a
+				class="page-link" href="#" onclick="fncButtonCadastro(this)"
+				pagina="<?php echo $i; ?>" funcao="<?php echo $funcao; ?>"
+				controlador="<?php echo $controlador; ?>"
+				retorno="<?php echo $retorno; ?>"><?php echo $i;?></a></li>
+			<?php } ?>
+		    <li
+				class="page-item <?php echo ($pagina >= $numPaginas)?'disabled':'';?>">
+				<a class="page-link" href="#" onclick="fncButtonCadastro(this)"
+				pagina="<?php echo ($pagina >= $numPaginas)?$numPaginas:($pagina+1); ?>"
+				funcao="<?php echo $funcao; ?>"
+				controlador="<?php echo $controlador; ?>"
+				retorno="<?php echo $retorno; ?>">Próximo</a>
+			</li>
+		</ul>
+	</nav>
+</div>
+<?php
+}
+
 ?>

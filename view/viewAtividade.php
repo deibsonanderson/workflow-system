@@ -29,156 +29,160 @@ class ViewAtividade {
             });
         </script>
 <div class="row">
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-		<div class="card">        
-        
-		<div class="card-header d-flex">
-            <h4 class="card-header-title">Cadatro de Atividade</h4>
-            <div class="toolbar ml-auto">
-	            <a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarAtividade" controlador="ControladorAtividade" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
-	            <a href="#" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Cadastrar</a>            	
-            </div>
-        </div>	
-		<div class="card-body">	
-        	<form action="#" method="post" id="formCadastro" class="">
-	            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
-	            <input type="hidden" name="controlador" id="controlador" value="ControladorAtividade"/>
-	            <input type="hidden" name="funcao" id="funcao" value="incluirAtividade"/>
-	            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
-	            <input type="hidden" name="arquivo" id="arquivo" value="" />    
-	            <input type="hidden" name="imagem" id="imagem" value="" />  						
-				<div class="form-group">
-					<label for="titulo" class="col-form-label">Nome *</label>
-					<input id="titulo" name="titulo" type="text" class="form-control mgs_alerta" >
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card">        
+		        
+				<div class="card-header d-flex">
+		            <h4 class="card-header-title">Cadatro de Atividade</h4>
+		            <div class="toolbar ml-auto">
+			            <a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarAtividade" controlador="ControladorAtividade" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+			            <a href="#" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Cadastrar</a>            	
+		            </div>
+		        </div>	
+				<div class="card-body">	
+		        	<form action="#" method="post" id="formCadastro" class="">
+			            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
+			            <input type="hidden" name="controlador" id="controlador" value="ControladorAtividade"/>
+			            <input type="hidden" name="funcao" id="funcao" value="incluirAtividade"/>
+			            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
+			            <input type="hidden" name="arquivo" id="arquivo" value="" />    
+			            <input type="hidden" name="imagem" id="imagem" value="" />  						
+						<div class="form-group">
+							<label for="titulo" class="col-form-label">Nome *</label>
+							<input id="titulo" name="titulo" type="text" class="form-control mgs_alerta" >
+						</div>
+						<div class="form-group">
+							<label for="descricao">Descrição</label>
+							<textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="link" class="col-form-label">Link</label>
+							<input id="link" name="link" type="text" class="form-control" onkeyup="this.value=this.value.toLowerCase();">
+						</div>
+						<div class="form-group">
+							<label for="vencimento" class="col-form-label">Dia do Vencimento</label>
+							<select id="vencimento" name="vencimento" class="form-control">
+							<option value="">Selecione...</option>
+							<?php 
+								for($i = 1; $i <=31; $i++){
+									echo "<option value='$i' >Dia $i</option>";
+								}
+							?>
+							</select>
+						</div>								
+						<div class="form-group">
+							<label for="valor" class="col-form-label">Valor R$</label>
+							<input id="valor" name="valor" type="text" value="0,00" class="form-control money" >
+						</div>
+						<div class="form-group">
+							<label for="propriedade">Propriedade</label>
+							<select id="propriedade" name="propriedade"  class="mgs_alerta form-control" >
+								<option value="1"  >Prositivo</option>
+		                        <option value="0" selected="selected" >Negativo</option>
+		        			</select>
+						</div>
+						<div class="form-group">
+							<label for="pais">Categoria *</label>
+							<select id="categoria" name="categoria" class="mgs_alerta form-control">
+							<?php 
+							try {
+								$controladorCategoriaAtividade = new ControladorCategoriaAtividade();
+								$objCategoriaAtividade = $controladorCategoriaAtividade->listarCategoriaAtividade();
+							} catch (Exception $e) { echo 'erro no listarCategoriaAtividade '; }
+							?>
+								<option value="">Selecione...</option>
+							<?php 
+							 foreach ($objCategoriaAtividade as $catCategoriaAtividade){
+							?>
+								<option value="<?php echo $catCategoriaAtividade->getId()?>"><?php echo $catCategoriaAtividade->getNome();?></option>
+							<?php                                  	
+							 }
+							 ?>                                 
+							</select>
+						</div>					
+					</form>				
+					<div class="form-group">
+		                <table border="0" style="width: 100%">
+		                    <tr>
+		                        <td colspan="3">
+		                            <label>Imagem Largura Máxima: 640px</label>&nbsp;&nbsp; 
+		                        </td>
+		                    </tr>
+		                    <tr style="height: 110px;">
+		                        <td style="width: 20%;text-align: right;">
+		                            <span id="span-teste" class="upload-wrapper" >  
+		                                <form action="./post-imagem.php" method="post" id="form_imagem">
+		                                    <input name="pastaArquivo" type="hidden" value="./imagens/atividade/">
+		                                    <input name="largura" type="hidden" value="128">
+		                                    <input name="opcao" type="hidden" value="1">
+		                                    <input name="tipoArq" type="hidden" value="imagem">
+		                                    <input type="file" name="file" class="upload-file" style="width: 30px;" onchange="javascript: fncSubmitArquivo('enviar', this);" >
+		                                    <input type="submit" id="enviar" style="display:none;">   
+		                                    <img src="./assets/images/img_upload.png" class="upload-button" />
+		                                </form> 
+		                            </span>
+		                        </td>
+		                        <td style="width: 20%">
+		                            <img onclick="fncRemoverArquivo('imagem', './imagens/atividade', 'imagem', 'imagemAtual', './assets/images/imagemPadrao.jpg');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;margin-bottom:7px;" class="upload-button" />
+		                        </td>
+		                        <td style="width: 60%">
+		                            <img id="imagemAtual" name="imagemAtual" src="./assets/images/imagemPadrao.jpg" border="0" style="" />
+		                            <progress id="progress" value="0" max="100" style="display:none;"></progress>
+		                            <span id="porcentagem" style="display:none;">0%</span>                            
+		                        </td>
+		                    </tr>
+		                </table>
+					</div>				
+					<div class="form-group">
+		                <table border="0" style="width: 100%">
+		                    <tr>
+		                        <td colspan="3">
+		                            <label>Tamanho Máxima: 2 Megas.</label>&nbsp;&nbsp; 
+		                        </td>
+		                    </tr>
+		                    <tr style="height: 110px;">
+		                        <td style="width: 20%;text-align: right;">
+		                            <span id="span-teste" class="upload-wrapper" >                                                        
+		                                <form action="./post-imagem.php" method="post" id="form_arquivo">
+		                                    <input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
+		                                    <input name="largura" type="hidden" value="640">
+		                                    <input name="opcao" type="hidden" value="1">
+		                                    <input name="tipoArq" type="hidden" value="arquivo">
+		                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
+		                                    <input type="submit" id="enviar_arquivo" style="display:none;">
+		                                    <img src="./assets/images/img_upload.png" class="upload-button" />
+		                                </form>
+		                            </span>
+		                        </td>
+		                        <td style="width: 20%">
+		                            <img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;margin-bottom:7px;" class="upload-button" />
+		                        </td>
+		                        <td style="width: 60%;">
+		                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
+		                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
+		                            <span id="porcentagem_arquivo" style="display:none;">0%</span>
+		                        </td>
+		                    </tr>
+		                </table>				
+					</div>
 				</div>
-				<div class="form-group">
-					<label for="descricao">Descrição</label>
-					<textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
 				</div>
-				<div class="form-group">
-					<label for="link" class="col-form-label">Link</label>
-					<input id="link" name="link" type="text" class="form-control" onkeyup="this.value=this.value.toLowerCase();">
-				</div>
-				<div class="form-group">
-					<label for="vencimento" class="col-form-label">Dia do Vencimento</label>
-					<select id="vencimento" name="vencimento" class="form-control">
-					<option value="">Selecione...</option>
-					<?php 
-						for($i = 1; $i <=31; $i++){
-							echo "<option value='$i' >Dia $i</option>";
-						}
-					?>
-					</select>
-				</div>								
-				<div class="form-group">
-					<label for="valor" class="col-form-label">Valor R$</label>
-					<input id="valor" name="valor" type="text" value="0,00" class="form-control money" >
-				</div>
-				<div class="form-group">
-					<label for="propriedade">Propriedade</label>
-					<select id="propriedade" name="propriedade"  class="mgs_alerta form-control" >
-						<option value="1"  >Prositivo</option>
-                        <option value="0" selected="selected" >Negativo</option>
-        			</select>
-				</div>
-				<div class="form-group">
-					<label for="pais">Categoria *</label>
-					<select id="categoria" name="categoria" class="mgs_alerta form-control">
-					<?php 
-					try {
-						$controladorCategoriaAtividade = new ControladorCategoriaAtividade();
-						$objCategoriaAtividade = $controladorCategoriaAtividade->listarCategoriaAtividade();
-					} catch (Exception $e) { echo 'erro no listarCategoriaAtividade '; }
-					?>
-						<option value="">Selecione...</option>
-					<?php 
-					 foreach ($objCategoriaAtividade as $catCategoriaAtividade){
-					?>
-						<option value="<?php echo $catCategoriaAtividade->getId()?>"><?php echo $catCategoriaAtividade->getNome();?></option>
-					<?php                                  	
-					 }
-					 ?>                                 
-					</select>
-				</div>					
-			</form>				
-			<div class="form-group">
-                <table border="0" style="width: 100%">
-                    <tr>
-                        <td colspan="3">
-                            <label>Imagem Largura Máxima: 640px</label>&nbsp;&nbsp; 
-                        </td>
-                    </tr>
-                    <tr style="height: 110px;">
-                        <td style="width: 20%;text-align: right;">
-                            <span id="span-teste" class="upload-wrapper" >  
-                                <form action="./post-imagem.php" method="post" id="form_imagem">
-                                    <input name="pastaArquivo" type="hidden" value="./imagens/atividade/">
-                                    <input name="largura" type="hidden" value="128">
-                                    <input name="opcao" type="hidden" value="1">
-                                    <input name="tipoArq" type="hidden" value="imagem">
-                                    <input type="file" name="file" class="upload-file" style="width: 30px;" onchange="javascript: fncSubmitArquivo('enviar', this);" >
-                                    <input type="submit" id="enviar" style="display:none;">   
-                                    <img src="./assets/images/img_upload.png" class="upload-button" />
-                                </form> 
-                            </span>
-                        </td>
-                        <td style="width: 20%">
-                            <img onclick="fncRemoverArquivo('imagem', './imagens/atividade', 'imagem', 'imagemAtual', './assets/images/imagemPadrao.jpg');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;margin-bottom:7px;" class="upload-button" />
-                        </td>
-                        <td style="width: 60%">
-                            <img id="imagemAtual" name="imagemAtual" src="./assets/images/imagemPadrao.jpg" border="0" style="" />
-                            <progress id="progress" value="0" max="100" style="display:none;"></progress>
-                            <span id="porcentagem" style="display:none;">0%</span>                            
-                        </td>
-                    </tr>
-                </table>
-			</div>				
-			<div class="form-group">
-                <table border="0" style="width: 100%">
-                    <tr>
-                        <td colspan="3">
-                            <label>Tamanho Máxima: 2 Megas.</label>&nbsp;&nbsp; 
-                        </td>
-                    </tr>
-                    <tr style="height: 110px;">
-                        <td style="width: 20%;text-align: right;">
-                            <span id="span-teste" class="upload-wrapper" >                                                        
-                                <form action="./post-imagem.php" method="post" id="form_arquivo">
-                                    <input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
-                                    <input name="largura" type="hidden" value="640">
-                                    <input name="opcao" type="hidden" value="1">
-                                    <input name="tipoArq" type="hidden" value="arquivo">
-                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
-                                    <input type="submit" id="enviar_arquivo" style="display:none;">
-                                    <img src="./assets/images/img_upload.png" class="upload-button" />
-                                </form>
-                            </span>
-                        </td>
-                        <td style="width: 20%">
-                            <img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;margin-bottom:7px;" class="upload-button" />
-                        </td>
-                        <td style="width: 60%;">
-                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
-                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
-                            <span id="porcentagem_arquivo" style="display:none;">0%</span>
-                        </td>
-                    </tr>
-                </table>				
 			</div>
-		</div>
-		</div>
-	</div>
 </div>		        	
         <?php
     }
 
-    public function telaListarAtividade($objAtividade) {
-        $controladorAcao = new ControladorAcao();
+    public function telaListarAtividade($objAtividade, $pagina) {
+    	$controladorAcao = new ControladorAcao();
         $perfil = $controladorAcao->retornaPerfilClasseAcao($_SESSION["login"], 'telaListarAtividade');
         ?>
         <script type="text/javascript">
             $('.tablesorter').dataTable({
-                "sPaginationType": "full_numbers"
+				"sPaginationType": "full_numbers"
+                /*"paging":   false,
+                "ordering": false,
+                "info":     false,
+                "searching": false*/
             });
             $(document).ready(function() {
                 $('#tooltip').hide();
@@ -186,75 +190,80 @@ class ViewAtividade {
             });
         </script>
 <div class="row">
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-		<div class="card">        
-        <div class="card-header d-flex">
-            <h4 class="card-header-title">Atividade</h4>
-        	<?php
-            if ($perfil === 'A') {
-            ?>
-            <div class="toolbar ml-auto">
-            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaCadastrarAtividade" controlador="ControladorAtividade" retorno="div_central" class="btn btn-primary btn-sm buttonCadastro">Novo</a>
-            </div>
-            <?php } ?>
-        </div>		
-		<div class="card-body">
-			<div class="table-responsive">
-				<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
-					<thead>
-						<tr>
-                            <th>C&oacute;digo</th> 
-                            <th>Imagem</th>
-                            <th>T&iacute;tulo</th>
-                            <th>Custo</th>  
-                            <th>Descri&ccedil;&atilde;o</th>
-							<th>Vencimento</th>							
-                            <th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
-						</tr>
-					</thead>
-					<tbody>
-                        <?php
-                        if ($objAtividade) {
-                            foreach ($objAtividade as $atividade) {
-                            	if($atividade->getPropriedade() == '1'){
-                            		$simbolo = '';
-                            		$colorcss = 'color:BLUE;';
-                            	}else{
-                            		$simbolo = '-';
-                            		$colorcss = 'color:RED;';
-								}
-								
-								$imagem = './assets/images/avatar-1.jpg';
-								if($atividade->getImagem() != null && $atividade->getImagem() != ''){
-									$imagem = './imagens/atividade/'.$atividade->getImagem();
-								}
-                            	?>    
-                                <tr> 
-                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo str_pad($atividade->getId(), 5, "0", STR_PAD_LEFT); ?></td> 
-                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center;"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
-                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo $atividade->getTitulo(); ?></td> 
-                                    <td onclick="getId(this)"  class="getId;" style="cursor:pointer;<?php echo $colorcss; ?>"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></td>
-                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo limitarTexto($atividade->getDescricao(), 110); ?></td> 
-                                     <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center; "  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo ($atividade->getVencimento() == "00" || $atividade->getVencimento() == null || $atividade->getVencimento() == "")?"-":$atividade->getVencimento(); ?></td>
-									<td style="text-align:center">
-                                        <div class="btn-group ml-auto">
-	                                        <?php
-	                                        echo ($perfil !== 'C')? '<button onclick="getId(this)" id="'.$atividade->getId().'" funcao="telaAlterarAtividade" controlador="ControladorAtividade" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-edit"></i></button>';
-	                                        echo ($perfil === 'A')? '<button onclick="fncDeleteId(this)" modal="question" id="'.$atividade->getId().'" funcao="excluirAtividade" controlador="ControladorAtividade" retorno="div_central" mensagem="4"  class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-trash-alt"></i></button>'; 
-	                                        ?>
-                                        </div>                                           
-                                    </td>
-                                </tr> 
-                                <?php
-                            }
-                        }
-                        ?>  	
-					</tbody>
-				</table>
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card">        
+			        <div class="card-header d-flex">
+			            <h4 class="card-header-title">Atividade</h4>
+			        	<?php
+			            if ($perfil === 'A') {
+			            ?>
+			            <div class="toolbar ml-auto">
+			            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaCadastrarAtividade" controlador="ControladorAtividade" retorno="div_central" class="btn btn-primary btn-sm buttonCadastro">Novo</a>
+			            </div>
+			            <?php } ?>
+			        </div>		
+					<div class="card-body">
+						<div class="table-responsive">
+							<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
+								<thead>
+									<tr>
+			                            <th>C&oacute;digo</th> 
+			                            <th>Imagem</th>
+			                            <th>T&iacute;tulo</th>
+			                            <th>Custo</th>  
+			                            <th>Descri&ccedil;&atilde;o</th>
+										<th>Vencimento</th>							
+			                            <th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
+									</tr>
+								</thead>
+								<tbody>
+			                        <?php
+			                        if ($objAtividade->retorno) {
+			                        	foreach ($objAtividade->retorno as $atividade) {
+			                            	if($atividade->getPropriedade() == '1'){
+			                            		$simbolo = '';
+			                            		$colorcss = 'color:BLUE;';
+			                            	}else{
+			                            		$simbolo = '-';
+			                            		$colorcss = 'color:RED;';
+											}
+											
+											$imagem = './assets/images/avatar-1.jpg';
+											if($atividade->getImagem() != null && $atividade->getImagem() != ''){
+												$imagem = './imagens/atividade/'.$atividade->getImagem();
+											}
+			                            	?>    
+			                                <tr> 
+			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo str_pad($atividade->getId(), 5, "0", STR_PAD_LEFT); ?></td> 
+			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center;"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
+			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo $atividade->getTitulo(); ?></td> 
+			                                    <td onclick="getId(this)"  class="getId;" style="cursor:pointer;<?php echo $colorcss; ?>"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></td>
+			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo limitarTexto($atividade->getDescricao(), 110); ?></td> 
+			                                     <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center; "  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo ($atividade->getVencimento() == "00" || $atividade->getVencimento() == null || $atividade->getVencimento() == "")?"-":$atividade->getVencimento(); ?></td>
+												<td style="text-align:center">
+			                                        <div class="btn-group ml-auto">
+				                                        <?php
+				                                        echo ($perfil !== 'C')? '<button onclick="getId(this)" id="'.$atividade->getId().'" funcao="telaAlterarAtividade" controlador="ControladorAtividade" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-edit"></i></button>';
+				                                        echo ($perfil === 'A')? '<button onclick="fncDeleteId(this)" modal="question" id="'.$atividade->getId().'" funcao="excluirAtividade" controlador="ControladorAtividade" retorno="div_central" mensagem="4"  class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-trash-alt"></i></button>'; 
+				                                        ?>
+			                                        </div>                                           
+			                                    </td>
+			                                </tr> 
+			                                <?php
+			                            }
+			                        }
+			                        ?>  	
+								</tbody>
+							</table>
+						</div>
+						<!--div class="row justify-content-md-center ">
+							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+								<?php //echo paginacao($pagina, $objAtividade->numPaginas, 'telaListarAtividade', 'ControladorAtividade', 'div_central'); ?>
+							</div>							
+						</div-->
+					</div>
+				</div>
 			</div>
-		</div>
-		</div>
-	</div>
 </div>		
     <?php
     }
@@ -1030,6 +1039,7 @@ class ViewAtividade {
 									<th>Processo</th> 
 									<th>Atividade</th> 
 									<th>Descri&ccedil;&atilde;o</th> 
+									<th>Titulo Arquivo</th> 
 									<th>Anexo</th> 
 									<th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
 								</tr>
@@ -1047,6 +1057,7 @@ class ViewAtividade {
 					                        <td><?php echo $comentario->getProcesso()->getTitulo(); ?></td>
 					                        <td><?php echo $comentario->getFluxoProcesso()->getAtividade()->getTitulo(); ?></td>
 					                        <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
+					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() == '')?'':'<a  target="_blank" href="./arquivos/atividade/'.$comentario->getArquivo().'">'.$comentario->getArquivo().'</a>'; ?></td>
 					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
 					                        </td>

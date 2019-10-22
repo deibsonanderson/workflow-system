@@ -31,9 +31,11 @@ class DaoAtividade extends Dados {
     	}
     }
     
-    public function listarAtividade($id = null, $id_usuario = null) {
+    public function listarAtividade($id = null, $id_usuario = null, $pag = null) {
         try {
             $retorno = array();
+            $paginado = new stdClass();
+            
             $conexao = $this->ConectarBanco();
             $sql = "SELECT a.id,a.titulo,a.descricao,a.link,a.arquivo,a.imagem,a.valor,a.propriedade,a.status,
                     a.id_categoria,LPAD(a.vencimento, 2, 0) as vencimento,c.nome as nome_categoria, c.status as status_categoria 
@@ -42,6 +44,14 @@ class DaoAtividade extends Dados {
 					WHERE a.status = '1' ";
 			$sql .= ($id_usuario != null) ? " AND a.id_usuario = " . $id_usuario : "";
             $sql .= ($id != null) ? " AND a.id = " . $id : "";
+            /*if($pag != null){
+            	$cmd = "select * from tb_workflow_atividade a INNER JOIN tb_workflow_categoria_atividade c ON (a.id_categoria = c.id) WHERE a.status = '1' AND a.id_usuario = " . $id_usuario;
+            	$total = mysqli_num_rows(mysqli_query($conexao, $cmd));
+            	$registros = 10;
+            	$numPaginas = ceil($total/$registros);
+            	$inicio = ($registros*$pag)-$registros; 
+            	$sql .=  " LIMIT $inicio,$registros ";
+            }*/
             
             $query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
             while ($objetoAtividade = mysqli_fetch_object($query)) {
@@ -67,7 +77,14 @@ class DaoAtividade extends Dados {
                 $retorno[] = $atividade;
             }            
             $this->FecharBanco($conexao);
-            return $retorno;
+            
+            $paginado->retorno = $retorno;
+            $paginado->numPaginas = $numPaginas;
+            $paginado->registros = $registros;
+            $paginado->total = $total;
+            $paginado->inicio = $inicio;
+            
+            return $paginado;
         } catch (Exception $e) {
             return $e;
         }

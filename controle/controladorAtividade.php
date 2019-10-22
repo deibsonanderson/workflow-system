@@ -12,10 +12,10 @@ class ControladorAtividade {
         
     }
 
-    public function listarAtividade($id = null) {
+    public function listarAtividade($id = null, $pagina = null) {
         try {
-            $daoAtividade = new DaoAtividade();
-            $retorno = $daoAtividade->listarAtividade($id,$_SESSION["login"]->getId());
+        	$daoAtividade = new DaoAtividade();
+            $retorno = $daoAtividade->listarAtividade($id,$_SESSION["login"]->getId(), $pagina);
             $daoAtividade->__destruct();
             return $retorno;
         } catch (Exception $e) {
@@ -133,7 +133,10 @@ class ControladorAtividade {
     public function telaListarAtividade($post = null) {
         try {
             $viewAtividade = new ViewAtividade();
-            $retorno = $viewAtividade->telaListarAtividade($this->listarAtividade(null));
+            if($post["pagina"] === null || $post["pagina"] === ''){
+            	$post["pagina"] = 1;
+            }
+            $retorno = $viewAtividade->telaListarAtividade($this->listarAtividade(null, $post["pagina"]), $post["pagina"]);
             $viewAtividade->__destruct();
             return $retorno;
         } catch (Exception $e) {

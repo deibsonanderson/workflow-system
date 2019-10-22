@@ -172,11 +172,12 @@
         controlador = $(element).attr('controlador');
         funcao = $(element).attr('funcao');
         retorno = $(element).attr('retorno');
+        pagina = $(element).attr('pagina')
 
         $.ajax({
             url: 'controlador.php',
             type: 'POST',
-            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao,
+            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&pagina='+ pagina,
             success: function(result) {
                 $('#' + retorno).html(result);
             },
