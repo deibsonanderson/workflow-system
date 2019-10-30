@@ -122,6 +122,7 @@ class ControladorAtividade {
     public function telaCadastrarAtividade($post = null) {
         try {
             $viewAtividade = new ViewAtividade();
+            $post = null;
             $retorno = $viewAtividade->telaCadastrarAtividade($post);
             $viewAtividade->__destruct();
             return $retorno;
@@ -147,7 +148,8 @@ class ControladorAtividade {
     public function telaAlterarAtividade($post = null) {
         try {
             $viewAtividade = new ViewAtividade();
-            $retorno = $viewAtividade->telaAlterarAtividade($this->listarAtividade($post["id"]));
+            $pagina = $this->listarAtividade($post["id"], null);
+            $retorno = $viewAtividade->telaAlterarAtividade($pagina->retorno);
             $viewAtividade->__destruct();
             return $retorno;
         } catch (Exception $e) {
@@ -158,7 +160,8 @@ class ControladorAtividade {
     public function telaVisualizarAtividade($post = null) {
         try {
             $viewAtividade = new ViewAtividade();
-            $retorno = $viewAtividade->telaVisualizarAtividade($this->listarAtividade($post["id"]));
+            $pagina = $this->listarAtividade($post["id"], null);
+            $retorno = $viewAtividade->telaVisualizarAtividade($pagina->retorno);
             $viewAtividade->__destruct();
             return $retorno;
         } catch (Exception $e) {

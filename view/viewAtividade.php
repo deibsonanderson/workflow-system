@@ -13,7 +13,7 @@ class ViewAtividade {
     }
 
     public function telaCadastrarAtividade($post) {
-        ?>
+    	?>
         <script type="text/javascript">
         <?php
         echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
@@ -148,7 +148,7 @@ class ViewAtividade {
 		                                    <input name="largura" type="hidden" value="640">
 		                                    <input name="opcao" type="hidden" value="1">
 		                                    <input name="tipoArq" type="hidden" value="arquivo">
-		                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
+		                                    <input type="file" name="file" class="upload-file" style="width: 30px;"  onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
 		                                    <input type="submit" id="enviar_arquivo" style="display:none;">
 		                                    <img src="./assets/images/img_upload.png" class="upload-button" />
 		                                </form>
@@ -269,7 +269,7 @@ class ViewAtividade {
     }
 
     public function telaAlterarAtividade($objAtividade) {
-        ?>
+    	?>
         <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
         <script type="text/javascript" >
@@ -290,7 +290,7 @@ class ViewAtividade {
             </div>
         </div>	
 		<div class="card-body">	
-        	<form action="#" method="post" id="formCadastro" class="">
+			<form action="#" method="post" id="formCadastro" class="">
                 <input type="hidden" name="retorno" id="retorno" value="div_central"/>
                 <input type="hidden" name="controlador" id="controlador" value="ControladorAtividade"/>
                 <input type="hidden" name="funcao" id="funcao" value="alterarAtividade"/>
@@ -389,7 +389,7 @@ class ViewAtividade {
                                     <input name="largura" type="hidden" value="128">
                                     <input name="opcao" type="hidden" value="1">
                                     <input name="tipoArq" type="hidden" value="imagem">
-                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar', this);" >
+                                    <input type="file" name="file" class="upload-file" style="width: 30px;"  onchange="javascript: fncSubmitArquivo('enviar', this);" >
                                     <input type="submit" id="enviar" style="display:none;">   
                                     <img src="./assets/images/img_upload.png" class="upload-button" />
                                 </form> 
@@ -421,7 +421,7 @@ class ViewAtividade {
                                     <input name="largura" type="hidden" value="640">
                                     <input name="opcao" type="hidden" value="1">
                                     <input name="tipoArq" type="hidden" value="arquivo">
-                                    <input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
+                                    <input type="file" name="file" class="upload-file" style="width: 30px;" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
                                     <input type="submit" id="enviar_arquivo" style="display:none;">
                                     <img src="./assets/images/img_upload.png" class="upload-button" />
                                 </form>
@@ -815,7 +815,7 @@ class ViewAtividade {
 												<input name="largura" type="hidden" value="640">
 												<input name="opcao" type="hidden" value="1">
 												<input name="tipoArq" type="hidden" value="arquivo">
-												<input type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
+												<input style="width: 30px;" type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
 												<input type="submit" id="enviar_arquivo" style="display:none;">
 												<img src="./assets/images/img_upload.png" class="upload-button" />
 											</form>										
@@ -962,14 +962,15 @@ class ViewAtividade {
     public function telaListarComentariosAtividadeProcesso($listComentario){
     	?>
 		<script type="text/javascript">
+			//$.fn.DataTable.ext.pager.numbers_length = 10;
 			$('.tablesorter').dataTable({
 				"sPaginationType": "full_numbers",
 				"bFilter": false,
-				"bLengthChange" : false
+				"bLengthChange" : true
 			});
             $(document).ready(function() {
 	            $('#tooltip').hide();
-	            //fixTableLayout('example');  
+	            fixTableLayout('example');  
             });
 
             function showHideFilter(element){

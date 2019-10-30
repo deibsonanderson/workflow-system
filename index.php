@@ -62,21 +62,11 @@ unset($_SESSION["login"]);
                     <div class="form-group">
                         <input class="form-control form-control-lg" name="senha" id="senha" type="password" placeholder="Password">
                     </div>
-                    <div class="form-group">
-                        <!--label class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Remember Me</span>
-                        </label-->
-                    </div>
-                    <button id="loginbtn" type="button" class="btn btn-primary btn-lg btn-block formLogin">Login</button>
+                    <div class="form-group"></div>
+                    <button id="loginbtn" onclick="fncFormLogin(this)" type="button" class="btn btn-primary btn-lg btn-block formLogin">Login</button>
                 </form>
             </div>
-            <div class="card-footer bg-white p-0  ">
-                <!--div class="card-footer-item card-footer-item-bordered">
-                    <a href="#" class="footer-link">Create An Account</a></div>
-                <div class="card-footer-item card-footer-item-bordered">
-                    <a href="#" class="footer-link">Forgot Password</a>
-                </div-->
-            </div>
+            <div class="card-footer bg-white p-0  "></div>
         </div>
     </div>
   
@@ -85,31 +75,12 @@ unset($_SESSION["login"]);
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
     <script src="./assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-	<script src="./assets/main/js/lib.js" type="text/javascript" ></script>
+	<script src="./assets/main/js/library.js" type="text/javascript" ></script>
     <script src="./assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function(){
 			$('#divLogin').css('padding','100px 0 0 '+((screen.width/2)-242)+'px');
 		});
-		/*
-		var mensagem = "<?php echo ($_GET["m"])?$_GET["m"]:"";?>";
-		var invalido = "<?php echo ($_GET["i"])?$_GET["i"]:"";?>";  
-		if(mensagem != ""){
-			//$.grow2UI('Área restrita!', '&nbsp;');	
-			//$('#msgSlide').html('<span>Área restrita!</span>');
-			//$('#msgSlide').slideDown('slow', function() {
-        	//	setTimeout("$('#msgSlide').slideUp('slow')",3000);
-	        //});
-						
-		}else if(invalido != ""){
-			//$.grow2UI('Usuário ou senha invalidos!', '&nbsp;');	
-			
-			$('#msgSlide').html('<span>Usuário ou senha invalidos!</span>');
-			$('#msgSlide').slideDown('slow', function() {
-	        	setTimeout("$('#msgSlide').slideUp('slow')",3000);
-	        });
-		}
-		*/
 	</script>
 	<script language="JavaScript">
 		function enterPressed(evn) {
