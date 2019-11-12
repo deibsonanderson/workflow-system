@@ -646,8 +646,10 @@ class ViewProcesso {
             $('#tooltip').hide();
 
             function showInput(id){
-				$('#span_'+id).css('display','none');
-				$('#valor_'+id).css('display','block');
+				if(detectarMobile() == false){
+					$('#span_'+id).css('display','none');
+					$('#valor_'+id).css('display','block');
+				}
             }
 
             function showSpan(id){
