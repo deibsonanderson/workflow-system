@@ -216,6 +216,7 @@ class ControladorProcesso {
     public function telaCadastrarProcesso($post = null) {
         try {
             $viewProcesso = new ViewProcesso();
+            $post = null;
             $retorno = $viewProcesso->telaCadastrarProcesso($post);
             $viewProcesso->__destruct();
             return $retorno;

@@ -97,6 +97,7 @@ class ControladorFluxo {
     public function telaCadastrarFluxo($post = null) {
         try {
             $viewFluxo = new ViewFluxo();
+            $post = null;
             $retorno = $viewFluxo->telaCadastrarFluxo($post);
             $viewFluxo->__destruct();
             return $retorno;

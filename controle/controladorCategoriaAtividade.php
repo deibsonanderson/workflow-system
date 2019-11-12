@@ -12,8 +12,9 @@ class ControladorCategoriaAtividade {
 	public function listarCategoriaAtividade($id = null){
 		try {
 			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
-			return $moduloCategoriaAtividade->listarCategoriaAtividade($id,$_SESSION["login"]->getId());
+			$retorno = $moduloCategoriaAtividade->listarCategoriaAtividade($id,$_SESSION["login"]->getId());
 			$moduloCategoriaAtividade->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -81,8 +82,10 @@ class ControladorCategoriaAtividade {
 	public function telaCadastrarCategoriaAtividade($post = null){
 		try {
 			$viewCategoriaAtividade = new ViewCategoriaAtividade();
-			return $viewCategoriaAtividade->telaCadastrarCategoriaAtividade($post);
+			$post = null;
+			$retorno = $viewCategoriaAtividade->telaCadastrarCategoriaAtividade($post);
 			$viewCategoriaAtividade->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -92,8 +95,10 @@ class ControladorCategoriaAtividade {
 	public function telaListarCategoriaAtividade($post = null){
 		try {
 			$viewCategoriaAtividade = new ViewCategoriaAtividade();
-			return $viewCategoriaAtividade->telaListarCategoriaAtividade($this->listarCategoriaAtividade(null));
+			$post = null;
+			$retorno =  $viewCategoriaAtividade->telaListarCategoriaAtividade($this->listarCategoriaAtividade($post));
 			$viewCategoriaAtividade->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -103,8 +108,9 @@ class ControladorCategoriaAtividade {
 	public function telaAlterarCategoriaAtividade($post = null){
 		try {
 			$viewCategoriaAtividade = new ViewCategoriaAtividade();
-			return $viewCategoriaAtividade->telaAlterarCategoriaAtividade($this->listarCategoriaAtividade($post["id"]));
+			$retorno = $viewCategoriaAtividade->telaAlterarCategoriaAtividade($this->listarCategoriaAtividade($post["id"]));
 			$viewCategoriaAtividade->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}

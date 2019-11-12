@@ -13,8 +13,9 @@ class ControladorAcao {
 	public function listarClasseAcao($post = null){
 		try {
 			$modoloAcao = new DaoAcao();
-			return $modoloAcao->listarClasseAcao($post);
+			$retorno = $modoloAcao->listarClasseAcao($post);
 			$modoloAcao->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		};
@@ -24,8 +25,9 @@ class ControladorAcao {
 	public function listarClasseAcaoParaMenu($post = null){
 		try {
 			$modoloAcao = new DaoAcao();
-			return $modoloAcao->listarClasseAcaoParaMenu($post);
+			$retorno =  $modoloAcao->listarClasseAcaoParaMenu($post);
 			$modoloAcao->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -59,9 +61,10 @@ class ControladorAcao {
 			$objUsuario = $controladorUsuario->listarUsuario($post["id"]);
 			$controladorUsuario->__destruct();
 			
-                        $viewAcao = new ViewAcao();
-			return $viewAcao->telaListarAcao($this->listarClasseAcao($objUsuario[0]),$objUsuario);
+            $viewAcao = new ViewAcao();
+            $retorno =  $viewAcao->telaListarAcao($this->listarClasseAcao($objUsuario[0]),$objUsuario);
 			$viewAcao->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}

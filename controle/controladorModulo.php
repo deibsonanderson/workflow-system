@@ -73,8 +73,10 @@ class ControladorModulo {
 	public function telaCadastrarModulo($post = null){
 		try {
 			$viewModulo = new ViewModulo();
-			return $viewModulo->telaCadastrarModulo($post);
+			$post = null;
+			$retorno = $viewModulo->telaCadastrarModulo($post);
 			$viewModulo->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -84,8 +86,9 @@ class ControladorModulo {
 	public function telaListarModulo($post = null){
 		try {
 			$viewModulo = new ViewModulo();
-			return $viewModulo->telaListarModulo($this->listarModulo(null));
+			$retorno = $viewModulo->telaListarModulo($this->listarModulo(null));
 			$viewModulo->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -95,8 +98,9 @@ class ControladorModulo {
 	public function telaAlterarModulo($post = null){
 		try {
 			$viewModulo = new ViewModulo();
-			return $viewModulo->telaAlterarModulo($this->listarModulo($post["id"]));
+			$retorno = $viewModulo->telaAlterarModulo($this->listarModulo($post["id"]));
 			$viewModulo->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -106,8 +110,9 @@ class ControladorModulo {
 	public function telaVisualizarModulo($post = null){
 		try {
 			$viewModulo = new ViewModulo();
-			return $viewModulo->telaVisualizarModulo($this->listarModulo($post["id"]));
+			$retorno = $viewModulo->telaVisualizarModulo($this->listarModulo($post["id"]));
 			$viewModulo->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}

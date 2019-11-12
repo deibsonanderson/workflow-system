@@ -13,8 +13,9 @@ class ControladorClasse {
 		try {
 			$moduloClasse = new DaoClasse();
 			
-			return $moduloClasse->listarClasse($id);
+			$retorno = $moduloClasse->listarClasse($id);
 			$moduloClasse->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -78,8 +79,10 @@ class ControladorClasse {
 	public function telaCadastrarClasse($post = null){
 		try {
 			$viewClasse = new ViewClasse();
-			return $viewClasse->telaCadastrarClasse($post);
+			$post = null;
+			$retorno = $viewClasse->telaCadastrarClasse($post);
 			$viewClasse->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -88,8 +91,9 @@ class ControladorClasse {
 	public function telaListarClasse($post = null){
 		try {
 			$viewClasse = new ViewClasse();
-			return $viewClasse->telaListarClasse($this->listarClasse(null));
+			$retorno = $viewClasse->telaListarClasse($this->listarClasse(null));
 			$viewClasse->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -98,8 +102,9 @@ class ControladorClasse {
 	public function telaAlterarClasse($post = null){
 		try {
 			$viewClasse = new ViewClasse();
-			return $viewClasse->telaAlterarClasse($this->listarClasse($post["id"]));
+			$retorno = $viewClasse->telaAlterarClasse($this->listarClasse($post["id"]));
 			$viewClasse->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -109,8 +114,9 @@ class ControladorClasse {
 	public function telaVisualizarClasse($post = null){
 		try {
 			$viewClasse = new ViewClasse();
-			return $viewClasse->telaVisualizarClasse($this->listarClasse($post["id"]));
+			$retorno = $viewClasse->telaVisualizarClasse($this->listarClasse($post["id"]));
 			$viewClasse->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}

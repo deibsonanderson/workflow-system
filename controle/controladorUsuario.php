@@ -11,8 +11,9 @@ class ControladorUsuario {
 	public function listarUsuario($id = null){
 		try {
 			$moduloUsuario = new DaoUsuario();
-			return $moduloUsuario->listarUsuario($id);
+			$retorno = $moduloUsuario->listarUsuario($id);
 			$moduloUsuario->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -22,8 +23,9 @@ class ControladorUsuario {
 	public function listarUsuarioLogin($id = null){
 		try {
 			$moduloUsuario = new DaoUsuario();
-			return $moduloUsuario->listarUsuarioLogin($id);
+			$retorno = $moduloUsuario->listarUsuarioLogin($id);
 			$moduloUsuario->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -37,7 +39,7 @@ class ControladorUsuario {
 			$usuario->setSenha(md5($post["senha"]));
 			$usuario->setImagem($post["imagem"]);
 			$usuario->setPerfil($post["perfil"]);			
-			//$usuario->setEmpresa($post["empresa"]);			
+						
 			$usuario->setStatus('1');
 			
 			$moduloUsuario = new DaoUsuario();
@@ -88,8 +90,10 @@ class ControladorUsuario {
 	public function telaCadastrarUsuario($post = null){
 		try {
 			$viewUsuario = new ViewUsuario();
-			return $viewUsuario->telaCadastrarUsuario();
+			$post = null;
+			$retorno = $viewUsuario->telaCadastrarUsuario();
 			$viewUsuario->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -98,8 +102,9 @@ class ControladorUsuario {
 	public function telaListarUsuario($post = null){
 		try {
 			$viewUsuario = new ViewUsuario();
-			return $viewUsuario->telaListarUsuario($this->listarUsuario(null));
+			$retorno = $viewUsuario->telaListarUsuario($this->listarUsuario(null));
 			$viewUsuario->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -108,8 +113,9 @@ class ControladorUsuario {
 	public function telaAlterarUsuario($post = null){
 		try {
 			$viewUsuario = new ViewUsuario();
-			return $viewUsuario->telaAlterarUsuario($this->listarUsuario($post["id"]));
+			$retorno = $viewUsuario->telaAlterarUsuario($this->listarUsuario($post["id"]));
 			$viewUsuario->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -118,8 +124,9 @@ class ControladorUsuario {
 	public function telaVisualizarUsuario($post = null){
 		try {
 			$viewUsuario = new ViewUsuario();
-			return $viewUsuario->telaVisualizarUsuario($this->listarUsuario($post["id"]));
+			$retorno = $viewUsuario->telaVisualizarUsuario($this->listarUsuario($post["id"]));
 			$viewUsuario->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}

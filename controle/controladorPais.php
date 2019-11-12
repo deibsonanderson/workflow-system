@@ -11,8 +11,9 @@ class ControladorPais {
 	public function listarPais($id = null){
 		try {
 			$modulo_pais = new DaoPais();
-			return $modulo_pais->listarPais($id);
+			$retorno = $modulo_pais->listarPais($id);
 			$modulo_pais->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}

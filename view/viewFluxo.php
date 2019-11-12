@@ -13,7 +13,7 @@ class ViewFluxo {
     }
 
     public function telaCadastrarFluxo($post) {
-        ?>
+    	?>
         <script type="text/javascript">
         <?php
             echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";

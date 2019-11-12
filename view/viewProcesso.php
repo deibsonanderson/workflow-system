@@ -656,7 +656,7 @@ class ViewProcesso {
 				$('#valor_'+id).css('display','none');
             }
          </script>    	
-		<div class="row">
+		<div class="row" >
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
 					<div class="card-header d-flex">
@@ -729,7 +729,7 @@ class ViewProcesso {
 					                            	<input maxlength="10" style="width:100px; display:none;" 
 					                            	       id="valor_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" 
 					                            	       name="valor_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" 
-					                            	       onblur="recalcular();showSpan('<?php echo $fluxoProcesso->getAtividade()->getId(); ?>');" type="text" class="form-control money valor" 
+					                            	       onblur="recalcular(); showSpan('<?php echo $fluxoProcesso->getAtividade()->getId(); ?>');" type="text" class="form-control money valor" 
 					                            	       value="<?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'3'); ?>" 
 					                            	       ativo="<?php echo $fluxoProcesso->getAtivo(); ?>">
 					                            </td> 

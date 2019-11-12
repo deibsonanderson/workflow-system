@@ -62,8 +62,8 @@ class ControladorLogin {
 		} else{
 			$retorno = $moduloLogin->ultimoAcesso($id);
 		}
-		return $retorno;
 		$moduloLogin->__destruct();
+		return $retorno;		
 	}
 
 }
