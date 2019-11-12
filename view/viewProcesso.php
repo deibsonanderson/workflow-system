@@ -262,21 +262,21 @@ class ViewProcesso {
 		                <?php
 		                if ($fluxoProcesso->getAtuante() == 1) {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/desactive.png" class="time-line-btn-action"><!-- Desmarcar --></a>
+		                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/desactive.png" class="time-line-btn-action"><!-- Desmarcar --></a>
 		                <?php
 		                } else if ($fluxoProcesso->getAtivo() == 1 && $fluxoProcesso->getAtuante() != 1) {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/active.png" class="time-line-btn-action"><!--Marcar --></a>
+		                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/active.png" class="time-line-btn-action"><!--Marcar --></a>
 		                <?php
 		                }
 		
 		                if ($fluxoProcesso->getAtivo() == 1) {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/close.png" class="time-line-btn-action"><!--Fechar --></a>
+		                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/close.png" class="time-line-btn-action"><!--Fechar --></a>
 		                <?php
 		                } else {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/open.png" class="time-line-btn-action"><!--Abrir --></a>
+		                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/open.png" class="time-line-btn-action"><!--Abrir --></a>
 		                <?php
 		                }
 		                ?>
@@ -637,13 +637,25 @@ class ViewProcesso {
     
     public function telaRelatorioProcessosAtividades($objProcesso){
     	?>
-        <script type="text/javascript">
-        	$('.tablesorter').dataTable({
-        		"info": false,
-                "paging":false
-            });
+    	<script type="text/javascript">
+//         	$('.tablesorter').dataTable({
+//         		"info": false,
+//                 "paging":false,
+//                 "searching": false
+//             });
             $('#tooltip').hide();
-        </script>    	
+
+            function showInput(id){
+				$('#span_'+id).css('display','none');
+				$('#valor_'+id).css('display','block');
+            }
+
+            function showSpan(id){
+            	$('#span_'+id).css('display','block');
+            	$('#span_'+id).html('R$'+ $('#valor_'+id).val());
+				$('#valor_'+id).css('display','none');
+            }
+         </script>    	
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
@@ -709,7 +721,18 @@ class ViewProcesso {
 											<tr>
 												<td style="text-align: center;"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
 					                            <td ><?php echo limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
-					                            <td style="<?php echo $colorcss; ?>" ><?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?></td> 
+					                            <td style="<?php echo $colorcss; ?>" >
+					                            	<span onclick="showInput('<?php echo $fluxoProcesso->getAtividade()->getId(); ?>');" id="span_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" style="display:block;" 
+					                            	      name="span_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" ativo="<?php echo $fluxoProcesso->getAtivo(); ?>" >
+					                            	      <?php echo 'R$ '.$sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?>
+					                            	</span>
+					                            	<input maxlength="10" style="width:100px; display:none;" 
+					                            	       id="valor_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" 
+					                            	       name="valor_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" 
+					                            	       onblur="recalcular();showSpan('<?php echo $fluxoProcesso->getAtividade()->getId(); ?>');" type="text" class="form-control money valor" 
+					                            	       value="<?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'3'); ?>" 
+					                            	       ativo="<?php echo $fluxoProcesso->getAtivo(); ?>">
+					                            </td> 
 												<td style="text-align: center; <?php echo $colorStatus; ?>"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 											</tr>	
 										<?php
@@ -725,31 +748,31 @@ class ViewProcesso {
 			                    <tbody>
 					                <tr>
 										<td style="" >Provisão:</td> 
-						                <td style="" ><?php echo 'R$ '.moneyFormat($objProcesso[0]->getProvisao()); ?></td> 
+						                <td id="provisao" style="" ><?php echo 'R$ '.moneyFormat($objProcesso[0]->getProvisao()); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" >Total Aberto:</td> 
-						                <td style="color:RED;" ><?php echo 'R$ '.moneyFormat($aberto); ?></td> 
+						                <td id="totalAberto" style="color:RED;" ><?php echo 'R$ '.moneyFormat($aberto); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" >Total Fechado:</td> 
-						                <td style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($fechado); ?></td> 
+						                <td id="totalFechado" style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($fechado); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" >Total Positivo:</td> 
-						                <td style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($positivo); ?></td> 
+						                <td id="totalPositivo" style="color:BLUE;" ><?php echo 'R$ '.moneyFormat($positivo); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" >Total Negativo:</td> 
-						                <td style="color:RED;" ><?php echo 'R$ '.moneyFormat($negativo); ?></td> 
+						                <td id="totalNegativo" style="color:RED;" ><?php echo 'R$ '.moneyFormat($negativo); ?></td> 
 						            </tr>  
 					                <tr>
 										<td style="" >Total Geral (Positivo x Negativo):</td> 
-						                <td style="" ><?php echo 'R$ '.moneyFormat(($positivo+$negativo)); ?></td> 
+						                <td id="totalGeral" style="" ><?php echo 'R$ '.moneyFormat(($positivo+$negativo)); ?></td> 
 						            </tr>
 						            <tr>
 										<td style="" >Provisão x Total Geral:</td> 
-						                <td style="color:#008000;" ><?php echo 'R$ '.moneyFormat(($objProcesso[0]->getProvisao()+($positivo+$negativo))); ?></td> 
+						                <td id="provisaoTotalGeral" style="color:#008000;" ><?php echo 'R$ '.moneyFormat(($objProcesso[0]->getProvisao()+($positivo+$negativo))); ?></td> 
 						            </tr>   
 						        </tbody>
 						     </table>       			                    
@@ -757,8 +780,28 @@ class ViewProcesso {
 					</div>
 				</div>
 			</div>
-		</div>			
-		<?php 
+		</div>
+		<script type="text/javascript">
+			$('.money').mask('000000000000000,00', {
+			  reverse: true,
+			  translation: {
+			    '0': {
+			      pattern: /-|\d/,
+			      recursive: true
+			    }
+			  },
+			  onChange: function(value, e) {
+			    var target = e.target,
+			      position = target.selectionStart; // Capture initial position
+
+			    target.value = value.replace(/(?!^)-/g, '').replace(/^,/, '').replace(/^-,/, '-');
+
+			    target.selectionEnd = position; // Set the cursor back to the initial position.
+			  }
+			});
+			recalcular();
+		</script>			
+	<?php 
     }
     
     

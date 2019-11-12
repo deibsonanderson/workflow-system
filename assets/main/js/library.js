@@ -373,11 +373,11 @@
         funcao = $(element).attr('funcao');
         retorno = $(element).attr('retorno');
         mensagem = $(element).attr('mensagem');
-
+        ordem = $(element).attr('ordem');
         $.ajax({
             url: 'controlador.php',
             type: 'POST',
-            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id,
+            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id + '&ordem=' + ordem,
             success: function(result) {
                 $('#' + retorno).html(result);
             },
@@ -717,7 +717,8 @@ function pad(n, len, padding) {
 
 
 function valorMonetario(valor, conversao) {
-    switch (conversao) {
+    valor = (isNaN(valor))?valor:valor.toString();
+	switch (conversao) {
         case "1":
             valor = valor.replace(" ", "");
             valor = valor.replace(".", "");
@@ -728,7 +729,16 @@ function valorMonetario(valor, conversao) {
             valor = valor.replace(" ", "");
             valor = valor.replace(",", "");
             valor = valor.replace(".", ",");
-            break;
+        break;
+        case "3":
+            valor = valor.replace(" ", "");
+            valor = valor.replace(",", "");
+            valor = valor.replace(".", ",");
+        
+            if(!valor.includes(",")){
+            	valor += ",00";
+            }
+        break;        
     }
     return valor;
 }
@@ -1277,4 +1287,44 @@ function fixTableLayout(tableName){
     $('#'+tableName+'_paginate').css('padding-top','0.85em');
     $('#'+tableName+'_wrapper').css('margin-left','0');
     $('#'+tableName+'_wrapper').css('margin-right','0');
+}
+
+function recalcular(){
+	var totalPositivo = Number.parseFloat(0.0);
+	var totalNegativo = Number.parseFloat(0.0);
+	var totalAberto = Number.parseFloat(0.0);
+	var totalFechado = Number.parseFloat(0.0);    
+	$(".valor").each(function() {
+		  var valor = $(this).val();
+		  var ativo = $(this).attr('ativo');
+		  if(valor){	
+		  	  valor = valor.replace(",", ".");	
+			  if(valor >= 0){
+				  totalPositivo += Number.parseFloat(valor);	
+              }else{
+            	  totalNegativo += Number.parseFloat(valor);
+              }
+		
+			  if(ativo == '1'){
+				  totalAberto += Number.parseFloat(valor);	
+              }else{
+            	  totalFechado += Number.parseFloat(valor);
+              }
+		  }else if(valor == '0'){
+			  $(this).val("0,00"); 	  
+		  }else{
+			  $(this).val("0,00");		
+	      }
+	});
+    var provisao = $('#provisao').html();
+        provisao = provisao.replace(".", "");
+        provisao = provisao.replace("R$ ", "");
+        provisao = provisao.replace(",", ".");
+        provisao = Number.parseFloat(provisao);
+    $('#totalAberto').html('R$ '+valorMonetario(totalAberto.toFixed(2),'3'));
+    $('#totalFechado').html('R$ '+valorMonetario(totalPositivo.toFixed(2),'3'));
+    $('#totalPositivo').html('R$ '+valorMonetario(totalPositivo.toFixed(2),'3'));
+    $('#totalNegativo').html('R$ '+valorMonetario(totalNegativo.toFixed(2),'3'));
+    $('#totalGeral').html('R$ '+valorMonetario((totalPositivo+totalNegativo).toFixed(2),'3'));
+    $('#provisaoTotalGeral').html('R$ '+valorMonetario((provisao+(totalPositivo+totalNegativo)).toFixed(2),'3'));
 }

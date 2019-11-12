@@ -103,6 +103,10 @@ function valorMonetario($valor, $conversao) {
             $valor = str_replace(",", "", $valor);
             $valor = str_replace(".", ",", $valor);
             break;
+        case "3":
+        	$valor = str_replace(" ", "", $valor);
+        	$valor = str_replace(",", "", $valor);
+        	break;
     }
     return $valor;
 }

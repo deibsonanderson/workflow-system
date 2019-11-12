@@ -118,7 +118,11 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->abrirFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	if($post["ordem"] == '2'){
+            		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
+            	}else{
+            		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	}
             }
             $daoProcesso->__destruct();
         } catch (Exception $e) {
@@ -133,7 +137,11 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->fecharFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	if($post["ordem"] == '2'){
+            		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
+            	}else{
+            		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	}
             }
             $daoProcesso->__destruct();
         } catch (Exception $e) {
@@ -148,7 +156,11 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->atuarFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	if($post["ordem"] == '2'){
+            		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
+            	}else{
+            		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	}
             }
             $daoProcesso->__destruct();
         } catch (Exception $e) {
@@ -163,7 +175,11 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->desatuarFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	if($post["ordem"] == '2'){
+            		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
+            	}else{
+            		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
+            	}
             }
             $daoProcesso->__destruct();
         } catch (Exception $e) {
