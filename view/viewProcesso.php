@@ -638,13 +638,16 @@ class ViewProcesso {
     public function telaRelatorioProcessosAtividades($objProcesso){
     	?>
     	<script type="text/javascript">
-//         	$('.tablesorter').dataTable({
-//         		"info": false,
-//                 "paging":false,
-//                 "searching": false
-//             });
+			if(detectarMobile() == true){
+		    	$('.tablesorter').dataTable({
+	        		"info": false,
+	                "paging":false,
+	                "searching": false
+	            });
+			}
             $('#tooltip').hide();
 
+            
             function showInput(id){
 				if(detectarMobile() == false){
 					$('#span_'+id).css('display','none');
