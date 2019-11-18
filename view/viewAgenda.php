@@ -180,22 +180,22 @@ class ViewAgenda {
 					            <?php
 					            if ($objAtividade != null && $objAtividade[0]->getLink()) {
 					            ?>			
-								<div class="form-group">
-									<label for="link" class="col-form-label" style="float: left;">Link</label> 
-									<br /><br />
-									<a style="float: left;" target="_blank" href="<?php echo $objAtividade[0]->getLink(); ?>"><?php echo $objAtividade[0]->getLink(); ?></a>
+								<div class="form-group" style="text-align:left;">
+									<label for="link" class="col-form-label">Link:&nbsp;
+										<a target="_blank" href="<?php echo $objAtividade[0]->getLink(); ?>"><?php echo $objAtividade[0]->getLink(); ?></a>
+									</label> 
 								</div>
 					            <?php
 					            }								
 					            if ($objAtividade != null && $objAtividade[0]->getArquivo()) {
 					            ?>
-								<div class="form-group">
+								<div class="form-group" style="text-align:left;" >
 									<label for="arquivoAtual" class="col-form-label">Arquivo da atividade disponivel:&nbsp;</label> 
 									<input type="hidden" name="arquivo_atividade" id="arquivo_atividade" value="<?php echo $objAtividade[0]->getArquivo(); ?>" /> 
-									<span name="arquivoAtual" onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')" style="cursor: pointer; text-decoration: underline;">
-					                    <?php echo $objAtividade[0]->getArquivo(); ?>       
+									<span name="arquivoAtual"  style="cursor: pointer;">
+					                    <a target="_blank" title="Abrir arquivo: <?php echo $objAtividade[0]->getArquivo(); ?>" style="text-decoration: underline;" href="<?php echo './arquivos/atividade/'.$objAtividade[0]->getArquivo(); ?>"><?php echo $objAtividade[0]->getArquivo(); ?></a> &nbsp;
+					                    <img src="assets/images/arrow.png" onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')" style="cursor: pointer;width: 29px;" title="Download arquivo: <?php echo $objAtividade[0]->getArquivo(); ?>" >
 					                </span>
-					                &nbsp; <img src="./assets/images/img_upload.png" border="0" style="float: none; margin: 0; width: 20px;" />
 								</div>
 								<?php } ?>
 							</div>
@@ -572,8 +572,10 @@ class ViewAgenda {
         $perfil = $controladorAcao->retornaPerfilClasseAcao($_SESSION["login"], 'telaListarAgenda');
         ?>
         <script type="text/javascript">
+            $.fn.dataTable.moment( 'DD/MM/YYYY' );
             $('.tablesorter').dataTable({
-                "sPaginationType": "full_numbers"
+                "sPaginationType": "full_numbers",
+                "aaSorting": [[0, 'desc']]
             });
             $(document).ready(function() {
                 $('#tooltip').hide();

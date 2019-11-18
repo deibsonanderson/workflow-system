@@ -171,7 +171,7 @@ class ControladorComentarioFluxoProcesso {
     			$filtro .= ' AND wa.id = '.$post["atividade"];
     		}
 
-    		$filtro .= ' ORDER BY wc.id DESC ';
+    		$filtro .= ' ORDER BY wc.data DESC ';
     		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
     		$retorno = $daoComentarioFluxoProcesso->listarComentarioFluxoProcessoByFilter($filtro);
     		$daoComentarioFluxoProcesso->__destruct();

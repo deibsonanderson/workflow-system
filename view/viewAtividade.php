@@ -753,9 +753,9 @@ class ViewAtividade {
 			            if ($objAtividade != null && $objAtividade[0]->getLink()) {
 			            ?>			
 						<div class="form-group">
-							<label for="link" class="col-form-label">Link</label> 
-							<br />
-							<a style="float: left;" target="_blank" href="<?php echo $objAtividade[0]->getLink(); ?>"><?php echo $objAtividade[0]->getLink(); ?></a>
+							<label for="link" class="col-form-label">Link:&nbsp;
+								<a target="_blank" href="<?php echo $objAtividade[0]->getLink(); ?>"><?php echo $objAtividade[0]->getLink(); ?></a>
+							</label> 
 						</div>
 			            <?php
 			            }
@@ -765,10 +765,10 @@ class ViewAtividade {
 						<div class="form-group">
 							<label for="arquivoAtual" class="col-form-label">Arquivo da atividade disponivel:&nbsp;</label> 
 							<input type="hidden" name="arquivo_atividade" id="arquivo_atividade" value="<?php echo $objAtividade[0]->getArquivo(); ?>" /> 
-							<span name="arquivoAtual" onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')" style="cursor: pointer; text-decoration: underline;">
-			                    <?php echo $objAtividade[0]->getArquivo(); ?>       
+							<span name="arquivoAtual"  style="cursor: pointer;">
+			                    <a target="_blank" title="Abrir arquivo: <?php echo $objAtividade[0]->getArquivo(); ?>" style="text-decoration: underline;" href="<?php echo './arquivos/atividade/'.$objAtividade[0]->getArquivo(); ?>"><?php echo $objAtividade[0]->getArquivo(); ?></a> &nbsp;
+			                    <img src="assets/images/arrow.png" onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')" style="cursor: pointer;width: 29px;" title="Download arquivo: <?php echo $objAtividade[0]->getArquivo(); ?>" >
 			                </span>
-			                &nbsp; <img src="./assets/images/img_upload.png" border="0" style="float: none; margin: 0; width: 20px;" />
 						</div>
 						<?php } ?>
 					</div>
@@ -866,7 +866,7 @@ class ViewAtividade {
                 ++$cont;
                 ?>
                     <tr>
-                        <td id="valueDateChange" onclick="inputDateShow();"><label style="width: 170px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
+                        <td><label style="width: 170px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
                         <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
                         <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
@@ -963,10 +963,12 @@ class ViewAtividade {
     	?>
 		<script type="text/javascript">
 			//$.fn.DataTable.ext.pager.numbers_length = 10;
+			$.fn.dataTable.moment( 'DD/MM/YYYY' );
 			$('.tablesorter').dataTable({
 				"sPaginationType": "full_numbers",
 				"bFilter": false,
-				"bLengthChange" : true
+				"bLengthChange" : true,
+				"aaSorting": [[1, 'desc']]
 			});
             $(document).ready(function() {
 	            $('#tooltip').hide();
@@ -1035,7 +1037,7 @@ class ViewAtividade {
 						<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
 							<thead>
 								<tr>
-									<th>Código</th> 
+									<th>Data</th> 
 									<th>Fluxo</th> 
 									<th>Processo</th> 
 									<th>Atividade</th> 
@@ -1053,7 +1055,7 @@ class ViewAtividade {
 					                ++$cont;
 					                ?>
 					                    <tr>
-					                        <td id="valueDateChange" onclick="inputDateShow();"><label style="width: 80px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
+					                        <td><label style="width: 80px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
 					                        <td><?php echo $comentario->getFluxoProcesso()->getTitulo(); ?></td>
 					                        <td><?php echo $comentario->getProcesso()->getTitulo(); ?></td>
 					                        <td><?php echo $comentario->getFluxoProcesso()->getAtividade()->getTitulo(); ?></td>

@@ -279,7 +279,28 @@ class ViewProcesso {
 		                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/open.png" class="time-line-btn-action"><!--Abrir --></a>
 		                <?php
 		                }
+		                
+		                if($fluxoProcesso->getAtividade()->getArquivo()){
 		                ?>
+		                	<input type="hidden" name="arquivo_atividade" id="arquivo_atividade" value="<?php echo $fluxoProcesso->getAtividade()->getArquivo(); ?>" /> 
+		                	<a href="#" class="btn <?php echo $btnEstilo; ?> btn-lg"  onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')"  ><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'arrow_enabled.png':'arrow.png'; ?>" class="time-line-btn-action"></a>
+						<?php 
+		                }
+		                
+		                if($fluxoProcesso->getAtividade()->getLink()){
+						?>
+							<a target="_blank" href="<?php echo $fluxoProcesso->getAtividade()->getLink(); ?>" class="btn <?php echo $btnEstilo; ?> btn-lg"><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'external_link_enabade.png':'external_link29.png'; ?>" class="time-line-btn-action"></a>
+						<?php 
+	                	}
+	                	
+	                	if($fluxoProcesso->getAtividade()->getVencimento()){
+	                	?>
+							<a target="#" class="btn <?php echo $btnEstilo; ?> btn-lg">
+								<span style="padding:1px;color:<?php echo ($fluxoProcesso->getAtivo() == '1')?'#ffffff':'#6c757d'; ?>"><?php echo str_pad($fluxoProcesso->getAtividade()->getVencimento(), 2, "0", STR_PAD_LEFT); ?></span>
+							</a>
+						<?php 
+	                	}
+						?>
 					</div>
 					<!-- cd-timeline__content -->
 				</div>
@@ -310,6 +331,7 @@ class ViewProcesso {
     	$perfil = $controladorAcao->retornaPerfilClasseAcao($_SESSION["login"], 'telaListarProcesso');
 		?>
         <script type="text/javascript">
+            $.fn.dataTable.moment( 'DD/MM/YYYY' );
         	$('.tablesorter').dataTable({
                 "sPaginationType": "full_numbers",
                 "aaSorting": [[0, 'desc']]

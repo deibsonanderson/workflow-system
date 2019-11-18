@@ -11,6 +11,8 @@
     <script src="./assets/libs/js/main-js.js"></script>
 	<script src="./assets/main/js/library.js"></script>
 	<script src="./assets/main/js/datatables-dt-1.10.18.min.js"></script>
+    <script src="./assets/main/js/moment.min.js"></script>
+    <script src="./assets/main/js/datetime-moment.js"></script>
 	
 	<script src="./assets/main/js/blockUI/jquery.blockUI.js" ></script>
 	<script src="./assets/main/js/jquery.equalHeight.js"></script>
