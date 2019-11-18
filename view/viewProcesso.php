@@ -111,6 +111,12 @@ class ViewProcesso {
     		$funcao = "telaTimeLineProcessoOrderAtivo";
     	}
     	?>
+    	<style>
+			.margin-box-top {
+				margin-top: 3px;
+				min-width: 62px;
+			}
+		</style>
         <script type="text/javascript">
         	$('.tablesorter').dataTable({
                 "sPaginationType": "full_numbers",
@@ -256,47 +262,47 @@ class ViewProcesso {
 							funcao="telaVisualizarAtividadeProcesso" 
 							controlador="controladorAtividade" 
 							retorno="div_central" 
-							class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso"><!--Detalhe-->
+							class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso margin-box-top"><!--Detalhe-->
 							<img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'go.png':'godisabled.png' ?>" class="time-line-btn-action"></a>
 
 		                <?php
 		                if ($fluxoProcesso->getAtuante() == 1) {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/desactive.png" class="time-line-btn-action"><!-- Desmarcar --></a>
+		                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso margin-box-top" ><img src="./assets/images/desactive.png" class="time-line-btn-action"><!-- Desmarcar --></a>
 		                <?php
 		                } else if ($fluxoProcesso->getAtivo() == 1 && $fluxoProcesso->getAtuante() != 1) {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/active.png" class="time-line-btn-action"><!--Marcar --></a>
+		                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso margin-box-top" ><img src="./assets/images/active.png" class="time-line-btn-action"><!--Marcar --></a>
 		                <?php
 		                }
 		
 		                if ($fluxoProcesso->getAtivo() == 1) {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/close.png" class="time-line-btn-action"><!--Fechar --></a>
+		                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso margin-box-top" ><img src="./assets/images/close.png" class="time-line-btn-action"><!--Fechar --></a>
 		                <?php
 		                } else {
 		                ?>
-		                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso" ><img src="./assets/images/open.png" class="time-line-btn-action"><!--Abrir --></a>
+		                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $fluxoProcesso->getId(); ?>" ordem="<?php echo $order; ?>" retorno="div_central" class="btn <?php echo $btnEstilo; ?> btn-lg getIdProcesso margin-box-top" ><img src="./assets/images/open.png" class="time-line-btn-action"><!--Abrir --></a>
 		                <?php
 		                }
 		                
 		                if($fluxoProcesso->getAtividade()->getArquivo()){
 		                ?>
 		                	<input type="hidden" name="arquivo_atividade" id="arquivo_atividade" value="<?php echo $fluxoProcesso->getAtividade()->getArquivo(); ?>" /> 
-		                	<a href="#" class="btn <?php echo $btnEstilo; ?> btn-lg"  onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')"  ><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'arrow_enabled.png':'arrow.png'; ?>" class="time-line-btn-action"></a>
+		                	<a href="#" title="Arquivo cadastrado na atividade" class="btn <?php echo $btnEstilo; ?> btn-lg margin-box-top"  onClick="fnAbreArquivo('arquivo_atividade', './arquivos/atividade/')"  ><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'arrow_enabled.png':'arrow.png'; ?>" class="time-line-btn-action"></a>
 						<?php 
 		                }
 		                
 		                if($fluxoProcesso->getAtividade()->getLink()){
 						?>
-							<a target="_blank" href="<?php echo $fluxoProcesso->getAtividade()->getLink(); ?>" class="btn <?php echo $btnEstilo; ?> btn-lg"><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'external_link_enabade.png':'external_link29.png'; ?>" class="time-line-btn-action"></a>
+							<a target="_blank" title="Link cadastrado na atividade" href="<?php echo $fluxoProcesso->getAtividade()->getLink(); ?>" class="btn <?php echo $btnEstilo; ?> btn-lg margin-box-top"><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'external_link_enabade.png':'external_link29.png'; ?>" class="time-line-btn-action"></a>
 						<?php 
 	                	}
 	                	
 	                	if($fluxoProcesso->getAtividade()->getVencimento()){
 	                	?>
-							<a target="#" class="btn <?php echo $btnEstilo; ?> btn-lg">
-								<span style="padding:1px;color:<?php echo ($fluxoProcesso->getAtivo() == '1')?'#ffffff':'#6c757d'; ?>"><?php echo str_pad($fluxoProcesso->getAtividade()->getVencimento(), 2, "0", STR_PAD_LEFT); ?></span>
+							<a target="#" class="btn <?php echo $btnEstilo; ?> btn-lg margin-box-top">
+								<span title="Data de vencimento" style="font-size:15px;color:<?php echo ($fluxoProcesso->getAtivo() == '1')?'#ffffff':'#6c757d'; ?>"><?php echo str_pad($fluxoProcesso->getAtividade()->getVencimento(), 2, "0", STR_PAD_LEFT); ?></span>
 							</a>
 						<?php 
 	                	}
