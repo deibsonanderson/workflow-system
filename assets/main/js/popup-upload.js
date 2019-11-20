@@ -44,12 +44,13 @@ function fncInserirArquivo(fomulario, progress, porcentagem, inputFile, arquivoE
                 $('#' + arquivoExibicao).css('display', '');
                 //Bloco do HTML com o retorno do nome da imagem
                 $('#' + inputFile).val(data);
+                $('#' + arquivoExibicao).attr('title', data);
                 if (tipoArquivo === "imagem") {
                     
                     $('#' + arquivoExibicao).attr('src', caminhoArquivo + 'thumbnail' + data);
                     
                 } else if (tipoArquivo === "arquivo") {
-                    if(data.length >= 30){
+                	if(data.length >= 30){
                         data = data.substring(0, 25)+'...';
                     }
                     $('#' + arquivoExibicao).html('<br />'+data);
@@ -75,8 +76,10 @@ function fncRemoverArquivo(inputFile, caminhoArquivo, tipoArquivo, arquivoExibic
     if (tipoArquivo === "imagem") {
         $('#' + arquivoExibicao).attr('src', imagemDefault);
         $('#' + arquivoExibicao).css('display', '');
+        $('#' + arquivoExibicao).attr('title', '');
         
     } else if (tipoArquivo === "arquivo") {
+    	$('#' + arquivoExibicao).attr('title', '');
         $('#' + arquivoExibicao).html("<br />Adicione um arquivo clicando no <img src='./assets/images/img_upload.png' border='0' style='float:none;margin:0;width: 20px;' /> ao lado.");
         $('#' + arquivoExibicao).css('cursor', 'default');
         $('#' + arquivoExibicao).css('text-decoration', 'none');        

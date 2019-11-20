@@ -792,15 +792,27 @@ class ViewAtividade {
 								<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
 									<label for="fluxo">Data Comentário *</label>
 									<div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-					                    <input type="text" id="data_comentario" name="data_comentario" onblur="validarCampo(this)" onkeypress="return mascara(event, this, '##/##/####');" maxlength="10" name="vigencia" value="<?php echo $dataIn; ?>" class="form-control datetimepicker-input mgs_alerta" data-target="#datetimepicker4">
+					                    <input type="text" id="data_comentario" name="data_comentario" onblur="validarCampo(this)" onkeypress="return mascara(event, this, '##/##/####');" maxlength="10"  value="<?php echo $dataIn; ?>" class="form-control datetimepicker-input mgs_alerta" data-target="#datetimepicker4">
 					                    <div class="input-group-append" id="datepicker" name="datepicker" data-target="#datetimepicker4" data-toggle="datetimepicker">
 					                  		<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
 					                    </div>
 					                </div>
 								</div>
 								<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
-									<label for="descricao">Descrição</label>
-									<textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+									<label for="descricao">Categoria *</label>
+									<select id="categoria_comentario" name="categoria_comentario"  class="mgs_alerta form-control" >
+										<option value="0" selected="selected" >Sem Anexo</option>
+				                        <option value="1" >Boleto</option>
+				                        <option value="2" >Comprovante</option>
+				                        <option value="3" >Fatura</option>
+				                        <option value="4" >Documento</option>
+				                        <option value="5" >Nota Fiscal</option>
+				                        <option value="6" >Outros</option>
+				        			</select>	
+					            </div>
+								<div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+									<label for="descricao">Descrição *</label>
+									<textarea class="form-control mgs_alerta" id="descricao" name="descricao" rows="1"></textarea>
 								</div>
 							</div>
 						</form>
@@ -823,23 +835,24 @@ class ViewAtividade {
 										<td>
 											<img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;" class="upload-button" />
 										</td>
+										<td style="padding-left: 10px;">
+				                            <span title="" name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   >Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
+				                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
+				                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
+										</td>
+
 									</tr>
 								</table>
-							</div>
-							<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
-	                            <span name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   ><br />Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
-	                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
-	                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
 							</div>
 						</div>
 			        </div>
 			        <div class="card-header d-flex">
 			            <div class="toolbar ml-auto">
-				            <button id="anexo-btn" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 66px;text-align: center;">
+				            <button id="anexo-btn" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
 				            	<span id="anexo-btn-text" style="display: block;">
-				            		Anexo
+				            		Adicionar Comentário/Anexo
 				            	</span>
-				            	<img id="anexo-btn-img" src="./assets/images/preloader.gif" style="display: none;width: 20px;margin-left: 10px;" />
+				            	<img id="anexo-btn-img" src="./assets/images/preloader.gif" style="display: none;width: 20px;margin-left: 80px;" />
 				            </button>            	
 			            </div>
 			        </div>	        
@@ -871,7 +884,37 @@ class ViewAtividade {
                         <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
-                        
+                        <td>
+	                        <?php
+	                        if($comentario->getArquivo() == '' || $comentario->getArquivo() == null){
+	                        	echo 'Sem anexo';
+	                        }else{
+	                        	switch ($comentario->getCategoria()) {
+									case '1' :
+										echo 'Boleto';
+										break;
+									case '2' :
+										echo 'Comprovante';
+										break;
+									case '3' :
+										echo 'Fatura';
+										break;							
+									case '4' :
+										echo 'Documento';
+										break;
+									case '5' :
+										echo 'Nota Fiscal';
+										break;
+									case '6' :
+										echo 'Outros';
+										break;
+									default :
+										echo 'Sem anexo';
+										break;
+		                        } 
+	                        }
+	                        ?>
+                        </td>
                         <td style="text-align: center;">
                            <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 

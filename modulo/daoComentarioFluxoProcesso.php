@@ -16,7 +16,7 @@ class DaoComentarioFluxoProcesso extends Dados {
         try {
             $retorno = array();
             $conexao = $this->ConectarBanco();
-            $sql = "SELECT id,descricao,arquivo,id_processo_fluxo,data,status FROM tb_workflow_comentario WHERE status = '1' ";
+            $sql = "SELECT id,descricao,categoria, arquivo,id_processo_fluxo,data,status FROM tb_workflow_comentario WHERE status = '1' ";
             $sql .= ($id != null) ? " AND id_processo_fluxo = " . $id : "";
             $sql .= " ORDER BY id DESC ";
 			
@@ -26,6 +26,7 @@ class DaoComentarioFluxoProcesso extends Dados {
                 $comentarioFluxoProcesso->setId($objetoComentarioFluxoProcesso->id);
                 $comentarioFluxoProcesso->setDescricao($objetoComentarioFluxoProcesso->descricao);
                 $comentarioFluxoProcesso->setArquivo($objetoComentarioFluxoProcesso->arquivo);
+                $comentarioFluxoProcesso->setCategoria($objetoComentarioFluxoProcesso->categoria);
                 $comentarioFluxoProcesso->setStatus($objetoComentarioFluxoProcesso->status);
                 $comentarioFluxoProcesso->setData($objetoComentarioFluxoProcesso->data);
                 $fluxoProcesso = new FluxoProcesso();
@@ -45,7 +46,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     	try {
     		$retorno = array();
     		$conexao = $this->ConectarBanco();
-    		$sql = "SELECT id,descricao,arquivo,id_processo_fluxo,data,status FROM tb_workflow_comentario WHERE status = '1' AND descricao != '' ";
+    		$sql = "SELECT id,descricao,categoria, arquivo,id_processo_fluxo,data,status FROM tb_workflow_comentario WHERE status = '1' AND descricao != '' ";
     		$sql .= ($ids != null) ? " AND id_processo_fluxo IN (" . implode(',', array_map('intval', $ids)). ")" : "";
     		$sql .= " ORDER BY id DESC ";
     		
@@ -55,6 +56,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     			$comentarioFluxoProcesso->setId($objetoComentarioFluxoProcesso->id);
     			$comentarioFluxoProcesso->setDescricao($objetoComentarioFluxoProcesso->descricao);
     			$comentarioFluxoProcesso->setArquivo($objetoComentarioFluxoProcesso->arquivo);
+    			$comentarioFluxoProcesso->setCategoria($objetoComentarioFluxoProcesso->categoria);
     			$comentarioFluxoProcesso->setStatus($objetoComentarioFluxoProcesso->status);
     			$comentarioFluxoProcesso->setData($objetoComentarioFluxoProcesso->data);
     			$fluxoProcesso = new FluxoProcesso();
@@ -100,6 +102,7 @@ class DaoComentarioFluxoProcesso extends Dados {
             $sql = "SELECT wc.id,
                            wc.descricao,
                            wc.arquivo,
+						   wc.categoria,	
                            wc.id_processo_fluxo,
                            wc.data,
                            wc.status,
@@ -126,6 +129,7 @@ class DaoComentarioFluxoProcesso extends Dados {
                 $comentarioFluxoProcesso->setId($objetoComentarioFluxoProcesso->id);
                 $comentarioFluxoProcesso->setDescricao($objetoComentarioFluxoProcesso->descricao);
                 $comentarioFluxoProcesso->setArquivo($objetoComentarioFluxoProcesso->arquivo);
+                $comentarioFluxoProcesso->setCategoria($objetoComentarioFluxoProcesso->categoria);
                 $comentarioFluxoProcesso->setStatus($objetoComentarioFluxoProcesso->status);
                 $comentarioFluxoProcesso->setData($objetoComentarioFluxoProcesso->data);
                 $fluxoProcesso = new FluxoProcesso();
@@ -160,7 +164,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     public function incluirComentarioFluxoProcesso($comentarioFluxoProcesso) {
         try {
             $conexao = $this->ConectarBanco();
-            $sql = "INSERT INTO tb_workflow_comentario(descricao,arquivo,id_processo_fluxo,data,status) VALUES ('" . $comentarioFluxoProcesso->getDescricao() . "','" . $comentarioFluxoProcesso->getArquivo() . "','" . $comentarioFluxoProcesso->getFluxoProcesso()->getId() . "',".$comentarioFluxoProcesso->getData().",'" . $comentarioFluxoProcesso->getStatus() . "')";
+            $sql = "INSERT INTO tb_workflow_comentario(descricao,arquivo,categoria,id_processo_fluxo,data,status) VALUES ('" . $comentarioFluxoProcesso->getDescricao() . "','" . $comentarioFluxoProcesso->getArquivo() . "','" . $comentarioFluxoProcesso->getCategoria() . "','" . $comentarioFluxoProcesso->getFluxoProcesso()->getId() . "',".$comentarioFluxoProcesso->getData().",'" . $comentarioFluxoProcesso->getStatus() . "')";
             $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do insert!');
             $this->FecharBanco($conexao);
             return $retorno;
@@ -204,7 +208,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     	try {
     		$retorno = array();
     		$conexao = $this->ConectarBanco();
-    		$sql = "SELECT id,descricao,arquivo,id_processo_fluxo,data,status FROM tb_workflow_comentario WHERE status = '1' ";
+    		$sql = "SELECT id,descricao,arquivo,categoria,id_processo_fluxo,data,status FROM tb_workflow_comentario WHERE status = '1' ";
     		$sql .= ($id != null) ? " AND id = " . $id : "";
     		
     		
@@ -214,6 +218,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     			$comentario->setId($objetoComentarioFluxoProcesso->id);
     			$comentario->setDescricao($objetoComentarioFluxoProcesso->descricao);
     			$comentario->setArquivo($objetoComentarioFluxoProcesso->arquivo);
+    			$comentario->setCategoria($objetoComentarioFluxoProcesso->categoria);
     			$comentario->setStatus($objetoComentarioFluxoProcesso->status);
     			$comentario->setData($objetoComentarioFluxoProcesso->data);
     			$fluxoProcesso = new FluxoProcesso();
@@ -236,6 +241,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     		$sql = "SELECT wc.id,
                            wc.descricao,
                            wc.arquivo,
+						   wc.categoria,	
                            wc.id_processo_fluxo,
                            wc.data,
                            wc.status,
@@ -266,6 +272,7 @@ class DaoComentarioFluxoProcesso extends Dados {
     			$comentario->setArquivo($objetoComentarioFluxoProcesso->arquivo);
     			$comentario->setStatus($objetoComentarioFluxoProcesso->status);
     			$comentario->setData($objetoComentarioFluxoProcesso->data);
+    			$comentario->setCategoria($objetoComentarioFluxoProcesso->categoria);
     			
     			$fluxoProcesso = new FluxoProcesso();
     			$fluxoProcesso->setId($objetoComentarioFluxoProcesso->id_processo_fluxo);

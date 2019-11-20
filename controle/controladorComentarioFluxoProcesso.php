@@ -61,6 +61,16 @@ class ControladorComentarioFluxoProcesso {
             $comentarioFluxoProcesso = new ComentarioFluxoProcesso();
             $comentarioFluxoProcesso->setDescricao($post["descricao"]);
             $comentarioFluxoProcesso->setArquivo($post["arquivo"]);
+            
+            if($post["arquivo"] == '' || $post["arquivo"] == null){
+            	$comentarioFluxoProcesso->setCategoria('0');
+            }else{
+            	if(($post["arquivo"] != '' || $post["arquivo"] != null) && $post["categoria_comentario"] == '0'){
+            		$comentarioFluxoProcesso->setCategoria('6');
+            	}else{
+            		$comentarioFluxoProcesso->setCategoria($post["categoria_comentario"]);
+            	}
+            }
             $fluxoProcesso = new FluxoProcesso();
             $fluxoProcesso->setId($post["id_processo_fluxo"]);
             $comentarioFluxoProcesso->setFluxoProcesso($fluxoProcesso);

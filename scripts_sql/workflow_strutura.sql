@@ -455,4 +455,6 @@ ALTER TABLE `tb_workflow_titulo_fluxo`
 ALTER TABLE `tb_workflow_usuario`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
   
-ALTER TABLE `tb_workflow_atividade` ADD `vencimento` INT NULL DEFAULT NULL AFTER `status`;  
+ALTER TABLE `tb_workflow_atividade` ADD `vencimento` INT NULL DEFAULT NULL AFTER `status`; 
+
+ALTER TABLE `tb_workflow_comentario` ADD `categoria` VARCHAR(10) NULL DEFAULT NULL AFTER `arquivo`; 
