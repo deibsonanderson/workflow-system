@@ -49,20 +49,10 @@
 				$('#' + retorno).html(result);
 			},
 			beforeSend : function() {
-				$('#loader').css({
-					display : "block"
-				});
-				$('#div-loader').css({
-					opacity : 0.5
-				});
+				showLoading();
 			},
 			complete : function() {
-				$('#loader').css({
-					display : "none"
-				});
-				$('#div-loader').css({
-					opacity : 1.0
-				});
+				hideLoading();
 				$('#div_a').remove();
 				$('#' + retorno).css('display', '');
 				if (mensagem) {
@@ -146,14 +136,10 @@
                     $('#' + retorno).html(result);
                 },
                 beforeSend: function() {
-                    $('#loader').css({
-                        display: "block"
-                    });
+                	showLoading();
                 },
                 complete: function() {
-                    $('#loader').css({
-                        display: "none"
-                    });
+                	hideLoading();
                     if (mensagem) {
                         msgSlide(mensagem);
                     }
@@ -182,14 +168,10 @@
                 $('#' + retorno).html(result);
             },
             beforeSend: function() {
-                $('#loader').css({
-                    display: "block"
-                });
+            	showLoading();
             },
             complete: function() {
-                $('#loader').css({
-                    display: "none"
-                });
+            	hideLoading();
                 $('#div_a').remove();
                 $('#' + retorno).css('display', '');
 
@@ -228,14 +210,10 @@
                     $('#' + retorno).html(result);
                 },
                 beforeSend: function() {
-                    $('#loader').css({
-                        display: "block"
-                    });
+                	showLoading();
                 },
                 complete: function() {
-                    $('#loader').css({
-                        display: "none"
-                    });
+                	hideLoading();
                     $.unblockUI();
                     if (mensagem) {
                         msgSlide(mensagem);
@@ -274,14 +252,10 @@
                     $('#' + retorno).html(result);
                 },
                 beforeSend: function() {
-                    $('#loader').css({
-                        display: "block"
-                    });
+                	showLoading();
                 },
                 complete: function() {
-                    $('#loader').css({
-                        display: "none"
-                    });
+                	hideLoading();
                 }
             });
 
@@ -342,14 +316,10 @@
                 $('#' + retorno).html(result);
             },
             beforeSend: function() {
-                $('#loader').css({
-                    display: "block"
-                });
+            	showLoading();
             },
             complete: function() {
-                $('#loader').css({
-                    display: "none"
-                });
+            	hideLoading();
                 $('#div_a').remove();
                 $('#' + retorno).css('display', '');
 
@@ -383,14 +353,10 @@
                 $('#' + retorno).html(result);
             },
             beforeSend: function() {
-                $('#loader').css({
-                    display: "block"
-                });
+            	showLoading();
             },
             complete: function() {
-                $('#loader').css({
-                    display: "none"
-                });
+            	hideLoading();
                 $('#div_a').remove();
                 $('#' + retorno).css('display', '');
                 if (mensagem) {
@@ -423,14 +389,10 @@
             	$('#' + retorno).html(result);
             },
             beforeSend: function() {
-                $('#loader').css({
-                    display: "block"
-                });
+            	showLoading();
             },
             complete: function() {
-                $('#loader').css({
-                    display: "none"
-                });
+            	hideLoading();
                 $('#' + retorno).css('display', '');
                 if (mensagem) {
                     msgSlide(mensagem);
@@ -465,20 +427,10 @@
                 $('#' + retorno).html(result);
             },
             beforeSend: function() {
-                $('#loader').css({
-                    display: "block"
-                });
-                $('#div-loader').css({
-                    opacity: 0.5
-                });
+            	showLoading();
             },
             complete: function() {
-                $('#loader').css({
-                    display: "none"
-                });
-                $('#div-loader').css({
-                    opacity: 1.0
-                });
+            	hideLoading();
                 $('#div_a').remove();
                 $('#' + retorno).css('display', '');
                 if (mensagem) {
@@ -915,14 +867,10 @@ function inputUpdate(fluxoProcessoId,propriedade){
             //$('#' + retorno).html(result);
         },
         beforeSend: function() {
-            $('#loader').css({
-                display: "block"
-            });
+        	showLoading();
         },
         complete: function() {
-            $('#loader').css({
-                display: "none"
-            });
+        	hideLoading();
             $('#div_a').remove();
             $('#' + retorno).css('display', '');
 
@@ -1040,20 +988,10 @@ function telaVisualizarEventosAgenda(dateText){
 			$('#div_agenda_retorno').html(result);
 		},
 		beforeSend: function() {
-			$('#loader').css({
-				display: "block"
-			});
-			$('#div-loader').css({
-				opacity: 0.5
-			});
+			showLoading();
 		},
 		complete: function() {
-			$('#loader').css({
-				display: "none"
-			});
-			$('#div-loader').css({
-				opacity: 1.0
-			});
+			hideLoading();
 		}
 	});
 }
@@ -1067,20 +1005,10 @@ function telaVisualizarComentariosAgenda(dateText){
 			$('#div_comentario_retorno').html(result);
 		},
 		beforeSend: function() {
-			$('#loader').css({
-				display: "block"
-			});
-			$('#div-loader').css({
-				opacity: 0.5
-			});
+			showLoading();
 		},
 		complete: function() {
-			$('#loader').css({
-				display: "none"
-			});
-			$('#div-loader').css({
-				opacity: 1.0
-			});
+			hideLoading();
 		}
 	});
 }
@@ -1097,20 +1025,10 @@ function ordenarAgenda() {
 					//$('#div_agenda_retorno').html(result);
 				},
 				beforeSend: function() {
-					$('#loader').css({
-						display: "block"
-					});
-					$('#div-loader').css({
-						opacity: 0.5
-					});
+					showLoading();
 				},
 				complete: function() {
-					$('#loader').css({
-						display: "none"
-					});
-					$('#div-loader').css({
-						opacity: 1.0
-					});
+					hideLoading();
 				}
 			});
 		}
@@ -1128,20 +1046,10 @@ function desativarAgenda(id, ativo) {
 			$('#div_central').html(result);
 		},
 		beforeSend: function() {
-			$('#loader').css({
-				display: "block"
-			});
-			$('#div-loader').css({
-				opacity: 0.5
-			});
+			showLoading();
 		},
 		complete: function() {
-			$('#loader').css({
-				display: "none"
-			});
-			$('#div-loader').css({
-				opacity: 1.0
-			});
+			hideLoading();
 		}
 	});
 }
@@ -1186,14 +1094,10 @@ function incluirAgenda(element){
                 $('#' + retorno).html(result);
             },
             beforeSend: function() {
-                $('#loader').css({
-                    display: "block"
-                });
+            	showLoading();
             },
             complete: function() {
-                $('#loader').css({
-                    display: "none"
-                });
+            	hideLoading();
                 if (mensagem) {
                     msgSlide(mensagem);
                 }
@@ -1220,20 +1124,10 @@ function removerAgenda(id, arquivo) {
 			$('#div_central').html(result);
 		},
 		beforeSend: function() {
-			$('#loader').css({
-				display: "block"
-			});
-			$('#div-loader').css({
-				opacity: 0.5
-			});
+			showLoading();
 		},
 		complete: function() {
-			$('#loader').css({
-				display: "none"
-			});
-			$('#div-loader').css({
-				opacity: 1.0
-			});
+			hideLoading();
             if (mensagem) {
                 msgSlide("4");
             }
@@ -1258,20 +1152,10 @@ function telaModalAgendaProcessoFluxo(info){
 	        	
 		},
 		beforeSend: function() {
-			$('#loader').css({
-				display: "block"
-			});
-			$('#div-loader').css({
-				opacity: 0.5
-			});
+			showLoading();
 		},
 		complete: function() {
-			$('#loader').css({
-				display: "none"
-			});
-			$('#div-loader').css({
-				opacity: 1.0
-			});
+			hideLoading();
 		}
 	});
 }
@@ -1288,6 +1172,24 @@ function fixTableLayout(tableName){
     $('#'+tableName+'_paginate').css('padding-top','0.85em');
     $('#'+tableName+'_wrapper').css('margin-left','0');
     $('#'+tableName+'_wrapper').css('margin-right','0');
+}
+
+function showLoading(){
+    $('#loader').css({
+        display: "block"
+    });
+    $('#div-loader').css({
+        opacity: 0.5
+    });
+}
+
+function hideLoading(){
+	$('#loader').css({
+		display: "none"
+	});
+	$('#div-loader').css({
+		opacity: 1.0
+	});
 }
 
 function recalcular(){
