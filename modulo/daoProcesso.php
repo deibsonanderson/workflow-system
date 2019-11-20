@@ -462,8 +462,8 @@ class DaoProcesso extends Dados {
     		
     		$sql .= ($id_usuario != null) ? " AND wp.id_usuario = " . $id_usuario : "";
     		
-    		$sql .= " ORDER BY wa.vencimento ASC ";
-    		
+    		$sql .= " ORDER BY CONCAT(YEAR(wp.data),'-',LPAD( MONTH(wp.data), 2, 0),'-',LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0)) ASC ";
+    		//debug($sql);
     		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
     		$ultimo_id = 0;
     		$processo = new Processo();
