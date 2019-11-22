@@ -211,17 +211,20 @@ class ViewProcesso {
 					</div>
 					<!-- cd-timeline__img -->
 					<div class="cd-timeline__content js-cd-content">
+						<?php $tituloProcessoFluxo = ($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(); ?>
+						
 						<h3 id_processo_fluxo="<?php echo $fluxoProcesso->getId(); ?>"
 							id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
 							id="<?php echo $fluxoProcesso->getAtividade()->getId(); ?>"
 							ativo="<?php echo $fluxoProcesso->getAtivo(); ?>"
 							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+							titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
 							onclick="getIdProcesso(this)"
 							funcao="telaVisualizarAtividadeProcesso" 
 							controlador="controladorAtividade" 
 							retorno="div_central"
 							style="cursor: pointer;">
-								<?php echo $fluxoProcesso->getAtividade()->getTitulo(); ?>
+								<?php echo $tituloProcessoFluxo; ?>
 							</h3>
 						<p>
 						<?php 
@@ -313,7 +316,13 @@ class ViewProcesso {
            <?php
            		}
     	    }
-	       ?>    	
+	       ?>    
+	       		<!-- div class="cd-timeline__block js-cd-block" style="" >
+					<div class="cd-timeline__img cd-timeline__img--plus js-cd-img" style="cursor: pointer;margin-top: 10px;background:#ffffff;">
+						<img src="./assets/images/notes-add.gif" alt="Picture">
+					</div>
+					<div style="opacity: 0.0" class="cd-timeline__content js-cd-content"></div>
+				</div-->				
 			</div>
 		</section>
 		<div class="row">
@@ -323,12 +332,13 @@ class ViewProcesso {
 		            <h4 class="card-header-title"></h4>
 		            <div class="toolbar ml-auto">
 		            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
-		            	<a href="#timeline-top" class="btn btn-primary btn-sm buttonCadastro">Topo</a>
+		            	<span onclick="scrollToSmooth();" class="btn btn-primary btn-sm buttonCadastro">Topo</span>
 		            </div>
 		        </div>	
 		     	</div>
 		     </div>
 		</div>
+		<!-- script src="./assets/vendor/timeline/js/main.js"></script-->
 	<?php 
     }
     
@@ -499,7 +509,7 @@ class ViewProcesso {
     		foreach ($objProcesso[0]->getFluxoProcesso() as $fluxoProcesso) {
 				$sinal = ($fluxoProcesso->getAtividade()->getPropriedade() == '1')?'':'-';
 				
-    			$data .= "{ x: '".limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30)."', y: ".$sinal.$fluxoProcesso->getAtividade()->getValor()." },";	
+				$data .= "{ x: '".limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 30)."', y: ".$sinal.$fluxoProcesso->getAtividade()->getValor()." },";	
     			
     		}
     		$data = substr($data, 0, -1);
@@ -509,7 +519,7 @@ class ViewProcesso {
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">
 					<div class="card-header d-flex">
-			            <h4 class="card-header-title">Atividades do processo</h4>
+			            <h4 class="card-header-title">Gráfico Atividades</h4>
 			            <div class="toolbar ml-auto">
 			            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
 			            </div>
@@ -753,16 +763,16 @@ class ViewProcesso {
 		                        		?>    
 											<tr>
 												<td style="text-align: center;"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
-					                            <td ><?php echo limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
+					                            <td ><?php echo limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
 					                            <td style="<?php echo $colorcss; ?>" >
-					                            	<span onclick="showInput('<?php echo $fluxoProcesso->getAtividade()->getId(); ?>');" id="span_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" style="display:block;" 
-					                            	      name="span_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" ativo="<?php echo $fluxoProcesso->getAtivo(); ?>" >
+					                            	<span onclick="showInput('<?php echo $fluxoProcesso->getId(); ?>');" id="span_<?php echo $fluxoProcesso->getId(); ?>" style="display:block;" 
+					                            	      name="span_<?php echo $fluxoProcesso->getId(); ?>" ativo="<?php echo $fluxoProcesso->getAtivo(); ?>" >
 					                            	      <?php echo 'R$ '.$sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?>
 					                            	</span>
 					                            	<input maxlength="10" style="width:100px; display:none;" 
-					                            	       id="valor_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" 
-					                            	       name="valor_<?php echo $fluxoProcesso->getAtividade()->getId(); ?>" 
-					                            	       onblur="recalcular(); showSpan('<?php echo $fluxoProcesso->getAtividade()->getId(); ?>');" type="text" class="form-control money valor" 
+					                            	       id="valor_<?php echo $fluxoProcesso->getId(); ?>" 
+					                            	       name="valor_<?php echo $fluxoProcesso->getId(); ?>" 
+					                            	       onblur="recalcular(); showSpan('<?php echo $fluxoProcesso->getId(); ?>');" type="text" class="form-control money valor" 
 					                            	       value="<?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'3'); ?>" 
 					                            	       ativo="<?php echo $fluxoProcesso->getAtivo(); ?>">
 					                            </td> 

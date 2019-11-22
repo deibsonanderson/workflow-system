@@ -317,6 +317,7 @@ class DaoProcesso extends Dados {
                             wa.descricao AS descricao_atividade,
                             wa.vencimento AS vencimento_atividade,
 							wpf.valor_atividade AS valor,
+							wpf.titulo_atividade AS titulo_processo_fluxo,
 							wpf.propriedade_atividade AS propriedade,
                             wp.id_usuario,
 							wp.provisao,
@@ -368,7 +369,8 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setId_fluxo($objetoFluxoProcesso->id_fluxo);
                 $fluxoProcesso->setAtivo($objetoFluxoProcesso->ativo);
                 $fluxoProcesso->setAtuante($objetoFluxoProcesso->atuante);
-
+                $fluxoProcesso->setTitulo($objetoFluxoProcesso->titulo_processo_fluxo);
+                
                 $atividade = new Atividade();
                 $atividade->setId($objetoFluxoProcesso->id_atividade);
                 $atividade->setTitulo($objetoFluxoProcesso->titulo_atividade);

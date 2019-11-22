@@ -71,7 +71,7 @@ function addColor($valor){
 			}						
 			?>    
 				<tr  >
-					<td style="<?php echo addColor($odd);?>"width="400px" ><?php echo utf8_decode(limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 100)); ?></td> 
+					<td style="<?php echo addColor($odd);?>"width="400px" ><?php echo utf8_decode(limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 100)); ?></td> 
 					<td style="<?php echo $colorcss; ?><?php echo addColor($odd);?>" ><?php echo $sinal.moneyFormat($fluxoProcesso->getAtividade()->getValor()); ?></td> 
 					<td style="text-align: center; <?php echo $colorStatus; ?><?php echo addColor($odd);?>"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 				</tr>	

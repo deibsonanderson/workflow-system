@@ -706,6 +706,7 @@ class ViewAtividade {
 																</a>
 															</div>
 				                                            <?php
+				                                            break;
 			                                        	}
 			                                        }
 			                                    }
@@ -743,7 +744,7 @@ class ViewAtividade {
 					<div class="card-body">
 						<div class="form-group">
 							<label for="nome" class="col-form-label">Nome *</label> 
-							<input id="titulo" name="titulo" type="text" disabled value="<?php echo $objAtividade[0]->getTitulo(); ?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+							<input id="titulo" name="titulo" type="text" disabled value="<?php echo $processoFluxo->getTitulo(); ?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
 						</div>
 						<div class="form-group">
 							<label for="descricao">Descrição</label>

@@ -176,6 +176,7 @@ class ControladorAtividade {
             $processoFluxo->setId($post["id_processo_fluxo"]);        
             $processoFluxo->setAtivo($post["ativo"]);
             $processoFluxo->setAtuante($post["atuante"]);
+            $processoFluxo->setTitulo($post["titulo_processo_fluxo"]);
             
             $processo = new Processo();
             $processo->setId($post["id_processo"]);
