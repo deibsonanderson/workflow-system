@@ -10,6 +10,9 @@ class FluxoProcesso {
     private $atuante;
     private $processo;
     private $titulo;
+    private $valor;
+    private $propriedade;
+    private $vencimento;
     
     //construtor
     public function __construct() {
@@ -61,30 +64,53 @@ class FluxoProcesso {
         $this->id_fluxo = $id_fluxo;
     }
 
-    function getAtuante() {
+    public function getAtuante() {
         return $this->atuante;
     }
 
-    function setAtuante($atuante) {
+    public function setAtuante($atuante) {
         $this->atuante = $atuante;
     }
 
-    function getProcesso() {
+    public function getProcesso() {
         return $this->processo;
     }
 
-    function setProcesso($processo) {
+    public function setProcesso($processo) {
         $this->processo = $processo;
     }
 
-    function getTitulo() {
+    public function getTitulo() {
     	return $this->titulo;
     }
     
-    function setTitulo($titulo) {
+    public function setTitulo($titulo) {
     	$this->titulo = $titulo;
     }
     
+    public function getVencimento() {
+    	return $this->vencimento;
+    }
+    
+    public function setVencimento($vencimento) {
+    	$this->vencimento = $vencimento;
+    }
+    
+    public function getValor() {
+    	return $this->valor;
+    }
+    
+    public function setValor($valor) {
+    	$this->valor = $valor;
+    }
+    
+    public function getPropriedade() {
+    	return $this->propriedade;
+    }
+    
+    public function setPropriedade($propriedade) {
+    	$this->propriedade = $propriedade;
+    }
 
 }
 

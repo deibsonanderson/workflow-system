@@ -111,6 +111,7 @@ class ViewProcesso {
     		$funcao = "telaTimeLineProcessoOrderAtivo";
     	}
     	?>
+    	<div id="div_modal_timeline_retorno"></div>
     	<style>
 			.margin-box-top {
 				margin-top: 3px;
@@ -317,12 +318,14 @@ class ViewProcesso {
            		}
     	    }
 	       ?>    
-	       		<!-- div class="cd-timeline__block js-cd-block" style="" >
+	       <?php //echo 'processo='.$objProcesso[0]->getId().'-titulo_fluxo='.$objProcesso[0]->getFluxo()->getId(); ?>
+	       		<div class="cd-timeline__block js-cd-block"
+	       			onclick="fncTelaModalCadastrarProcessoFluxo(this)" id_processo="<?php echo $objProcesso[0]->getId(); ?>" id_fluxo="<?php echo $objProcesso[0]->getFluxo()->getId(); ?>">
 					<div class="cd-timeline__img cd-timeline__img--plus js-cd-img" style="cursor: pointer;margin-top: 10px;background:#ffffff;">
-						<img src="./assets/images/notes-add.gif" alt="Picture">
+						<img src="./assets/images/plus-icon-plus.png" alt="Picture">
 					</div>
 					<div style="opacity: 0.0" class="cd-timeline__content js-cd-content"></div>
-				</div-->				
+				</div>				
 			</div>
 		</section>
 		<div class="row">
@@ -425,7 +428,7 @@ class ViewProcesso {
 											}
 											?>    
 			                                <tr style="<?php echo $styleCor; ?>">
-			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer;text-align: center;"  id="<?php echo $processo->getId(); ?>" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><img alt="time line" src="./assets/images/flow.png"></td> 
+			                                    <td onclick="getId(this)"   class="getId dimensions" style="cursor:pointer;text-align: center;"  id="<?php echo $processo->getId(); ?>" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><img alt="time line" src="./assets/images/flow.png"></td> 
 			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer;text-align: center;"  id="<?php echo $processo->getId(); ?>" funcao="telaGraficoProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><img alt="gráfico" src="./assets/images/chart.png" style="width: 38px;"></td> 
 			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer;text-align: center;"  id="<?php echo $processo->getId(); ?>" funcao="telaRelatorioProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><img alt="gráfico" src="./assets/main/images/relatorio-logo.png" style="width: 38px;"></td> 
 			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><?php echo str_pad($processo->getId(), 5, '0', STR_PAD_LEFT); ?></td> 
@@ -924,5 +927,112 @@ class ViewProcesso {
         <?php
 	}
 
+	public function telaModalCadastrarProcessoFluxo($processo){
+	?>
+    	<div class="modal" id="modalTimeLine" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg" role="document" style="overflow-y: initial !important;">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title"></h5>
+            <div class="toolbar ml-auto">
+	            <button type="button" 
+	               onclick="fncFormCadastro(this)" id="formCadastroTimeLine" class="btn btn-primary formCadastro">
+		          <span aria-hidden="true">Cadastrar</span>
+		        </button>
+		        <button type="button" id="closeModalTimeLine" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">Fechar</span>
+		        </button>
+            </div>		 
+	      </div>
+	      <div class="modal-body" style="height: 450px; overflow-y: auto;">
+			<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="card">          
+						<div class="card-body">
+				        	<form action="#" method="post" id="formCadastro" class="">
+					            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
+					            <input type="hidden" name="controlador" id="controlador" value="ControladorProcesso"/>
+					            <input type="hidden" name="funcao" id="funcao" value="incluirProcessoFluxo"/>
+					            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
+					            <input type="hidden" name="input_valor" id="input_valor" value=""/>
+					            <input type="hidden" name="id_processo" id="id_processo" value="<?php echo $processo[0]->getId(); ?>"/>
+					            <div class="form-row">
+									<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+										<label for="id_fluxo" class="col-form-label">Atividade *</label>
+										<select id="id_fluxo" name="id_fluxo" class="form-control mgs_alerta" onchange="exibirAtividade();" >
+										<?php 
+										if ($processo[0] != null && $processo[0]->getFluxoProcesso() != null) {
+											foreach ($processo[0]->getFluxoProcesso() as $fluxoProcesso) {
+												$atividade = $fluxoProcesso->getAtividade();
+										?>
+											<option titulo="<?php echo $atividade->getTitulo();?>" 
+											        descricao="<?php echo $atividade->getDescricao(); ?>"											        
+											        vencimento="<?php echo ($atividade->getVencimento() == "0" || $atividade->getVencimento() == "00" || $atividade->getVencimento() == null || $atividade->getVencimento() == "")?"-":str_pad($atividade->getVencimento(), 2, "0", STR_PAD_LEFT); ?>"
+											        propriedade="<?php echo $atividade->getPropriedade(); ?>"
+											        categoria="<?php echo $atividade->getCategoria()->getNome(); ?>"
+											        valor="<?php echo $atividade->getValor(); ?>"
+											        value="<?php echo $fluxoProcesso->getId_fluxo(); ?>">
+											        <?php echo $atividade->getTitulo();?>
+											</option>
+										<?php                                  	
+										 }
+										}
+										?>
+										</select>
+									</div>
+									<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+										<label for="input_titulo" class="col-form-label">Título *</label>
+										<input id="input_titulo" name="input_titulo" type="text" class="form-control mgs_alerta">
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+										<label for="input_descricao" class="col-form-label">Descrição</label>
+										<textarea class="form-control" style="resize: none;" id="input_descricao" name="input_descricao" rows="3" disabled="disabled"></textarea>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+										<label for="input_vencimento" class="col-form-label">Dia do Vencimento</label>
+										<input id="input_vencimento" name="input_vencimento" type="text" class="form-control number" maxlength="2" >
+									</div>
+									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+										<label for="input_propriedade" class="col-form-label">Propriedade</label>
+										<select id="input_propriedade" name="input_propriedade" class="form-control mgs_alerta">
+											<option value="1">Positivo</option>
+											<option value="0">Negativo</option>
+										</select>
+									</div>
+									<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+										<label for="input_categoria" class="col-form-label">Categoria</label>
+										<input id="input_categoria" name="input_categoria" type="text" class="form-control" disabled="disabled" >
+									</div>		
+								</div>			
+							</form>	
+						</div>
+					</div>
+				</div>
+			</div>	
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<script type="text/javascript">
+		function exibirAtividade(){
+			$('#input_titulo').val($('#id_fluxo option:selected').attr('titulo'));
+			$('#input_valor').val($('#id_fluxo option:selected').attr('valor'));
+			$('#input_descricao').val($('#id_fluxo option:selected').attr('descricao'));
+			$('#input_vencimento').val($('#id_fluxo option:selected').attr('vencimento'));
+			$('#input_propriedade').val($('#id_fluxo option:selected').attr('propriedade'));
+			$('#input_categoria').val($('#id_fluxo option:selected').attr('categoria'));
+		}
+		<?php 
+		echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
+		?>
+		exibirAtividade();
+		$('.number').mask('00');		
+	</script>		
+	<?php 		
+	}
 }
 ?>

@@ -138,6 +138,7 @@ class ViewAgenda {
 																		</a>
 																	</div>
 						                                            <?php
+						                                            break;
 					                                        	}
 					                                        }
 					                                    }
@@ -478,95 +479,6 @@ class ViewAgenda {
     	}
     }
 
-    public function telaVisualizarAgendaOld($listAgenda, $data) {
-        if ($listAgenda) {
-            ?>
-            <script type="text/javascript" >
-                $("#txt_descricao").val("");
-                $("#link").val("");
-                $("#arquivo").val("");
-                $('#arquivoAtual').html("<br />Adicione um arquivo clicando no <img src='./assets/images/img_upload.png' border='0' style='float:none;margin:0;width: 20px;' /> ao lado.");
-                $('#arquivoAtual').css('cursor', 'default');
-                $('#arquivoAtual').css('text-decoration', 'none');
-                ordenar();
-            </script>   
-            <div id="div_agenda" >
-                <?php
-                foreach ($listAgenda as $agenda) {
-
-                    if ($agenda->getAtivo() != "1") {
-                        $cor = "background-color: #DFF0D8 !important;";
-                        $atv = "1";
-                    } else {
-                        $cor = "";
-                        $atv = "0";
-                    }
-                    ?>
-                    <fieldset id="recordsArray_<?php echo $agenda->getId(); ?>" style="padding-left: 10px;padding-right: 10px;<?php echo $cor; ?>">
-						<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
-                            <tbody>
-	                            <tr>
-	                                <td style="width: 10%;text-align: center;" >
-	                                    <label style="width: 100px;margin-right: 20px;">
-	                                        <input type="image" src="./assets/images/icn_alert_success.png" title="Desativar" onclick="desativarAgenda(<?php echo $agenda->getId(); ?>,<?php echo $atv; ?>);"  >
-	                                        <input type="image" src="./assets/images/icn_trash.png" title="Excluir" onclick="removerAgenda(<?php echo $agenda->getId(); ?>);" ><?php echo recuperaData($agenda->getData()); ?></label><br/>
-	                                    <input type="hidden" name="arquivo<?php echo $agenda->getId(); ?>" id="arquivo<?php echo $agenda->getId(); ?>" value="<?php echo $agenda->getArquivo(); ?>" /> 
-	                                    <?php
-	                                    echo ($agenda->getLink() != '' || $agenda->getLink() != null) ? '<a href="' . $agenda->getLink() . '" target="_blank" title="Acesso ao Link Clique aqui!" ><img src="assets/images/external_link29.png" ></a>' : '';
-	                                    echo ($agenda->getArquivo() != '') ? '&nbsp;&nbsp;<img src="assets/images/arrow.png" style="cursor: pointer;" title="Arquivo: ' . $agenda->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $agenda->getId() . '\', \'./arquivos/agenda\')" >' : '';
-	                                    ?>
-	                                </td>
-	                                <td style="width: 90%"><?php echo nl2br($agenda->getDescricao()); ?></td>
-	                            </tr>				
-							</tbody> 
-						</table>
-                    </fieldset>
-                    <div class="clear"></div>
-                    <?php
-                }
-                ?></div>
-        <?php
-        }
-        if ($data != null) {
-            ?>
-            <!-- Bloco Comentario por data -->
-            <div class="module_content">
-                <?php
-                $controladorComentario = new ControladorComentarioFluxoProcesso();
-                $listComentario = $controladorComentario->listarComentarioFluxoProcessoByData($data);
-                if ($listComentario) {
-                    ?><h3 class="tabs_involved">Comentários dos processos</h3><?php
-                    $cont = 0;
-                    foreach ($listComentario as $comentario) {
-                        $getIdProcessoStr = 'class="getIdProcesso" funcao="telaVisualizarAtividadeProcesso" controlador="controladorAtividade" retorno="div_central" id_processo_fluxo="' . $comentario->getFluxoProcesso()->getId() . '" id="' . $comentario->getFluxoProcesso()->getAtividade()->getId() . '" id_processo="' . $comentario->getProcesso()->getId() . '" ativo="' . $comentario->getFluxoProcesso()->getAtivo() . '" atuante="' . $comentario->getFluxoProcesso()->getAtuante() . '"';
-                        ++$cont;
-                        ?>                
-                        <fieldset style="padding-left: 10px;padding-right: 10px;cursor: pointer;">
-							<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
-	                            <tbody>
-	                                <tr style="cursor: pointer;">
-	                                    <td <?php echo $getIdProcessoStr; ?>><label style="width: 100px;cursor: pointer;"><?php echo recuperaData($comentario->getData()); ?></label></td>
-	                                    <td <?php echo $getIdProcessoStr; ?>><label style="width: 170px;cursor: pointer;"><?php echo limitarTexto($comentario->getProcesso()->getTitulo(), 20); ?></label></td>
-	                                    <td <?php echo $getIdProcessoStr; ?>><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
-	                                    <td><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
-	                                        <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
-	                                    </td>
-	                                </tr>
-	                            </tbody>    
-                            </table>                   
-                        </fieldset>
-                        <div class="clear"></div>
-                        <?php
-                    }
-                }
-                ?>	                
-                <div class="clear"></div>            
-            </div>
-            <!-- Bloco Comentario por data -->             
-            <?php
-        }
-    }
-	
     public function telaListarAgenda($objAgenda) {
         $controladorAcao = new ControladorAcao();
         $perfil = $controladorAcao->retornaPerfilClasseAcao($_SESSION["login"], 'telaListarAgenda');

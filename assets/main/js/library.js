@@ -1161,6 +1161,31 @@ function telaModalAgendaProcessoFluxo(info){
 	});
 }
 
+function fncTelaModalCadastrarProcessoFluxo(element){
+	var id_processo = $(element).attr('id_processo');
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: 'retorno=div_modal_timeline_retorno&controlador=controladorProcesso&funcao=telaModalCadastrarProcessoFluxo&id='+id_processo,
+		success: function(result) {
+			$('#div_modal_timeline_retorno').html(result);
+		    $.blockUI({
+	            message: $('#modalTimeLine'),
+	        });
+	        $('#closeModalTimeLine').click(function() {
+	            $.unblockUI();
+	            return false;
+	        });
+		},
+		beforeSend: function() {
+			//showLoading();
+		},
+		complete: function() {
+			//hideLoading();
+		}
+	});
+}
+
 function fixTableLayout(tableName){
     $('#'+tableName+'_wrapper').addClass('form-row');
     $('#'+tableName+'_filter').addClass('form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2');

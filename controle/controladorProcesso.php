@@ -212,6 +212,59 @@ class ControladorProcesso {
             return $e;
         }
     }
+    
+    public function alterarProcesso($post) {
+    	try {
+    		$processo = new Processo();
+    		$processo->setId($post["id"]);
+    		$processo->setDescricao($post["descricao"]);
+    		$processo->setTitulo($post["titulo"]);
+    		$processo->setProvisao(valorMonetario($post["provisao"], "1"));
+    		
+    		if($post["vigencia"] == null || $post["vigencia"] == '' || !validarDate($post["vigencia"])){
+    			$processo->setData("NOW()");
+    		}else{
+    			$processo->setData("'".desformataData($post["vigencia"])."'");
+    		}
+    		
+    		$daoProcesso = new DaoProcesso();
+    		if ($daoProcesso->alterarProcesso($processo)) {
+    			return $this->telaListarProcesso();
+    		}
+    		$daoProcesso->__destruct();
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function listarDistinctProcesso() {
+    	try {
+    		$daoProcesso = new DaoProcesso();
+    		$retorno = $daoProcesso->listarDistinctProcesso();
+    		$daoProcesso->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function incluirProcessoFluxo($post = null){
+    	$fluxoProcesso = new FluxoProcesso();
+    	
+    	$fluxoProcesso->setTitulo($post["input_titulo"]); //OK
+    	$fluxoProcesso->setProcesso($post["id_processo"]); //ok
+    	$fluxoProcesso->setId_fluxo($post["id_fluxo"]); //ok
+    	$fluxoProcesso->setPropriedade($post["input_propriedade"]);
+    	//$fluxoProcesso->setVencimento($post["input_vencimento"]); //TODO ser feito no futuro;
+    	$fluxoProcesso->setValor($post["valor"]); //OK
+   	
+    	$daoProcesso = new DaoProcesso();
+    	$daoProcesso->incluirProcessoFluxo($fluxoProcesso);
+    	
+    	$retorno = $this->telaListarProcesso();
+    	$this->__destruct();
+    	return $retorno;
+    }
 
     public function telaCadastrarProcesso($post = null) {
         try {
@@ -326,40 +379,12 @@ class ControladorProcesso {
     	}
     }
     
-    
-    public function alterarProcesso($post) {
-    	try {
-    		$processo = new Processo();
-    		$processo->setId($post["id"]);
-    		$processo->setDescricao($post["descricao"]);
-    		$processo->setTitulo($post["titulo"]);
-    		$processo->setProvisao(valorMonetario($post["provisao"], "1"));
-    		
-    		if($post["vigencia"] == null || $post["vigencia"] == '' || !validarDate($post["vigencia"])){
-    			$processo->setData("NOW()");
-    		}else{
-    			$processo->setData("'".desformataData($post["vigencia"])."'");
-    		}
-    		
-    		$daoProcesso = new DaoProcesso();
-    		if ($daoProcesso->alterarProcesso($processo)) {
-    			return $this->telaListarProcesso();
-    		}    		
-            $daoProcesso->__destruct();
-        } catch (Exception $e) {
-            return $e;
-        }
+    public function telaModalCadastrarProcessoFluxo($post = null){
+    	$viewProcesso = new ViewProcesso();
+    	$retorno = $viewProcesso->telaModalCadastrarProcessoFluxo($this->buscarFluxoProcesso($post["id"]));
+    	$viewProcesso->__destruct();
+    	return $retorno;
     }
 
-    public function listarDistinctProcesso() {
-    	try {
-    		$daoProcesso = new DaoProcesso();
-    		$retorno = $daoProcesso->listarDistinctProcesso();
-    		$daoProcesso->__destruct();
-    		return $retorno;
-    	} catch (Exception $e) {
-    		return $e;
-    	}
-    }
 }
 ?>
