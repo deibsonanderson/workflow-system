@@ -954,7 +954,6 @@ class ViewProcesso {
 					            <input type="hidden" name="controlador" id="controlador" value="ControladorProcesso"/>
 					            <input type="hidden" name="funcao" id="funcao" value="incluirProcessoFluxo"/>
 					            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
-					            <input type="hidden" name="input_valor" id="input_valor" value=""/>
 					            <input type="hidden" name="id_processo" id="id_processo" value="<?php echo $processo[0]->getId(); ?>"/>
 					            <div class="form-row">
 									<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
@@ -993,20 +992,24 @@ class ViewProcesso {
 								</div>
 								<div class="form-row">
 									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-										<label for="input_vencimento" class="col-form-label">Dia do Vencimento</label>
-										<input id="input_vencimento" name="input_vencimento" type="text" class="form-control number" maxlength="2" >
+										<label for="input_vencimento" class="col-form-label">Dia do Vencimento *</label>
+										<input id="input_vencimento" name="input_vencimento" type="text" class="form-control number mgs_alerta" maxlength="2" >
 									</div>
 									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-										<label for="input_propriedade" class="col-form-label">Propriedade</label>
+										<label for="input_propriedade" class="col-form-label">Propriedade *</label>
 										<select id="input_propriedade" name="input_propriedade" class="form-control mgs_alerta">
 											<option value="1">Positivo</option>
 											<option value="0">Negativo</option>
 										</select>
 									</div>
-									<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+										<label for="input_valor" class="col-form-label">Valor *</label>
+										<input id="input_valor" name="input_valor" type="text" class="form-control money mgs_alerta" >
+									</div>	
+									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
 										<label for="input_categoria" class="col-form-label">Categoria</label>
 										<input id="input_categoria" name="input_categoria" type="text" class="form-control" disabled="disabled" >
-									</div>		
+									</div>											
 								</div>			
 							</form>	
 						</div>
@@ -1020,7 +1023,7 @@ class ViewProcesso {
 	<script type="text/javascript">
 		function exibirAtividade(){
 			$('#input_titulo').val($('#id_fluxo option:selected').attr('titulo'));
-			$('#input_valor').val($('#id_fluxo option:selected').attr('valor'));
+			$('#input_valor').val(valorMonetario($('#id_fluxo option:selected').attr('valor'),'2'));
 			$('#input_descricao').val($('#id_fluxo option:selected').attr('descricao'));
 			$('#input_vencimento').val($('#id_fluxo option:selected').attr('vencimento'));
 			$('#input_propriedade').val($('#id_fluxo option:selected').attr('propriedade'));
@@ -1030,7 +1033,8 @@ class ViewProcesso {
 		echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
 		?>
 		exibirAtividade();
-		$('.number').mask('00');		
+		$('.number').mask('00');
+		$('.money').mask('000.000.000.000.000,00', {reverse: true});
 	</script>		
 	<?php 		
 	}

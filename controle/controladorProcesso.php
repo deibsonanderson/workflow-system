@@ -251,13 +251,13 @@ class ControladorProcesso {
     public function incluirProcessoFluxo($post = null){
     	$fluxoProcesso = new FluxoProcesso();
     	
-    	$fluxoProcesso->setTitulo($post["input_titulo"]); //OK
-    	$fluxoProcesso->setProcesso($post["id_processo"]); //ok
-    	$fluxoProcesso->setId_fluxo($post["id_fluxo"]); //ok
+    	$fluxoProcesso->setTitulo($post["input_titulo"]);
+    	$fluxoProcesso->setProcesso($post["id_processo"]);
+    	$fluxoProcesso->setId_fluxo($post["id_fluxo"]);
     	$fluxoProcesso->setPropriedade($post["input_propriedade"]);
-    	//$fluxoProcesso->setVencimento($post["input_vencimento"]); //TODO ser feito no futuro;
-    	$fluxoProcesso->setValor($post["valor"]); //OK
-   	
+    	$fluxoProcesso->setVencimento($post["input_vencimento"]); 
+    	$fluxoProcesso->setValor(valorMonetario($post["input_valor"], '1'));
+   		
     	$daoProcesso = new DaoProcesso();
     	$daoProcesso->incluirProcessoFluxo($fluxoProcesso);
     	
