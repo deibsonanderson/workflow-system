@@ -458,3 +458,7 @@ ALTER TABLE `tb_workflow_usuario`
 ALTER TABLE `tb_workflow_atividade` ADD `vencimento` INT NULL DEFAULT NULL AFTER `status`; 
 
 ALTER TABLE `tb_workflow_comentario` ADD `categoria` VARCHAR(10) NULL DEFAULT NULL AFTER `arquivo`; 
+
+ALTER TABLE `tb_workflow_processo_fluxo` ADD `out_flow` INT NOT NULL DEFAULT 0 AFTER `valor_atividade`; 
+
+ALTER TABLE `tb_workflow_processo_fluxo` ADD `vencimento_atividade` INT NULL DEFAULT NULL AFTER `valor_atividade`; 

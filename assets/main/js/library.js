@@ -439,9 +439,52 @@
                 }
             }
         });
-}
+    }
     
-    
+    function fncDeleteProcessoFluxo(element){
+    	var modal = $(element).attr('modal');
+        $.blockUI({
+            message: $('#'+modal),
+            css: {
+                width: '275px'
+            }
+        });
+        var id = $(element).attr('id');
+        var id_processo = $(element).attr('id_processo');
+        controlador = $(element).attr('controlador');
+        funcao = $(element).attr('funcao');
+        retorno = $(element).attr('retorno');
+        mensagem = $(element).attr('mensagem');
+        
+
+        $('#sim').click(function() {
+            $('#' + retorno).css('display', '');
+            $.ajax({
+                url: 'controlador.php',
+                type: 'POST',
+                data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id+'&id_processo='+ id_processo,
+                success: function(result) {
+                    $('#' + retorno).html(result);
+                },
+                beforeSend: function() {
+                	showLoading();
+                },
+                complete: function() {
+                	hideLoading();
+                    $('#div_a').remove();
+                    $('#' + retorno).css('display', '');
+                    if (mensagem) {
+                        msgSlide(mensagem);
+                    }
+                }
+            });
+        });
+
+        $('#nao').click(function() {
+            $.unblockUI();
+            return false;
+        });
+    }
 
 
 /**

@@ -88,6 +88,8 @@ class DaoProcesso extends Dados {
 							wa.vencimento AS vencimento_atividade,
 							wpf.valor_atividade AS valor,
 							wpf.propriedade_atividade AS propriedade,
+							wpf.out_flow,
+                            wpf.vencimento_atividade AS vencimento_processo_fluxo, 
                             wp.id_usuario
                     FROM tb_workflow_processo_fluxo wpf
                     INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
@@ -133,6 +135,8 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setId_fluxo($objetoFluxoProcesso->id_fluxo);
                 $fluxoProcesso->setAtivo($objetoFluxoProcesso->ativo);
                 $fluxoProcesso->setAtuante($objetoFluxoProcesso->atuante);
+                $fluxoProcesso->setOutFlow($objetoFluxoProcesso->out_flow);
+                $fluxoProcesso->setVencimento($objetoFluxoProcesso->vencimento_processo_fluxo);
 
                 $atividade = new Atividade();
                 $atividade->setId($objetoFluxoProcesso->id_atividade);
@@ -167,9 +171,9 @@ class DaoProcesso extends Dados {
             $id_processo = mysqli_insert_id($conexao);
 
             $atuante = 1;
-            $sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, titulo_atividade) VALUES ";
+            $sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade, titulo_atividade) VALUES ";
             foreach ($listFluxoAtividade as $atividade) {
-            	$sql .= "(" . $id_processo . "," . $atividade->getIdFluxo() . ",".$atuante.",1 , 1, " . $atividade->getValor() . "," . $atividade->getPropriedade() . ",'" . $atividade->getTitulo() . "' ),";
+            	$sql .= "(" . $id_processo . "," . $atividade->getIdFluxo() . ",".$atuante.",1 , 1, " . $atividade->getValor() . "," . $atividade->getPropriedade() . ",0,'" . $atividade->getVencimento() . "','" . $atividade->getTitulo() . "' ),";
                 $atuante = 0;
             }
             $sql_fluxo = substr($sql, 0, -1);
@@ -185,9 +189,8 @@ class DaoProcesso extends Dados {
     public function incluirProcessoFluxo($fluxoProcesso) {
     	try {
     		$conexao = $this->ConectarBanco();
-    		$sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, titulo_atividade) VALUES ";
-    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "','" . $fluxoProcesso->getTitulo() . "' )";
-    		//debug($sql);
+    		$sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade, titulo_atividade) VALUES ";
+    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "',1,'" . $fluxoProcesso->getVencimento() . "','" . $fluxoProcesso->getTitulo() . "' )";
     		$retorno = mysqli_query($conexao, $sql) or die('Erro na execução  do insert tb_workflow_processo_fluxo!');
     		$this->FecharBanco($conexao);
     		return $retorno;
@@ -211,6 +214,20 @@ class DaoProcesso extends Dados {
         } catch (Exception $e) {
             return $e;
         }
+    }
+    
+    public function excluirProcessoFluxo($id) {
+    	try {
+    		$conexao = $this->ConectarBanco();
+
+    		$sql = "UPDATE tb_workflow_processo_fluxo SET status = '0' WHERE id = " . $id . "";
+    		$retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet processo!');
+    		
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
     }
 
     public function abrirFluxoProcesso($fluxoProcesso) {
@@ -246,7 +263,7 @@ class DaoProcesso extends Dados {
             if ($objetoFluxoProcesso->id_processo != null) {
                 
                 $sql = "UPDATE tb_workflow_processo_fluxo SET atuante = '0' WHERE id_processo = " . $objetoFluxoProcesso->id_processo . "";
-                mysqli_query($conexao,$sql) or die('Erro na execução  do update da tb_workflow_processo_fluxo!');
+                mysqli_query($conexao,$sql) or die('Erro na execução do update da tb_workflow_processo_fluxo!');
                 
                 $sql = "UPDATE tb_workflow_processo_fluxo SET atuante = '1' WHERE id = " . $fluxoProcesso->getId() . "";
                 $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do update da tb_workflow_processo_fluxo!');
@@ -336,6 +353,8 @@ class DaoProcesso extends Dados {
                             wp.id_usuario,
 							wp.provisao,
 							wf.ordenacao,
+							wpf.out_flow,
+                            wpf.vencimento_atividade AS vencimento_processo_fluxo, 
                             wc.nome AS titulo_categoria_atividade
                     FROM tb_workflow_processo_fluxo wpf
                     INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
@@ -386,7 +405,9 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setAtivo($objetoFluxoProcesso->ativo);
                 $fluxoProcesso->setAtuante($objetoFluxoProcesso->atuante);
                 $fluxoProcesso->setTitulo($objetoFluxoProcesso->titulo_processo_fluxo);
-
+                $fluxoProcesso->setOutFlow($objetoFluxoProcesso->out_flow);
+                $fluxoProcesso->setVencimento($objetoFluxoProcesso->vencimento_processo_fluxo);
+                
                 $categoriaAtividade = new CategoriaAtividade();
                 $categoriaAtividade->setNome($objetoFluxoProcesso->titulo_categoria_atividade);
                 
@@ -486,7 +507,6 @@ class DaoProcesso extends Dados {
     		$sql .= ($id_usuario != null) ? " AND wp.id_usuario = " . $id_usuario : "";
     		
     		$sql .= " ORDER BY CONCAT(YEAR(wp.data),'-',LPAD( MONTH(wp.data), 2, 0),'-',LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0)) ASC ";
-    		//debug($sql);
     		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
     		$ultimo_id = 0;
     		$processo = new Processo();

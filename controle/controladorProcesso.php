@@ -255,15 +255,29 @@ class ControladorProcesso {
     	$fluxoProcesso->setProcesso($post["id_processo"]);
     	$fluxoProcesso->setId_fluxo($post["id_fluxo"]);
     	$fluxoProcesso->setPropriedade($post["input_propriedade"]);
-    	$fluxoProcesso->setVencimento($post["input_vencimento"]); 
+    	if($post["input_vencimento"] != "" || $post["input_vencimento"] != "-"){
+    		$fluxoProcesso->setVencimento($post["input_vencimento"]); 
+    	}
     	$fluxoProcesso->setValor(valorMonetario($post["input_valor"], '1'));
    		
     	$daoProcesso = new DaoProcesso();
     	$daoProcesso->incluirProcessoFluxo($fluxoProcesso);
     	
-    	$retorno = $this->telaListarProcesso();
+    	$retorno = $this->telaTimeLineProcesso(array("id" => $post["id_processo"]));
     	$this->__destruct();
     	return $retorno;
+    }
+    
+    public function excluirProcessoFluxo($post) {
+    	try {
+    		$daoProcesso = new DaoProcesso();
+    		$daoProcesso->excluirProcessoFluxo($post["id"]);
+    		$retorno = $this->telaTimeLineProcesso(array("id" => $post["id_processo"]));
+    		$this->__destruct();
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
     }
 
     public function telaCadastrarProcesso($post = null) {

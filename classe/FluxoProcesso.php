@@ -13,6 +13,7 @@ class FluxoProcesso {
     private $valor;
     private $propriedade;
     private $vencimento;
+    private $outFlow;
     
     //construtor
     public function __construct() {
@@ -110,6 +111,14 @@ class FluxoProcesso {
     
     public function setPropriedade($propriedade) {
     	$this->propriedade = $propriedade;
+    }
+    
+    public function getOutFlow() {
+    	return $this->outFlow;
+    }
+    
+    public function setOutFlow($outFlow) {
+    	$this->outFlow = $outFlow;
     }
 
 }

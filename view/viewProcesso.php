@@ -310,6 +310,21 @@ class ViewProcesso {
 							</a>
 						<?php 
 	                	}
+	                	
+	                	if($fluxoProcesso->getOutFlow() == '1'){
+	                		?>
+							<a onclick="fncDeleteProcessoFluxo(this)" 
+							   title="Excluir Atividade Avulsa"
+							   funcao="excluirProcessoFluxo" 
+							   controlador="controladorProcesso"
+							   id="<?php echo $fluxoProcesso->getId(); ?>"
+							   id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
+							   retorno="div_central"
+							   modal="question"
+							   mensagem="4" 
+							   class="btn <?php echo $btnEstilo; ?> btn-lg margin-box-top"><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'icn_trash_enable.png':'icn_trash_disabled.png'; ?>" class="time-line-btn-action"></a>
+						<?php 
+	                	}	                	
 						?>
 					</div>
 					<!-- cd-timeline__content -->
@@ -1032,9 +1047,9 @@ class ViewProcesso {
 		<?php 
 		echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
 		?>
-		exibirAtividade();
 		$('.number').mask('00');
 		$('.money').mask('000.000.000.000.000,00', {reverse: true});
+		exibirAtividade();
 	</script>		
 	<?php 		
 	}
