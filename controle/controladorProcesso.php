@@ -191,8 +191,8 @@ class ControladorProcesso {
     	try {
     		$fluxoProcesso = new FluxoProcesso();
     		$fluxoProcesso->setId($post["id"]);
-    		$fluxoProcesso->propriedade = $post["propriedade"];
-    		$fluxoProcesso->valor_atividade = valorMonetario($post["valor"], "1");
+    		$fluxoProcesso->setPropriedade($post["propriedade"]);
+    		$fluxoProcesso->setValor(valorMonetario($post["valor"], "1"));
     		$daoProcesso = new DaoProcesso();
     		$daoProcesso->atualizarValorFluxoProcesso($fluxoProcesso);
     		$daoProcesso->__destruct();

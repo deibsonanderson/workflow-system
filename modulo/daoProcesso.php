@@ -15,7 +15,7 @@ class DaoProcesso extends Dados {
     public function atualizarValorFluxoProcesso($fluxoProcesso) {
     	try {
     		$conexao = $this->ConectarBanco();
-    		$sql = "UPDATE tb_workflow_processo_fluxo SET valor_atividade=". $fluxoProcesso->valor_atividade. ", propriedade_atividade = ". $fluxoProcesso->propriedade. "  WHERE id = " . $fluxoProcesso->getId() . "";
+    		$sql = "UPDATE tb_workflow_processo_fluxo SET valor_atividade=". $fluxoProcesso->getValor(). ", propriedade_atividade = ". $fluxoProcesso->getPropriedade(). "  WHERE id = " . $fluxoProcesso->getId() . "";
     		$retorno = mysqli_query($conexao,$sql) or die('Erro na update valor atividade!');
     		$this->FecharBanco($conexao);
     		return $retorno;
