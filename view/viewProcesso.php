@@ -194,7 +194,10 @@ class ViewProcesso {
 						$imgEstilo = 'picture';
             			$btnEstilo = 'btn-success';
             			$opacit = 'opacity:1.0;';
-            		}            		
+            		}
+            		
+					$tituloProcessoFluxo = ($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo();
+						
            ?>    
 	            <div class="cd-timeline__block js-cd-block" style="<?php echo $opacit; ?>" >
 					<div class="cd-timeline__img cd-timeline__img--<?php echo $imgEstilo; ?> js-cd-img" 
@@ -203,6 +206,8 @@ class ViewProcesso {
 						 id="<?php echo $fluxoProcesso->getAtividade()->getId(); ?>"
 						 ativo="<?php echo $fluxoProcesso->getAtivo(); ?>"
 						 atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+						 titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
+						 vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
 						 onclick="getIdProcesso(this)"
 						 funcao="telaVisualizarAtividadeProcesso" 
 						 controlador="controladorAtividade" 
@@ -212,14 +217,13 @@ class ViewProcesso {
 					</div>
 					<!-- cd-timeline__img -->
 					<div class="cd-timeline__content js-cd-content">
-						<?php $tituloProcessoFluxo = ($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(); ?>
-						
 						<h3 id_processo_fluxo="<?php echo $fluxoProcesso->getId(); ?>"
 							id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
 							id="<?php echo $fluxoProcesso->getAtividade()->getId(); ?>"
 							ativo="<?php echo $fluxoProcesso->getAtivo(); ?>"
 							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
 							titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
+							vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
 							onclick="getIdProcesso(this)"
 							funcao="telaVisualizarAtividadeProcesso" 
 							controlador="controladorAtividade" 
@@ -244,7 +248,9 @@ class ViewProcesso {
 							id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
 							id="<?php echo $fluxoProcesso->getAtividade()->getId(); ?>"
 							ativo="<?php echo $fluxoProcesso->getAtivo(); ?>"
-							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"						
+							titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
+							vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"	
 							onclick="getIdProcesso(this)"
 							funcao="telaVisualizarAtividadeProcesso" 
 							controlador="controladorAtividade" 
@@ -261,7 +267,9 @@ class ViewProcesso {
 							id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
 							id="<?php echo $fluxoProcesso->getAtividade()->getId(); ?>"
 							ativo="<?php echo $fluxoProcesso->getAtivo(); ?>"
-							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"							
+							titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
+							vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
 							onclick="getIdProcesso(this)"
 							funcao="telaVisualizarAtividadeProcesso" 
 							controlador="controladorAtividade" 
@@ -303,10 +311,12 @@ class ViewProcesso {
 						<?php 
 	                	}
 	                	
-	                	if($fluxoProcesso->getAtividade()->getVencimento()){
+	                	if($fluxoProcesso->getVencimento() || $fluxoProcesso->getAtividade()->getVencimento()){
 	                	?>
 							<a target="#" class="btn <?php echo $btnEstilo; ?> btn-lg margin-box-top">
-								<span title="Data de vencimento" style="font-size:15px;color:<?php echo ($fluxoProcesso->getAtivo() == '1')?'#ffffff':'#6c757d'; ?>"><?php echo str_pad($fluxoProcesso->getAtividade()->getVencimento(), 2, "0", STR_PAD_LEFT); ?></span>
+								<span title="Data de vencimento" style="font-size:15px;color:<?php echo ($fluxoProcesso->getAtivo() == '1')?'#ffffff':'#6c757d'; ?>">
+								<?php echo str_pad(($fluxoProcesso->getVencimento())?$fluxoProcesso->getVencimento():$fluxoProcesso->getAtividade()->getVencimento(), 2, "0", STR_PAD_LEFT); ?>
+								</span>
 							</a>
 						<?php 
 	                	}
@@ -333,7 +343,6 @@ class ViewProcesso {
            		}
     	    }
 	       ?>    
-	       <?php //echo 'processo='.$objProcesso[0]->getId().'-titulo_fluxo='.$objProcesso[0]->getFluxo()->getId(); ?>
 	       		<div class="cd-timeline__block js-cd-block"
 	       			onclick="fncTelaModalCadastrarProcessoFluxo(this)" id_processo="<?php echo $objProcesso[0]->getId(); ?>" id_fluxo="<?php echo $objProcesso[0]->getFluxo()->getId(); ?>">
 					<div class="cd-timeline__img cd-timeline__img--plus js-cd-img" style="cursor: pointer;margin-top: 10px;background:#ffffff;">
@@ -705,16 +714,16 @@ class ViewProcesso {
 
             
             function showInput(id){
-				if(detectarMobile() == false){
+				//if(detectarMobile() == false){
 					$('#span_'+id).css('display','none');
-					$('#valor_'+id).css('display','block');
-				}
+					$('#div_valor_'+id).css('display','');
+				//}
             }
 
             function showSpan(id){
             	$('#span_'+id).css('display','block');
             	$('#span_'+id).html('R$'+ $('#valor_'+id).val());
-				$('#valor_'+id).css('display','none');
+				$('#div_valor_'+id).css('display','none');
             }
          </script>    	
 		<div class="row" >
@@ -787,12 +796,18 @@ class ViewProcesso {
 					                            	      name="span_<?php echo $fluxoProcesso->getId(); ?>" ativo="<?php echo $fluxoProcesso->getAtivo(); ?>" >
 					                            	      <?php echo 'R$ '.$sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?>
 					                            	</span>
-					                            	<input maxlength="10" style="width:100px; display:none;" 
+					                            	<div id="div_valor_<?php echo $fluxoProcesso->getId(); ?>" class="input-group" style="display:none;min-width:150px;max-width:150px;">
+					                            		<input maxlength="10" style="" 
 					                            	       id="valor_<?php echo $fluxoProcesso->getId(); ?>" 
 					                            	       name="valor_<?php echo $fluxoProcesso->getId(); ?>" 
-					                            	       onblur="recalcular(); showSpan('<?php echo $fluxoProcesso->getId(); ?>');" type="text" class="form-control money valor" 
+					                            	       onblur="" 
+					                            	       type="text" class="form-control money valor" 
 					                            	       value="<?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'3'); ?>" 
 					                            	       ativo="<?php echo $fluxoProcesso->getAtivo(); ?>">
+		                                                <div class="input-group-append">
+		                                                    <button onclick="recalcular(); showSpan('<?php echo $fluxoProcesso->getId(); ?>');" type="button" class="btn btn-primary">OK</button>
+		                                                </div>
+		                                            </div>
 					                            </td> 
 												<td style="text-align: center; <?php echo $colorStatus; ?>"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 											</tr>	
@@ -978,18 +993,19 @@ class ViewProcesso {
 										if ($processo[0] != null && $processo[0]->getFluxoProcesso() != null) {
 											foreach ($processo[0]->getFluxoProcesso() as $fluxoProcesso) {
 												$atividade = $fluxoProcesso->getAtividade();
+												$titulo = ($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$atividade->getTitulo();
 										?>
-											<option titulo="<?php echo $atividade->getTitulo();?>" 
-											        descricao="<?php echo $atividade->getDescricao(); ?>"											        
+											<option titulo="<?php echo $titulo;?>" 
+											        descricao="<?php echo ($fluxoProcesso->getDescricao())?$fluxoProcesso->getDescricao():$atividade->getDescricao(); ?>"											        
 											        vencimento="<?php echo ($atividade->getVencimento() == "0" || $atividade->getVencimento() == "00" || $atividade->getVencimento() == null || $atividade->getVencimento() == "")?"-":str_pad($atividade->getVencimento(), 2, "0", STR_PAD_LEFT); ?>"
-											        propriedade="<?php echo $atividade->getPropriedade(); ?>"
+											        propriedade="<?php echo ($fluxoProcesso->getPropriedade())?$fluxoProcesso->getPropriedade():$atividade->getPropriedade(); ?>"
 											        categoria="<?php echo $atividade->getCategoria()->getNome(); ?>"
-											        valor="<?php echo $atividade->getValor(); ?>"
+											        valor="<?php echo ($fluxoProcesso->getValor())?$fluxoProcesso->getValor():$atividade->getValor(); ?>"
 											        value="<?php echo $fluxoProcesso->getId_fluxo(); ?>">
-											        <?php echo $atividade->getTitulo();?>
+											        <?php echo $titulo;?>
 											</option>
-										<?php                                  	
-										 }
+										<?php
+										 	}
 										}
 										?>
 										</select>
@@ -1002,7 +1018,7 @@ class ViewProcesso {
 								<div class="form-row">
 									<div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 										<label for="input_descricao" class="col-form-label">Descrição</label>
-										<textarea class="form-control" style="resize: none;" id="input_descricao" name="input_descricao" rows="3" disabled="disabled"></textarea>
+										<textarea class="form-control" style="resize: none;" id="input_descricao" name="input_descricao" rows="3"></textarea>
 									</div>
 								</div>
 								<div class="form-row">

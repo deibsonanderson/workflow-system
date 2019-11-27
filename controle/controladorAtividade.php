@@ -171,12 +171,14 @@ class ControladorAtividade {
 
     public function telaVisualizarAtividadeProcesso($post = null) {
         try {
+        	
             $viewAtividade = new ViewAtividade();
             $processoFluxo = new FluxoProcesso();
             $processoFluxo->setId($post["id_processo_fluxo"]);        
             $processoFluxo->setAtivo($post["ativo"]);
             $processoFluxo->setAtuante($post["atuante"]);
             $processoFluxo->setTitulo($post["titulo_processo_fluxo"]);
+            $processoFluxo->setVencimento($post["vencimento_processo_fluxo"]);
             
             $processo = new Processo();
             $processo->setId($post["id_processo"]);

@@ -200,6 +200,45 @@ class ControladorProcesso {
     		return $e;
     	}
     }
+    
+    public function atualizarTituloFluxoProcesso($post){
+    	try {
+    		$fluxoProcesso = new FluxoProcesso();
+    		$fluxoProcesso->setId($post["id"]);
+    		$fluxoProcesso->setTitulo($post["valor"]);
+    		$daoProcesso = new DaoProcesso();
+    		$daoProcesso->atualizarTituloFluxoProcesso($fluxoProcesso);
+    		$daoProcesso->__destruct();
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function atualizarDescricaoFluxoProcesso($post){
+    	try {
+    		$fluxoProcesso = new FluxoProcesso();
+    		$fluxoProcesso->setId($post["id"]);
+    		$fluxoProcesso->setDescricao($post["valor"]);
+    		$daoProcesso = new DaoProcesso();
+    		$daoProcesso->atualizarDescricaoFluxoProcesso($fluxoProcesso);
+    		$daoProcesso->__destruct();
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function atualizarVencimentoFluxoProcesso($post){
+    	try {
+    		$fluxoProcesso = new FluxoProcesso();
+    		$fluxoProcesso->setId($post["id"]);
+    		$fluxoProcesso->setVencimento($post["valor"]);
+    		$daoProcesso = new DaoProcesso();
+    		$daoProcesso->atualizarVencimentoFluxoProcesso($fluxoProcesso);
+    		$daoProcesso->__destruct();
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
 
     public function excluirProcesso($post) {
         try {
@@ -252,6 +291,7 @@ class ControladorProcesso {
     	$fluxoProcesso = new FluxoProcesso();
     	
     	$fluxoProcesso->setTitulo($post["input_titulo"]);
+    	$fluxoProcesso->setDescricao($post["input_descricao"]);
     	$fluxoProcesso->setProcesso($post["id_processo"]);
     	$fluxoProcesso->setId_fluxo($post["id_fluxo"]);
     	$fluxoProcesso->setPropriedade($post["input_propriedade"]);

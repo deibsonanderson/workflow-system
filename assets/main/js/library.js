@@ -415,6 +415,7 @@
         var id_processo = $(element).attr('id_processo');
         var id_processo_fluxo = $(element).attr('id_processo_fluxo');
         var titulo_processo_fluxo = $(element).attr('titulo_processo_fluxo');
+        var vencimento_processo_fluxo = $(element).attr('vencimento_processo_fluxo');
         controlador = $(element).attr('controlador');
         funcao = $(element).attr('funcao');
         retorno = $(element).attr('retorno');
@@ -423,7 +424,7 @@
         $.ajax({
             url: 'controlador.php',
             type: 'POST',
-            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id+'&id_processo='+ id_processo+'&id_processo_fluxo='+ id_processo_fluxo+'&ativo='+ativo+'&atuante='+atuante+'&titulo_processo_fluxo='+titulo_processo_fluxo,
+            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id+'&id_processo='+ id_processo+'&id_processo_fluxo='+ id_processo_fluxo+'&ativo='+ativo+'&atuante='+atuante+'&titulo_processo_fluxo='+titulo_processo_fluxo+'&vencimento_processo_fluxo='+vencimento_processo_fluxo,
             success: function(result) {
                 $('#' + retorno).html(result);
             },
@@ -548,7 +549,10 @@ function msgSlide(msg) {
                 msg1 = "A(s) Data(s) deve ser preenchidas corretamente!";
                 tipo = "close";
                 break;
-
+            case "18":
+                msg1 = "Houve um erro inesperado!";
+                tipo = "close";
+                break;            	
             default:
                 msg1 = msg;
                 break;
@@ -890,9 +894,6 @@ function inputShow(fluxoProcessoId, valor, propriedade){
 						        '</div>'+
 						    '</div>'+
 					    '</div>');
-	
-	
-	
 	$('.money').mask('000.000.000.000.000,00', {reverse: true}); 
 }
 
@@ -902,24 +903,77 @@ function inputUpdate(fluxoProcessoId,propriedade){
 	$('#valueChange').html('<div onclick="inputShow(\''+fluxoProcessoId+'\',\''+valor+'\',\''+propriedade+'\')">R$ '+(propriedade == '1'?'':'-')+valor+'</div>');
     controlador = 'ControladorProcesso';
     funcao = 'atualizarValorFluxoProcesso';
-    
-	$.ajax({
-        url: 'controlador.php',
-        type: 'POST',
-        data: 'controlador=' + controlador + '&funcao=' + funcao + '&valor='+ valor + '&id='+ fluxoProcessoId + '&propriedade='+propriedade,
-        success: function(result) {
-            //$('#' + retorno).html(result);
-        },
-        beforeSend: function() {
-        	showLoading();
-        },
-        complete: function() {
-        	hideLoading();
-            $('#div_a').remove();
-            $('#' + retorno).css('display', '');
+	if(valor == ''){
+		msgSlide("14");
+	}else{	    
+		$.ajax({
+	        url: 'controlador.php',
+	        type: 'POST',
+	        data: 'controlador=' + controlador + '&funcao=' + funcao + '&valor='+ valor + '&id='+ fluxoProcessoId + '&propriedade='+propriedade,
+	        success: function(result) {
+	            //$('#' + retorno).html(result);
+	        },
+	        beforeSend: function() {
+	        	showLoading();
+	        },
+	        complete: function() {
+	        	hideLoading();
+	            $('#div_a').remove();
+	            $('#' + retorno).css('display', '');
+	
+	        },
+	        error: function(){
+	        	msgSlide("18");
+	        }	        
+	    });
+	}
+}
 
-        }
-    });
+function inputUpdateProcessoFluxo(fluxoProcessoId, tipo){
+	
+	var valor = $('#input_titulo').val();
+	var funcao = 'atualizarTituloFluxoProcesso';
+	var mes = '';
+	var ano = '';
+	if(tipo == 'v'){
+		funcao = 'atualizarVencimentoFluxoProcesso';
+		valor = $('#input_vencimento').val();
+		mes = $('#input_vencimento').attr('mes');
+		ano = $('#input_vencimento').attr('ano');
+	}else if(tipo == 'd'){
+		funcao = 'atualizarDescricaoFluxoProcesso';
+		valor = $('#input_descricao').val();
+	}
+	
+	if(valor == ''){
+		msgSlide("14");
+	}else{	
+		$.ajax({
+	        url: 'controlador.php',
+	        type: 'POST',
+	        data: 'controlador=ControladorProcesso&funcao='+funcao+'&valor='+ valor + '&id='+ fluxoProcessoId,
+	        success: function(result) {
+	            if(tipo == 'v'){
+	            	$('#span_vencimento').css('display','');
+					$('#div_input_vencimento').css('display','none');
+					if(valor == ''){
+						$('#span_vencimento').html('-');
+					}else{
+						$('#span_vencimento').html(pad(valor,1,'0')+'/'+mes+'/'+ano);
+					}
+	            }
+	        },
+	        beforeSend: function() {
+	        	showLoading();
+	        },
+	        complete: function() {
+	        	hideLoading();
+	        },
+	        error: function(){
+	        	msgSlide("18");
+	        }
+	    });
+	}
 }
 
 function fcnScrollTop(){
@@ -1306,4 +1360,12 @@ function scrollToSmooth() {
 		top : 0,
 		behavior : 'smooth',
 	});
+}
+
+function fncLimitarTexto(texto, tamanho){
+    if (texto && texto.length >= tamanho){
+        return str.substring(0, (tamanho-3))+'...';
+    } else{
+        return texto;
+    }
 }

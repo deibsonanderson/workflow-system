@@ -14,6 +14,7 @@ class FluxoProcesso {
     private $propriedade;
     private $vencimento;
     private $outFlow;
+    private $descricao;
     
     //construtor
     public function __construct() {
@@ -119,6 +120,14 @@ class FluxoProcesso {
     
     public function setOutFlow($outFlow) {
     	$this->outFlow = $outFlow;
+    }
+        
+    public function getDescricao() {
+    	return $this->descricao;
+    }
+    
+    public function setDescricao($descricao) {
+    	$this->descricao = $descricao;
     }
 
 }

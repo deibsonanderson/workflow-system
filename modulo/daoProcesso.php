@@ -16,7 +16,43 @@ class DaoProcesso extends Dados {
     	try {
     		$conexao = $this->ConectarBanco();
     		$sql = "UPDATE tb_workflow_processo_fluxo SET valor_atividade=". $fluxoProcesso->getValor(). ", propriedade_atividade = ". $fluxoProcesso->getPropriedade(). "  WHERE id = " . $fluxoProcesso->getId() . "";
-    		$retorno = mysqli_query($conexao,$sql) or die('Erro na update valor atividade!');
+    		$retorno = mysqli_query($conexao,$sql) or die('Erro na update valor processo fluxo atividade!');
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function atualizarTituloFluxoProcesso($fluxoProcesso) {
+    	try {
+    		$conexao = $this->ConectarBanco();
+    		$sql = "UPDATE tb_workflow_processo_fluxo SET titulo_atividade='". $fluxoProcesso->getTitulo(). "' WHERE id = " . $fluxoProcesso->getId() . "";
+    		$retorno = mysqli_query($conexao,$sql) or die('Erro na update titulo processo fluxo atividade!');
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function atualizarDescricaoFluxoProcesso($fluxoProcesso) {
+    	try {
+    		$conexao = $this->ConectarBanco();
+    		$sql = "UPDATE tb_workflow_processo_fluxo SET descricao_atividade='". $fluxoProcesso->getDescricao(). "' WHERE id = " . $fluxoProcesso->getId() . "";
+    		$retorno = mysqli_query($conexao,$sql) or die('Erro na update descricao processo fluxo atividade!');
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function atualizarVencimentoFluxoProcesso($fluxoProcesso) {
+    	try {
+    		$conexao = $this->ConectarBanco();
+    		$sql = "UPDATE tb_workflow_processo_fluxo SET vencimento_atividade='". $fluxoProcesso->getVencimento(). "' WHERE id = " . $fluxoProcesso->getId() . "";
+    		$retorno = mysqli_query($conexao,$sql) or die('Erro na update vencimento processo fluxo atividade!');
     		$this->FecharBanco($conexao);
     		return $retorno;
     	} catch (Exception $e) {
@@ -90,6 +126,7 @@ class DaoProcesso extends Dados {
 							wpf.propriedade_atividade AS propriedade,
 							wpf.out_flow,
                             wpf.vencimento_atividade AS vencimento_processo_fluxo, 
+							wpf.descricao_atividade AS descricao_processo_fluxo,
                             wp.id_usuario
                     FROM tb_workflow_processo_fluxo wpf
                     INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
@@ -137,7 +174,8 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setAtuante($objetoFluxoProcesso->atuante);
                 $fluxoProcesso->setOutFlow($objetoFluxoProcesso->out_flow);
                 $fluxoProcesso->setVencimento($objetoFluxoProcesso->vencimento_processo_fluxo);
-
+                $fluxoProcesso->setDescricao($objetoFluxoProcesso->descricao_processo_fluxo);
+                
                 $atividade = new Atividade();
                 $atividade->setId($objetoFluxoProcesso->id_atividade);
                 $atividade->setTitulo($objetoFluxoProcesso->titulo_atividade);
@@ -171,9 +209,9 @@ class DaoProcesso extends Dados {
             $id_processo = mysqli_insert_id($conexao);
 
             $atuante = 1;
-            $sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade, titulo_atividade) VALUES ";
+            $sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade, descricao_atividade, titulo_atividade) VALUES ";
             foreach ($listFluxoAtividade as $atividade) {
-            	$sql .= "(" . $id_processo . "," . $atividade->getIdFluxo() . ",".$atuante.",1 , 1, " . $atividade->getValor() . "," . $atividade->getPropriedade() . ",0,'" . $atividade->getVencimento() . "','" . $atividade->getTitulo() . "' ),";
+            	$sql .= "(" . $id_processo . "," . $atividade->getIdFluxo() . ",".$atuante.",1 , 1, " . $atividade->getValor() . "," . $atividade->getPropriedade() . ",0,'" . $atividade->getVencimento() . "','" . $atividade->getDescricao() . "','" . $atividade->getTitulo() . "' ),";
                 $atuante = 0;
             }
             $sql_fluxo = substr($sql, 0, -1);
@@ -189,8 +227,8 @@ class DaoProcesso extends Dados {
     public function incluirProcessoFluxo($fluxoProcesso) {
     	try {
     		$conexao = $this->ConectarBanco();
-    		$sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade, titulo_atividade) VALUES ";
-    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "',1,'" . $fluxoProcesso->getVencimento() . "','" . $fluxoProcesso->getTitulo() . "' )";
+    		$sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade,descricao_atividade, titulo_atividade) VALUES ";
+    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "',1,'" . $fluxoProcesso->getVencimento() . "','" . $fluxoProcesso->getDescricao() . "','" . $fluxoProcesso->getTitulo() . "' )";
     		$retorno = mysqli_query($conexao, $sql) or die('Erro na execução  do insert tb_workflow_processo_fluxo!');
     		$this->FecharBanco($conexao);
     		return $retorno;
@@ -354,7 +392,8 @@ class DaoProcesso extends Dados {
 							wp.provisao,
 							wf.ordenacao,
 							wpf.out_flow,
-                            wpf.vencimento_atividade AS vencimento_processo_fluxo, 
+                            wpf.vencimento_atividade AS vencimento_processo_fluxo,
+                            wpf.descricao_atividade AS descricao_processo_fluxo, 
                             wc.nome AS titulo_categoria_atividade
                     FROM tb_workflow_processo_fluxo wpf
                     INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
@@ -407,6 +446,7 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setTitulo($objetoFluxoProcesso->titulo_processo_fluxo);
                 $fluxoProcesso->setOutFlow($objetoFluxoProcesso->out_flow);
                 $fluxoProcesso->setVencimento($objetoFluxoProcesso->vencimento_processo_fluxo);
+                $fluxoProcesso->setDescricao($objetoFluxoProcesso->descricao_processo_fluxo);
                 
                 $categoriaAtividade = new CategoriaAtividade();
                 $categoriaAtividade->setNome($objetoFluxoProcesso->titulo_categoria_atividade);
