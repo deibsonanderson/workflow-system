@@ -759,7 +759,7 @@ class ViewAtividade {
 						<div class="form-group">
 							<label for="nome" class="col-form-label">Titulo Atividade *</label> 
 							<div id="div_input_titulo" class="input-group" >
-                            	<input value="<?php echo $fluxoProcesso->getTitulo(); ?>" id="input_titulo" name="input_titulo" type="text" class="form-control">
+                            	<input value="<?php echo ($processoFluxo->getTitulo())?$processoFluxo->getTitulo():$objAtividade[0]->getTitulo(); ?>" id="input_titulo" name="input_titulo" type="text" class="form-control">
 	                            <div class="input-group-append">
                             		<button onclick="inputUpdateProcessoFluxo('<?php echo $processoFluxo->getId(); ?>','t')" type="button" class="btn btn-primary">Atualizar</button>
                                	</div>
@@ -768,7 +768,7 @@ class ViewAtividade {
 						<div class="form-group">
 							<label for="descricao">Descrição</label>
 							<div id="div_input_descricao" class="input-group" >
-							<textarea class="form-control" id="descricao" rows="3"><?php echo $objAtividade[0]->getDescricao(); ?></textarea>
+							<textarea class="form-control" id="input_descricao" rows="3"><?php echo ($processoFluxo->getDescricao())?$processoFluxo->getDescricao():$objAtividade[0]->getDescricao(); ?></textarea>
 	                            <div class="input-group-append">
                             		<button onclick="inputUpdateProcessoFluxo('<?php echo $processoFluxo->getId(); ?>','d')" type="button" class="btn btn-primary">Atualizar</button>
                                	</div>

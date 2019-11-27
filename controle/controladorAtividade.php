@@ -179,6 +179,7 @@ class ControladorAtividade {
             $processoFluxo->setAtuante($post["atuante"]);
             $processoFluxo->setTitulo($post["titulo_processo_fluxo"]);
             $processoFluxo->setVencimento($post["vencimento_processo_fluxo"]);
+            $processoFluxo->setDescricao($post["descricao_processo_fluxo"]);
             
             $processo = new Processo();
             $processo->setId($post["id_processo"]);

@@ -416,6 +416,7 @@
         var id_processo_fluxo = $(element).attr('id_processo_fluxo');
         var titulo_processo_fluxo = $(element).attr('titulo_processo_fluxo');
         var vencimento_processo_fluxo = $(element).attr('vencimento_processo_fluxo');
+        var descricao_processo_fluxo = $(element).attr('descricao_processo_fluxo');
         controlador = $(element).attr('controlador');
         funcao = $(element).attr('funcao');
         retorno = $(element).attr('retorno');
@@ -424,7 +425,7 @@
         $.ajax({
             url: 'controlador.php',
             type: 'POST',
-            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id+'&id_processo='+ id_processo+'&id_processo_fluxo='+ id_processo_fluxo+'&ativo='+ativo+'&atuante='+atuante+'&titulo_processo_fluxo='+titulo_processo_fluxo+'&vencimento_processo_fluxo='+vencimento_processo_fluxo,
+            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id+'&id_processo='+ id_processo+'&id_processo_fluxo='+ id_processo_fluxo+'&ativo='+ativo+'&atuante='+atuante+'&titulo_processo_fluxo='+titulo_processo_fluxo+'&vencimento_processo_fluxo='+vencimento_processo_fluxo+'&descricao_processo_fluxo='+descricao_processo_fluxo,
             success: function(result) {
                 $('#' + retorno).html(result);
             },
