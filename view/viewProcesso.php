@@ -189,6 +189,11 @@ class ViewProcesso {
             			$imgEstilo = 'ativo';
             			$btnEstilo = 'btn-primary';
 						$opacit = 'opacity:1.0;';
+            		} 
+            		if($fluxoProcesso->getOutFlow() == '1' && $fluxoProcesso->getAtivo() == '1'){
+            			$imgEstilo = 'ativo';
+            			$btnEstilo = 'btn-warning';
+            			$opacit = 'opacity:1.0;';
             		}
             		if($fluxoProcesso->getAtuante() == '1'){
 						$imgEstilo = 'picture';
