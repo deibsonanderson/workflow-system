@@ -712,13 +712,13 @@ class ViewProcesso {
     public function telaRelatorioProcessosAtividades($objProcesso){
     	?>
     	<script type="text/javascript">
-			if(detectarMobile() == true){
+			//if(detectarMobile() == true){
 		    	$('.tablesorter').dataTable({
 	        		"info": false,
 	                "paging":false,
 	                "searching": false
 	            });
-			}
+			//}
             $('#tooltip').hide();
 
             
