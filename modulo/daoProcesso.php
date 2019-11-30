@@ -456,7 +456,7 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setVencimento($objetoFluxoProcesso->vencimento_processo_fluxo);
                 $fluxoProcesso->setDescricao($objetoFluxoProcesso->descricao_processo_fluxo);
                 $fluxoProcesso->setValor($objetoFluxoProcesso->valor_processo_fluxo);
-                $fluxoProcesso->setPropriedade($objetoFluxoProcesso->propriedade);
+                $fluxoProcesso->setPropriedade($objetoFluxoProcesso->propriedade_processo_fluxo);
                 
                 $categoriaAtividade = new CategoriaAtividade();
                 $categoriaAtividade->setNome($objetoFluxoProcesso->titulo_categoria_atividade);
