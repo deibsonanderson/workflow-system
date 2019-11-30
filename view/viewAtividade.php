@@ -560,6 +560,23 @@ class ViewAtividade {
     public function telaVisualizarAtividadeProcesso($objAtividade, $processoFluxo) {
     	date_default_timezone_set('America/Sao_Paulo');
     	$dataIn = date("d/m/Y");
+    	
+    	$objProcessoFluxo = null;
+    	$controladorProcesso = new ControladorProcesso();
+    	$objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
+    	if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+    		foreach ($objProcesso as $processo) {
+    			if ($processo != null && $processo->getFluxoProcesso() != null) {
+    				foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
+    					if($fluxoProcesso->getId() == $processoFluxo->getId()){
+    						$objProcessoFluxo = $fluxoProcesso;
+    						break;
+    					}
+    				}
+    				break;
+    			}
+    		}
+    	}
     	?>
         <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
@@ -594,23 +611,23 @@ class ViewAtividade {
 			            <div class="toolbar ml-auto">
 			            	<a href="#" onclick="getId(this)" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" id="<?php echo $processoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
 			                <?php
-			                if ($processoFluxo->getAtuante() == 1) {
+			                if ($objProcessoFluxo->getAtuante() == 1) {
 			                ?>
-			                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Desmarcar</a>
+			                    <a href="#" onclick="getId(this)" funcao="desatuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $objProcessoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Desmarcar</a>
 			                <?php
-			                } else if ($processoFluxo->getAtivo() == 1 && $processoFluxo->getAtuante() != 1) {
+			                } else if ($objProcessoFluxo->getAtivo() == 1 && $objProcessoFluxo->getAtuante() != 1) {
 			                ?>
-			                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Marcar</a>
+			                    <a href="#" onclick="getId(this)" funcao="atuarFluxoProcesso" controlador="controladorProcesso" id="<?php echo $objProcessoFluxo->getId(); ?>" retorno="div_central" class="getId btn btn-primary btn-sm" >Marcar</a>
 			                <?php
 			                }
 			
-			                if ($processoFluxo->getAtivo() == 1) {
+			                if ($objProcessoFluxo->getAtivo() == 1) {
 			                ?>
-			                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Fechar</a>
+			                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $objProcessoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Fechar</a>
 			                <?php
 			                } else {
 			                ?>
-			                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $processoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Abrir</a>
+			                    <a href="#" onclick="getId(this)" funcao="abrirFluxoProcesso" controlador="controladorProcesso" id="<?php echo $objProcessoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Abrir</a>
 			                <?php
 			                }
 			                ?>		                      
@@ -632,50 +649,35 @@ class ViewAtividade {
 									</tr>
 								</thead>
 								<tbody>
-				                    <?php
-				                    $controladorProcesso = new ControladorProcesso();
-				                    $objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
-				                    $atividadeFluxoProcesso = null;
-				                    if ($objProcesso != null && $objProcesso[0]->getId() != null) {
-				                        foreach ($objProcesso as $processo) {
-				                        	if ($processo != null && $processo->getFluxoProcesso() != null) {
-				                        		foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
-				                        			if($fluxoProcesso->getAtividade()->getId() == $objAtividade[0]->getId()){
-				                        				$atividadeFluxoProcesso = $fluxoProcesso->getAtividade();
-				                        				break;
-				                        			}
-				                        		}
-				                        	}
-				                    ?>    
 				                    <tr style="text-align:center;">
 										<td class="getId dimensions" style="cursor: pointer"
-											id="<?php echo $processo->getId(); ?>"
+											id="<?php echo $objProcesso[0]->getId(); ?>"
 											funcao="telaVisualizarProcesso"
 											controlador="ControladorProcesso" retorno="div_central"
-											title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo str_pad($processo->getId(), 5, '0', STR_PAD_LEFT); ?></td>
+											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>"><?php echo str_pad($objProcesso[0]->getId(), 5, '0', STR_PAD_LEFT); ?></td>
 										<td class="getId dimensions" style="cursor: pointer"
-											id="<?php echo $processo->getId(); ?>"
+											id="<?php echo $objProcesso[0]->getId(); ?>"
 											funcao="telaVisualizarProcesso"
 											controlador="ControladorProcesso" retorno="div_central"
-											title="<?php echo nl2br($processo->getDescricao()); ?>">
-											<?php echo recuperaData($processo->getData()); ?></td>
+											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>">
+											<?php echo recuperaData($objProcesso[0]->getData()); ?></td>
 										<td style="text-align: center;">
 											<span>
 			                                    <?php
-	                                            if ($fluxoProcesso->getAtividade()->getImagem() == "" || $fluxoProcesso->getAtividade()->getImagem() == null) {
+			                                    if ($objProcessoFluxo->getAtividade()->getImagem() == "" || $objProcessoFluxo->getAtividade()->getImagem() == null) {
 	                                                $imagem = "assets/images/atividade.png";
 	                                            } else {
-	                                                $imagem = "imagens/atividade/" . $fluxoProcesso->getAtividade()->getImagem();
+	                                            	$imagem = "imagens/atividade/" . $objProcessoFluxo->getAtividade()->getImagem();
 	                                            }
 	                                            ?>
 	                                            <div style="">
 													<a class="dimensions"
-														atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+														atuante="<?php echo $objProcessoFluxo->getAtuante(); ?>"
 														style="text-decoration: none;"
-														title="<?php echo 'Título: ' . $fluxoProcesso->getAtividade()->getTitulo() . '<br/>Descrição: ' . nl2br($fluxoProcesso->getAtividade()->getDescricao()); ?>">
+														title="<?php echo 'Título: ' . $objProcessoFluxo->getTitulo() . '<br/>Descrição: ' . nl2br($objProcessoFluxo->getDescricao()); ?>">
 	                                                    <?php
 	                                                    $estilo = '';
-	                                                    if ($fluxoProcesso->getAtividade()->getId() != $objAtividade[0]->getId()) {
+	                                                    if ($objProcessoFluxo->getAtividade()->getId() != $objAtividade[0]->getId()) {
 	                                                        $estilo = 'opacity: 0.1;z-index: 1;';
 	                                                    } else {
 	                                                        $estilo = ';z-index: 1;border: 3px solid #00F;cursor:pointer;';
@@ -687,29 +689,25 @@ class ViewAtividade {
 						                    </span>
 						                </td>
 										<td class="getId dimensions" style="cursor: pointer"
-											id="<?php echo $processo->getId(); ?>"
+											id="<?php echo $objProcesso[0]->getId(); ?>"
 											funcao="telaVisualizarProcesso"
 											controlador="ControladorProcesso" retorno="div_central"
-											title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo limitarTexto($processo->getTitulo(), 40); ?></td>
+											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>"><?php echo limitarTexto($objProcesso[0]->getTitulo(), 40); ?></td>
 										<td class="getId dimensions" style="cursor: pointer"
-											id="<?php echo $processo->getId(); ?>"
+											id="<?php echo $objProcesso[0]->getId(); ?>"
 											funcao="telaVisualizarProcesso"
 											controlador="ControladorProcesso" retorno="div_central"
-											title="<?php echo nl2br($processo->getDescricao()); ?>">
-											<?php echo ($processo->getFluxo()) ? limitarTexto($processo->getFluxo()->getTitulo(), 40) : ''; ?></td>
+											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>">
+											<?php echo ($objProcesso[0]->getFluxo()) ? limitarTexto($objProcesso[0]->getFluxo()->getTitulo(), 40) : ''; ?></td>
 										<td class="dimensions" style="cursor: pointer"
-											id="<?php echo $processo->getId(); ?>"
+											id="<?php echo $objProcesso[0]->getId(); ?>"
 											onclick="showInputVencimento();"
-											title="<?php echo nl2br($processo->getDescricao()); ?>">
+											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>">
 											<?php
 												$vencimento = '-';
 												$date = strtotime($processo->getData());
-												if($processoFluxo->getVencimento() != "" && $processoFluxo->getVencimento() != null && $processoFluxo->getVencimento() != "00"){
-													$vencimento = $processoFluxo->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
-												}else{
-													if($objAtividade[0]->getVencimento() != "" && $objAtividade[0]->getVencimento() != null && $objAtividade[0]->getVencimento() != "00"){
-														$vencimento = $objAtividade[0]->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
-													}
+												if($objProcessoFluxo->getVencimento() != "" && $objProcessoFluxo->getVencimento() != null && $objProcessoFluxo->getVencimento() != "00"){
+													$vencimento = $objProcessoFluxo->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
 												}
 											?>
 											<span id="span_vencimento"><?php echo $vencimento; ?></span>
@@ -720,7 +718,7 @@ class ViewAtividade {
 													<option value="">Selecione...</option>
 													<?php 
 														for($i = 1; $i <=31; $i++){
-															$select = ($objAtividade[0]->getVencimento() == $i)?'selected="selected"':'';
+															$select = ($objProcessoFluxo->getVencimento() == $i)?'selected="selected"':'';
 															echo "<option value='".$i."' ".$select." >".$i."</option>";
 														}
 													?>
@@ -729,27 +727,23 @@ class ViewAtividade {
 										</td>
 										<td id="valueChange" class="getId dimensions"
 											style="cursor: pointer"
-											title="<?php echo nl2br($processo->getDescricao()); ?>">
+											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>">
 											<div
 												onclick="inputShow(
-					                                    '<?php echo $processoFluxo->getId(); ?>',
-					                                    '<?php echo $simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');?>',
-					                                    '<?php echo $atividadeFluxoProcesso->getPropriedade();?>')">
+					                                    '<?php echo $objProcessoFluxo->getId(); ?>',
+					                                    '<?php echo $simbolo.valorMonetario($objProcessoFluxo->getValor(),'2');?>',
+					                                    '<?php echo $objProcessoFluxo->getPropriedade();?>')">
 					                                    <?php
-						                                    if($atividadeFluxoProcesso->getPropriedade() == '1'){
+					                                    	if($objProcessoFluxo->getPropriedade() == '1'){
 						                                    	$simbolo = '';
 						                                    }else{
 						                                    	$simbolo = '-';
 						                                    }
-						                                    echo 'R$ '.$simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');
+						                                    echo 'R$ '.$simbolo.valorMonetario($objProcessoFluxo->getValor(),'2');
 					                                    ?>
 					                        </div>
 										</td>
 									</tr> 
-				                    <?php
-				                        }
-				                    }
-				                    ?>    				
 				                </tbody>
 							</table>
 						</div>
@@ -759,18 +753,18 @@ class ViewAtividade {
 						<div class="form-group">
 							<label for="nome" class="col-form-label">Titulo Atividade *</label> 
 							<div id="div_input_titulo" class="input-group" >
-                            	<input value="<?php echo ($processoFluxo->getTitulo())?$processoFluxo->getTitulo():$objAtividade[0]->getTitulo(); ?>" id="input_titulo" name="input_titulo" type="text" class="form-control">
+                            	<input value="<?php echo $objProcessoFluxo->getTitulo(); ?>" id="input_titulo" name="input_titulo" type="text" class="form-control">
 	                            <div class="input-group-append">
-                            		<button onclick="inputUpdateProcessoFluxo('<?php echo $processoFluxo->getId(); ?>','t')" type="button" class="btn btn-primary">Atualizar</button>
+                            		<button onclick="inputUpdateProcessoFluxo('<?php echo $objProcessoFluxo->getId(); ?>','t')" type="button" class="btn btn-primary">Atualizar</button>
                                	</div>
                             </div>
 						</div>
 						<div class="form-group">
 							<label for="descricao">Descrição</label>
 							<div id="div_input_descricao" class="input-group" >
-							<textarea class="form-control" id="input_descricao" rows="3"><?php echo ($processoFluxo->getDescricao())?$processoFluxo->getDescricao():$objAtividade[0]->getDescricao(); ?></textarea>
+							<textarea class="form-control" id="input_descricao" rows="3"><?php echo $objProcessoFluxo->getDescricao(); ?></textarea>
 	                            <div class="input-group-append">
-                            		<button onclick="inputUpdateProcessoFluxo('<?php echo $processoFluxo->getId(); ?>','d')" type="button" class="btn btn-primary">Atualizar</button>
+                            		<button onclick="inputUpdateProcessoFluxo('<?php echo $objProcessoFluxo->getId(); ?>','d')" type="button" class="btn btn-primary">Atualizar</button>
                                	</div>
                             </div>
 						</div>
@@ -799,7 +793,7 @@ class ViewAtividade {
 					</div>
 					<div class="card-footer" id="div_comentarios">
 		        		<?php 
-		        		   echo $this->telaComentariosAtividadeProcesso($processoFluxo->getId());
+		        			echo $this->telaComentariosAtividadeProcesso($objProcessoFluxo->getId());
 		        		?>
 				    </div>
 			        <div class="card-body">
@@ -808,10 +802,10 @@ class ViewAtividade {
 			                <input type="hidden" name="controlador" id="controlador" value="ControladorComentarioFluxoProcesso"/>
 			                <input type="hidden" name="funcao" id="funcao" value="incluirComentarioFluxoProcesso"/>
 			                <input type="hidden" name="mensagem" id="mensagem" value="1"/>
-			                <input type="hidden" name="id_processo_fluxo" id="id_fluxo_processo" value="<?php echo $processoFluxo->getId(); ?>" />
+			                <input type="hidden" name="id_processo_fluxo" id="id_fluxo_processo" value="<?php echo $objProcessoFluxo->getId(); ?>" />
 			                <input type="hidden" name="id_processo" id="id_processo" value="<?php echo $processoFluxo->getProcesso()->getId(); ?>" />				
 			                <input type="hidden" name="id" id="id_atividade" value="<?php echo ($objAtividade != null) ? $objAtividade[0]->getId() : ''; ?>" />  
-			                <input type="hidden" name="ativo" id="ativo" value="<?php echo $processoFluxo->getAtivo(); ?>" />
+			                <input type="hidden" name="ativo" id="ativo" value="<?php echo $objProcessoFluxo->getAtivo(); ?>" />
 			                <input type="hidden" name="arquivo" id="arquivo" value="" />						
 							<div class="form-row">
 								<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">

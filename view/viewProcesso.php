@@ -213,6 +213,7 @@ class ViewProcesso {
 						 atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
 						 titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
 						 vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
+						 valor_processo_fluxo="<?php echo $fluxoProcesso->getValor(); ?>"
 						 descricao_processo_fluxo="<?php echo $fluxoProcesso->getDescricao(); ?>"
 						 onclick="getIdProcesso(this)"
 						 funcao="telaVisualizarAtividadeProcesso" 
@@ -230,6 +231,7 @@ class ViewProcesso {
 							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
 							titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
 							vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
+							valor_processo_fluxo="<?php echo $fluxoProcesso->getValor(); ?>"
 							descricao_processo_fluxo="<?php echo $fluxoProcesso->getDescricao(); ?>"
 							onclick="getIdProcesso(this)"
 							funcao="telaVisualizarAtividadeProcesso" 
@@ -258,6 +260,7 @@ class ViewProcesso {
 							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"						
 							titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
 							vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
+							valor_processo_fluxo="<?php echo $fluxoProcesso->getValor(); ?>"
 							descricao_processo_fluxo="<?php echo $fluxoProcesso->getDescricao(); ?>"	
 							onclick="getIdProcesso(this)"
 							funcao="telaVisualizarAtividadeProcesso" 
@@ -266,8 +269,8 @@ class ViewProcesso {
 							style="cursor: pointer;"><?php echo $fluxoProcesso->getAtividade()->getDescricao(); ?>
 							<br />
 							Valor: <?php 
-							$propriedade = ($fluxoProcesso->getAtividade()->getPropriedade() == '1')?'':'-';
-							echo 'R$ '.$propriedade.moneyFormat($fluxoProcesso->getAtividade()->getValor()); 
+							$propriedade = ($fluxoProcesso->getPropriedade() == '1')?'':'-';
+							echo 'R$ '.$propriedade.moneyFormat($fluxoProcesso->getValor()); 
 							?>
 							</p>
 						<a  href="#" 
@@ -278,6 +281,7 @@ class ViewProcesso {
 							atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"							
 							titulo_processo_fluxo="<?php echo $tituloProcessoFluxo; ?>"
 							vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
+							valor_processo_fluxo="<?php echo $fluxoProcesso->getValor(); ?>"
 							descricao_processo_fluxo="<?php echo $fluxoProcesso->getDescricao(); ?>"
 							onclick="getIdProcesso(this)"
 							funcao="telaVisualizarAtividadeProcesso" 
@@ -543,9 +547,9 @@ class ViewProcesso {
     	$data = "";
     	if ($objProcesso != null && $objProcesso[0]->getFluxoProcesso() != null) {
     		foreach ($objProcesso[0]->getFluxoProcesso() as $fluxoProcesso) {
-				$sinal = ($fluxoProcesso->getAtividade()->getPropriedade() == '1')?'':'-';
+				$sinal = ($fluxoProcesso->getPropriedade() == '1')?'':'-';
 				
-				$data .= "{ x: '".limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 30)."', y: ".$sinal.$fluxoProcesso->getAtividade()->getValor()." },";	
+				$data .= "{ x: '".limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 30)."', y: ".$sinal.$fluxoProcesso->getValor()." },";	
     			
     		}
     		$data = substr($data, 0, -1);
@@ -765,28 +769,28 @@ class ViewProcesso {
 									$fechado = 0;
 									
 		                        	foreach ($objProcesso[0]->getFluxoProcesso() as $fluxoProcesso) {
-		                        		if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
-		                        			$positivo += $fluxoProcesso->getAtividade()->getValor();
+		                        		if($fluxoProcesso->getPropriedade() == '1'){
+		                        			$positivo += $fluxoProcesso->getValor();
 		                        			$sinal = '';
 		                        			$colorcss = 'color:BLUE;';
 		                        		}else{
-		                        			$negativo += $fluxoProcesso->getAtividade()->getValor();
+		                        			$negativo += $fluxoProcesso->getValor();
 		                        			$sinal = '-';
 		                        			$colorcss = 'color:RED;';
 		                        		}
 		                        		
 										if($fluxoProcesso->getAtivo() == '1' ){
-											if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
-												$aberto += $fluxoProcesso->getAtividade()->getValor();
+											if($fluxoProcesso->getPropriedade() == '1'){
+												$aberto += $fluxoProcesso->getValor();
 											}else{
-												$aberto -= $fluxoProcesso->getAtividade()->getValor();
+												$aberto -= $fluxoProcesso->getValor();
 											}
 											$colorStatus = 'color:RED;';
 										}else{
-											if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
-												$fechado += $fluxoProcesso->getAtividade()->getValor();
+											if($fluxoProcesso->getPropriedade() == '1'){
+												$fechado += $fluxoProcesso->getValor();
 											}else{
-												$fechado -= $fluxoProcesso->getAtividade()->getValor();
+												$fechado -= $fluxoProcesso->getValor();
 											}
 											$colorStatus = 'color:BLUE;';
 										}	
@@ -803,7 +807,7 @@ class ViewProcesso {
 					                            <td style="<?php echo $colorcss; ?>" >
 					                            	<span onclick="showInput('<?php echo $fluxoProcesso->getId(); ?>');" id="span_<?php echo $fluxoProcesso->getId(); ?>" style="display:block;" 
 					                            	      name="span_<?php echo $fluxoProcesso->getId(); ?>" ativo="<?php echo $fluxoProcesso->getAtivo(); ?>" >
-					                            	      <?php echo 'R$ '.$sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2'); ?>
+					                            	      <?php echo 'R$ '.$sinal.valorMonetario($fluxoProcesso->getValor(),'2'); ?>
 					                            	</span>
 					                            	<div id="div_valor_<?php echo $fluxoProcesso->getId(); ?>" class="input-group" style="display:none;min-width:150px;max-width:150px;">
 					                            		<input maxlength="10" style="" 
@@ -811,7 +815,7 @@ class ViewProcesso {
 					                            	       name="valor_<?php echo $fluxoProcesso->getId(); ?>" 
 					                            	       onblur="" 
 					                            	       type="text" class="form-control money valor" 
-					                            	       value="<?php echo $sinal.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'3'); ?>" 
+					                            	       value="<?php echo $sinal.valorMonetario($fluxoProcesso->getValor(),'3'); ?>" 
 					                            	       ativo="<?php echo $fluxoProcesso->getAtivo(); ?>">
 		                                                <div class="input-group-append">
 		                                                    <button onclick="recalcular(); showSpan('<?php echo $fluxoProcesso->getId(); ?>');" type="button" class="btn btn-primary">OK</button>
@@ -1033,7 +1037,15 @@ class ViewProcesso {
 								<div class="form-row">
 									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
 										<label for="input_vencimento" class="col-form-label">Dia do Vencimento *</label>
-										<input id="input_vencimento" name="input_vencimento" type="text" class="form-control number mgs_alerta" maxlength="2" >
+										<!-- input id="input_vencimento" name="input_vencimento" type="text" class="form-control number mgs_alerta" maxlength="2" -->
+										<select id="input_vencimento" name="input_vencimento" class="form-control">
+											<option value="">Sem Anexo</option>
+											<?php 
+												for($i = 1; $i <=31; $i++){
+													echo "<option value='".$i."'>".$i."</option>";
+												}
+											?>
+										</select>
 									</div>
 									<div class="form-group col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
 										<label for="input_propriedade" class="col-form-label">Propriedade *</label>

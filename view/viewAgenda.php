@@ -14,7 +14,21 @@ class ViewAgenda {
     
     public function telaModalAgendaProcessoFluxo($objAtividade, $processoFluxo){
     	$controladorProcesso = new ControladorProcesso();
+    	$objProcessoFluxo = null;
     	$objProcesso = $controladorProcesso->buscarFluxoProcesso($processoFluxo->getProcesso()->getId());
+    	if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+    		foreach ($objProcesso as $processo) {
+		    	if ($processo != null && $processo->getFluxoProcesso() != null) {
+		    		foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
+		    			if($fluxoProcesso->getId() == $processoFluxo->getId()){
+		    				$objProcessoFluxo = $fluxoProcesso;
+		    				break;
+		    			}
+		    		}
+		    		break;
+		    	}
+    		}
+    	}
     ?>
     	<script type="text/javascript">
 			function closeModal(){
@@ -28,11 +42,11 @@ class ViewAgenda {
 		        <h5 class="modal-title"></h5>
 	            <div class="toolbar ml-auto">
 		            <button type="button" class="btn btn-light" 
-		            	 id_processo_fluxo="<?php echo $processoFluxo->getId(); ?>"
+		            	 id_processo_fluxo="<?php echo $objProcessoFluxo->getId(); ?>"
 						 id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
-						 id="<?php echo $objProcesso[0]->getFluxoProcesso()[0]->getAtividade()->getId(); ?>"
-						 ativo="<?php echo $objProcesso[0]->getFluxoProcesso()[0]->getAtivo(); ?>"
-						 atuante="<?php echo $objProcesso[0]->getFluxoProcesso()[0]->getAtuante(); ?>"
+						 id="<?php echo $objProcessoFluxo->getAtividade()->getId(); ?>"
+						 ativo="<?php echo $objProcessoFluxo->getAtivo(); ?>"
+						 atuante="<?php echo $objProcessoFluxo->getAtuante(); ?>"
 						 onclick="getIdProcesso(this);closeModal();"
 						 funcao="telaVisualizarAtividadeProcesso" 
 						 controlador="controladorAtividade" 
@@ -64,34 +78,33 @@ class ViewAgenda {
 										</thead>
 										<tbody>
 						                    <?php
-						                    if ($objProcesso != null && $objProcesso[0]->getId() != null) {
-						                        foreach ($objProcesso as $processo) {
+						                    if ($objProcessoFluxo != null) {
 						                    ?>    
 						                    <tr style="text-align:center;">
 												<td class="getId dimensions" style="cursor: pointer"
-													id="<?php echo $processo->getId(); ?>"
+													id="<?php echo $objProcesso[0]->getId(); ?>"
 													funcao="telaVisualizarProcesso"
 													controlador="ControladorProcesso" retorno="div_central"
 													style=""
-													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo str_pad($processo->getId(), 5, '0', STR_PAD_LEFT); ?></td>
+													title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>"><?php echo str_pad($objProcesso[0]->getId(), 5, '0', STR_PAD_LEFT); ?></td>
 												<td class="getId dimensions" style="cursor: pointer"
 													id="<?php echo $processo->getId(); ?>"
 													funcao="telaVisualizarProcesso"
 													controlador="ControladorProcesso" retorno="div_central"
 													style=""
-													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo recuperaData($processo->getData()); ?></td>
+													title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>"><?php echo recuperaData($objProcesso[0]->getData()); ?></td>
 												<td class="getId dimensions" style="cursor: pointer"
 													id="<?php echo $processo->getId(); ?>"
 													funcao="telaVisualizarProcesso"
 													controlador="ControladorProcesso" retorno="div_central"
 													style=""
-													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo limitarTexto($processo->getTitulo(), 40); ?></td>
+													title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>"><?php echo limitarTexto($objProcesso[0]->getTitulo(), 40); ?></td>
 												<td class="getId dimensions" style="cursor: pointer"
 													id="<?php echo $processo->getId(); ?>"
 													funcao="telaVisualizarProcesso"
 													controlador="ControladorProcesso" retorno="div_central"
 													style=""
-													title="<?php echo nl2br($processo->getDescricao()); ?>"><?php echo ($processo->getFluxo()) ? limitarTexto($processo->getFluxo()->getTitulo(), 40) : ''; ?></td>
+													title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>"><?php echo ($objProcesso[0]->getFluxo()) ? limitarTexto($objProcesso[0]->getFluxo()->getTitulo(), 40) : ''; ?></td>
 												<td class="getId dimensions" style="cursor: pointer"
 													id="<?php echo $processo->getId(); ?>"
 													funcao="telaVisualizarProcesso"
@@ -99,9 +112,9 @@ class ViewAgenda {
 													style=""
 													title="<?php echo nl2br($processo->getDescricao()); ?>">
 													<?php
-														if($objAtividade[0]->getVencimento() != "" && $objAtividade[0]->getVencimento() != null && $objAtividade[0]->getVencimento() != "00"){
+														if($objProcessoFluxo->getVencimento() != "" && $objProcessoFluxo->getVencimento() != null && $objProcessoFluxo->getVencimento() != "00"){
 															$date = strtotime($processo->getData());
-															echo $objAtividade[0]->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
+															echo $objProcessoFluxo->getVencimento().'/'.date('m',$date).'/'.date('Y',$date);
 														}else{
 															echo "-";
 														}
@@ -110,39 +123,28 @@ class ViewAgenda {
 												<td class="" style="text-align: center;">
 													<span>
 					                                    <?php
-					                                    $atividadeFluxoProcesso = null;
-					                                    if ($processo != null && $processo->getFluxoProcesso() != null) {
-					                                        foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
-					                                        	if($fluxoProcesso->getAtividade()->getId() == $objAtividade[0]->getId()){
-					                                        		$atividadeFluxoProcesso = $fluxoProcesso->getAtividade();
-						                                            if ($fluxoProcesso->getAtividade()->getImagem() == "" || $fluxoProcesso->getAtividade()->getImagem() == null) {
-						                                                $imagem = "assets/images/atividade.png";
-						                                            } else {
-						                                                $imagem = "imagens/atividade/" . $fluxoProcesso->getAtividade()->getImagem();
-						                                            }
-						                                            ?>
-						                                            <div style="">
-																		<a class="dimensions"
-																			atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
-																			style="text-decoration: none;"
-																			title="<?php echo 'Título: ' . $fluxoProcesso->getAtividade()->getTitulo() . '<br/>Descrição: ' . nl2br($fluxoProcesso->getAtividade()->getDescricao()); ?>">
-						                                                    <?php
-						                                                    $estilo = '';
-						                                                    if ($fluxoProcesso->getAtividade()->getId() != $objAtividade[0]->getId()) {
-						                                                        $estilo = 'opacity: 0.1;z-index: 1;';
-						                                                    } else {
-						                                                        $estilo = ';z-index: 1;border: 3px solid #00F;cursor:pointer;';
-						                                                    }
-						                                                    ?>
-																			<img class="" style="width: 32px; height: 33px; <?php echo $estilo; ?>" src="<?php echo $imagem; ?>" />
-																		</a>
-																	</div>
-						                                            <?php
-						                                            break;
-					                                        	}
-					                                        }
-					                                    }
-					                                    ?>                                            
+					                                    if ($objProcessoFluxo->getAtividade()->getImagem() == "" || $objProcessoFluxo->getAtividade()->getImagem() == null) {
+			                                                $imagem = "assets/images/atividade.png";
+			                                            } else {
+			                                            	$imagem = "imagens/atividade/" . $objProcessoFluxo->getAtividade()->getImagem();
+			                                            }
+			                                            ?>
+			                                            <div style="">
+															<a class="dimensions"
+																atuante="<?php echo $objProcessoFluxo->getAtuante(); ?>"
+																style="text-decoration: none;"
+																title="<?php echo 'Título: ' . $objProcessoFluxo->getTitulo() . '<br/>Descrição: ' . nl2br($objProcessoFluxo->getDescricao()); ?>">
+			                                                    <?php
+			                                                    $estilo = '';
+			                                                    if ($objProcessoFluxo->getAtividade()->getId() != $objAtividade[0]->getId()) {
+			                                                        $estilo = 'opacity: 0.1;z-index: 1;';
+			                                                    } else {
+			                                                        $estilo = ';z-index: 1;border: 3px solid #00F;cursor:pointer;';
+			                                                    }
+			                                                    ?>
+																<img class="" style="width: 32px; height: 33px; <?php echo $estilo; ?>" src="<?php echo $imagem; ?>" />
+															</a>
+														</div>
 								                    </span>
 								                </td>
 												<td id="valueChange" class="getId dimensions"
@@ -150,18 +152,17 @@ class ViewAgenda {
 													title="<?php echo nl2br($processo->getDescricao()); ?>">
 													<div>
 					                                    <?php
-						                                    if($atividadeFluxoProcesso->getPropriedade() == '1'){
+					                                    if($objProcessoFluxo->getPropriedade() == '1'){
 						                                    	$simbolo = '';
 						                                    }else{
 						                                    	$simbolo = '-';
 						                                    }
-						                                    echo 'R$ '.$simbolo.valorMonetario($atividadeFluxoProcesso->getValor(),'2');
+						                                    echo 'R$ '.$simbolo.valorMonetario($objProcessoFluxo->getValor(),'2');
 					                                    ?>
 							                        </div>
 												</td>
 											</tr> 
-						                    <?php
-						                        }
+						                    <?php						                        
 						                    }
 						                    ?>    				
 						                </tbody>
@@ -172,11 +173,11 @@ class ViewAgenda {
 							<div class="card-body">
 								<div class="form-group">
 									<label for="nome" class="col-form-label" style="float: left;">Nome *</label> 
-									<input id="titulo" name="titulo" type="text" disabled value="<?php echo $objAtividade[0]->getTitulo(); ?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+									<input id="titulo" name="titulo" type="text" disabled value="<?php echo $objProcessoFluxo->getTitulo(); ?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
 								</div>
 								<div class="form-group">
 									<label for="descricao" style="float: left;">Descrição</label>
-									<textarea class="form-control" id="descricao" disabled rows="3"><?php echo $objAtividade[0]->getDescricao(); ?></textarea>
+									<textarea class="form-control" id="descricao" disabled rows="3"><?php echo $objProcessoFluxo->getDescricao(); ?></textarea>
 								</div>
 					            <?php
 					            if ($objAtividade != null && $objAtividade[0]->getLink()) {

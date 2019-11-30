@@ -44,24 +44,19 @@ class ControladorAgenda {
     		foreach ($objProcesso as $processo) {
     			if ($processo->getFluxoProcesso() != null) {
     				foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
-    					if(($fluxoProcesso->getAtividade()->getVencimento() != null ||
-    							$fluxoProcesso->getAtividade()->getVencimento() != "" ||
-    							$fluxoProcesso->getAtividade()->getVencimento() != "00") &&
-    							($fluxoProcesso->getAtividade()->getTitulo() != null ||
-    									trim($fluxoProcesso->getAtividade()->getTitulo()) != "")){
-    										
+    					if(($fluxoProcesso->getVencimento() != null || $fluxoProcesso->getVencimento() != "" || $fluxoProcesso->getVencimento() != "00") 
+    							&& ($fluxoProcesso->getTitulo() != null || trim($fluxoProcesso->getTitulo()) != "") ){
     										$date = strtotime($processo->getData());
-    										
     										$eventos .= "{  id: '".$fluxoProcesso->getAtividade()->getId()."',
-									                        title: '".trim($fluxoProcesso->getAtividade()->getTitulo())."-".trim($processo->getTitulo())."',
-									                        start: '".date('Y',$date)."-".date('m',$date)."-".$fluxoProcesso->getAtividade()->getVencimento()."',
+									                        title: '".trim($fluxoProcesso->getTitulo())."-".trim($processo->getTitulo())."',
+									                        start: '".date('Y',$date)."-".date('m',$date)."-".$fluxoProcesso->getVencimento()."',
 									                        backgroundColor: '#4285F4',
 									                        borderColor: '#4285F4',
 															tipo: 'P',
 															id_processo_fluxo:'".$fluxoProcesso->getId()."',
 															ativo:'".$fluxoProcesso->getAtivo()."',
 															atuante:'".$fluxoProcesso->getAtuante()."',
-															id_processo:'".$processo->getId()."' },";
+														    id_processo:'".$processo->getId()."' },";
     					}
     					$processoFluxoIds[] = $fluxoProcesso->getId();
     				}

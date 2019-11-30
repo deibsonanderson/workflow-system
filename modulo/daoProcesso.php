@@ -124,9 +124,12 @@ class DaoProcesso extends Dados {
 							wa.vencimento AS vencimento_atividade,
 							wpf.valor_atividade AS valor,
 							wpf.propriedade_atividade AS propriedade,
+							wpf.propriedade_atividade AS propriedade_processo_fluxo,
 							wpf.out_flow,
                             wpf.vencimento_atividade AS vencimento_processo_fluxo, 
 							wpf.descricao_atividade AS descricao_processo_fluxo,
+							wpf.titulo_atividade AS titulo_processo_fluxo,
+                            wpf.valor_atividade AS valor_processo_fluxo,
                             wp.id_usuario
                     FROM tb_workflow_processo_fluxo wpf
                     INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
@@ -175,6 +178,9 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setOutFlow($objetoFluxoProcesso->out_flow);
                 $fluxoProcesso->setVencimento($objetoFluxoProcesso->vencimento_processo_fluxo);
                 $fluxoProcesso->setDescricao($objetoFluxoProcesso->descricao_processo_fluxo);
+                $fluxoProcesso->setTitulo($objetoFluxoProcesso->titulo_processo_fluxo);
+                $fluxoProcesso->setValor($objetoFluxoProcesso->valor_processo_fluxo);
+                $fluxoProcesso->setPropriedade($objetoFluxoProcesso->propriedade_processo_fluxo);
                 
                 $atividade = new Atividade();
                 $atividade->setId($objetoFluxoProcesso->id_atividade);
@@ -228,7 +234,7 @@ class DaoProcesso extends Dados {
     	try {
     		$conexao = $this->ConectarBanco();
     		$sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade,descricao_atividade, titulo_atividade) VALUES ";
-    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "',1,'" . $fluxoProcesso->getVencimento() . "','" . $fluxoProcesso->getDescricao() . "','" . $fluxoProcesso->getTitulo() . "' )";
+    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "',1," . $fluxoProcesso->getVencimento() . ",'" . $fluxoProcesso->getDescricao() . "','" . $fluxoProcesso->getTitulo() . "' )";
     		$retorno = mysqli_query($conexao, $sql) or die('Erro na execução  do insert tb_workflow_processo_fluxo!');
     		$this->FecharBanco($conexao);
     		return $retorno;
@@ -382,13 +388,15 @@ class DaoProcesso extends Dados {
                             wa.titulo AS titulo_atividade,
                             wa.imagem AS imagem_atividade,
                             wa.arquivo AS arquivo_atividade,
+							wa.valor AS valor_atividade, 
+							wa.propriedade AS propriedade_atividade,
 							wa.link AS link_atividade,
                             wa.descricao AS descricao_atividade,
                             wa.vencimento AS vencimento_atividade,
-							wpf.valor_atividade AS valor,
+							wpf.valor_atividade AS valor_processo_fluxo,
 							wpf.titulo_atividade AS titulo_processo_fluxo,
-							wpf.propriedade_atividade AS propriedade,
-                            wp.id_usuario,
+							wpf.propriedade_atividade AS propriedade_processo_fluxo,
+							wp.id_usuario,
 							wp.provisao,
 							wf.ordenacao,
 							wpf.out_flow,
@@ -447,6 +455,8 @@ class DaoProcesso extends Dados {
                 $fluxoProcesso->setOutFlow($objetoFluxoProcesso->out_flow);
                 $fluxoProcesso->setVencimento($objetoFluxoProcesso->vencimento_processo_fluxo);
                 $fluxoProcesso->setDescricao($objetoFluxoProcesso->descricao_processo_fluxo);
+                $fluxoProcesso->setValor($objetoFluxoProcesso->valor_processo_fluxo);
+                $fluxoProcesso->setPropriedade($objetoFluxoProcesso->propriedade);
                 
                 $categoriaAtividade = new CategoriaAtividade();
                 $categoriaAtividade->setNome($objetoFluxoProcesso->titulo_categoria_atividade);
@@ -459,8 +469,8 @@ class DaoProcesso extends Dados {
                 $atividade->setLink($objetoFluxoProcesso->link_atividade);
                 $atividade->setImagem($objetoFluxoProcesso->imagem_atividade);
                 $atividade->setVencimento($objetoFluxoProcesso->vencimento_atividade);
-                $atividade->setValor($objetoFluxoProcesso->valor);
-                $atividade->setPropriedade($objetoFluxoProcesso->propriedade);
+                $atividade->setValor($objetoFluxoProcesso->valor_atividade);
+                $atividade->setPropriedade($objetoFluxoProcesso->propriedade_atividade);
                 $atividade->setCategoria($categoriaAtividade);
 
                 

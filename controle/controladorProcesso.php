@@ -295,8 +295,10 @@ class ControladorProcesso {
     	$fluxoProcesso->setProcesso($post["id_processo"]);
     	$fluxoProcesso->setId_fluxo($post["id_fluxo"]);
     	$fluxoProcesso->setPropriedade($post["input_propriedade"]);
-    	if($post["input_vencimento"] != "" || $post["input_vencimento"] != "-"){
-    		$fluxoProcesso->setVencimento($post["input_vencimento"]); 
+    	if($post["input_vencimento"] != ""){
+    		$fluxoProcesso->setVencimento("'".$post["input_vencimento"]."'"); 
+    	}else{
+    		$fluxoProcesso->setVencimento('NULL');
     	}
     	$fluxoProcesso->setValor(valorMonetario($post["input_valor"], '1'));
    		
