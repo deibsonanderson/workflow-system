@@ -22,6 +22,37 @@ class ViewFluxo {
                  $("#sortable").sortable({opacity: 0.6, cursor: 'move', update: function() {}});
                  $("#sortable").disableSelection();
             });
+
+            function fncFluxoPreExistente(element){
+				if($(element).val() == '0'){
+					$("#categoria").prop("disabled", false );
+					$(".check-fluxo").prop( "checked", false );
+				}else{
+					$("#categoria").prop("disabled", true );
+
+			        $.ajax({
+			            url: 'controlador.php',
+			            type: 'POST',
+			            data: 'retorno=sortable&controlador=ControladorFluxo&funcao=montarCheckUpdateAtividade&param=' + $(element).val(),
+			            success: function(result) {
+			            	$('#sortable').html(result);
+			            },
+			            beforeSend: function() {
+			            	showLoading();
+			            },
+			            complete: function() {
+			            	hideLoading();
+			                $('#sortable').css('display', '');
+			                //if (mensagem) {
+			                //   msgSlide(mensagem);
+			                //}
+			            },
+			            error: function(){
+
+					    }
+			        });
+				}
+            } 
         </script>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -47,6 +78,20 @@ class ViewFluxo {
 							<label for="descricao">Descrição</label>
 							<textarea class="form-control" id="descricao" rows="3"></textarea>
 						</div>
+						<div class="form-group">
+							<label for="pais">Fluxos</label>
+							<select onChange="fncFluxoPreExistente(this)" id="fluxos" name="fluxos"  class="form-control">
+								<option value="0">Sem fluxo pre cadastrado.</option>
+								<?php 
+								$controladorFluxo = new ControladorFluxo();
+								foreach ($controladorFluxo->listarFluxo(null) as $fluxo){
+								?>
+									<option value="<?php echo $fluxo->getId();?>"><?php echo $fluxo->getTitulo(); ?></option>
+								<?php 
+								}
+								?>
+							</select>
+						</div>							
 						<div class="form-group">
 							<label for="pais">Categoria *</label>
 							<select id="categoria" name="categoria"  class="form-control" 

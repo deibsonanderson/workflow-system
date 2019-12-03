@@ -900,8 +900,10 @@ class ViewAtividade {
                     <tr>
                         <td><label style="width: 170px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
                         <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
-                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
+                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Download do Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
+                        </td>
+                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<a target="_blank" href="./arquivos/atividade/'.$comentario->getArquivo().'"><img src="assets/images/external_link29.png" style="cursor: pointer;width: 29px;" title="Abrir no navegador o Arquivo: ' . $comentario->getArquivo() . '"></a>' : '-'; ?>
                         </td>
                         <td>
 	                        <?php
