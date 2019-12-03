@@ -164,7 +164,9 @@ class ControladorFluxo {
 					$imagem = './assets/images/avatar-1.jpg';
 					if($atividade->getImagem() != null && $atividade->getImagem() != ''){
 						$imagem = './imagens/atividade/'.$atividade->getImagem();
-					}	
+					}
+					
+					$vencimento = ($atividade->getVencimento())?$atividade->getVencimento():'-';
                     ?>
                     <div id="recordsArray_<?php echo $atividade->getId(); ?>" style="margin-bottom: 1px;">
 	                    <li id="listArray_<?php echo $atividade->getId(); ?>" class="list-group-item align-items-center drag-handle">
@@ -173,7 +175,7 @@ class ControladorFluxo {
 									<label class="custom-control custom-checkbox">
 										<input type="checkbox" id="atividades[]" name="atividades[]" class="custom-control-input check-fluxo" value="<?php echo $atividade->getId(); ?>">
 										<span class="custom-control-label"><img src="<?php echo $imagem; ?>" style="width: 38px;border: 3px solid #c8c8c8;"></span>
-										<span class="custom-control-label"><?php echo $atividade->getTitulo(); ?> | </span>
+										<span class="custom-control-label"><?php echo $atividade->getTitulo().' | '.$vencimento.' | '; ?></span>
 										<span class="custom-control-label" style="<?php echo $colorcss; ?>"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></span>
 									</label>
 								</div>
@@ -234,6 +236,8 @@ class ControladorFluxo {
     				if($atividade->getImagem() != null && $atividade->getImagem() != ''){
     					$imagem = './imagens/atividade/'.$atividade->getImagem();
     				}
+    				
+    				$vencimento = ($atividade->getVencimento())?$atividade->getVencimento():'-';
     				?>
                     <div id="recordsArray_<?php echo $atividade->getId(); ?>" style="margin-bottom: 1px;">
 	                    <li id="listArray_<?php echo $atividade->getId(); ?>" class="list-group-item align-items-center drag-handle">
@@ -242,7 +246,7 @@ class ControladorFluxo {
 								<label class="custom-control custom-checkbox">
 									<input type="checkbox" id="atividades[]" name="atividades[]" class="custom-control-input check-fluxo" value="<?php echo $atividade->getId(); ?>" <?php echo $checked; ?>>
 									<span class="custom-control-label"><img src="<?php echo $imagem; ?>" style="width: 38px;border: 3px solid #c8c8c8;"></span>
-									<span class="custom-control-label"><?php echo $atividade->getTitulo(); ?> | </span>
+									<span class="custom-control-label"><?php echo $atividade->getTitulo().' | '.$vencimento.' | '; ?></span>
 									<span class="custom-control-label" style="<?php echo $colorcss; ?>"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></span>
 								</label>
 								</div>
