@@ -1106,8 +1106,8 @@ class ViewAtividade {
 									<th>Processo</th> 
 									<th>Atividade</th> 
 									<th>Descri&ccedil;&atilde;o</th> 
-									<th>Titulo Arquivo</th> 
-									<th>Anexo</th> 
+									<th>Download Anexo</th> 
+									<th>Link Anexo</th> 
 									<th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
 								</tr>
 							</thead>
@@ -1124,10 +1124,10 @@ class ViewAtividade {
 					                        <td><?php echo $comentario->getProcesso()->getTitulo(); ?></td>
 					                        <td><?php echo $comentario->getFluxoProcesso()->getAtividade()->getTitulo(); ?></td>
 					                        <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
-					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() == '')?'':'<a  target="_blank" href="./arquivos/atividade/'.$comentario->getArquivo().'">'.$comentario->getArquivo().'</a>'; ?></td>
-					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
+					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
 					                        </td>
+					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() == '')?'-':'<a  target="_blank" href="./arquivos/atividade/'.$comentario->getArquivo().'"><img src="assets/images/external_link29.png" style="cursor: pointer;width: 29px;" title="Abrir no navegador o Arquivo: ' . $comentario->getArquivo() . '"></a>'; ?></td>
 					                        <td style="text-align: center;">
 					                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
