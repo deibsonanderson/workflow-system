@@ -1371,3 +1371,25 @@ function fncLimitarTexto(texto, tamanho){
         return texto;
     }
 }
+
+function fncSelecionados(elemento){
+	if($(elemento).is(':checked')){
+		fncEachCheckFluxo(true);
+	}else{
+		fncEachCheckFluxo(false);
+    }				
+}
+
+function fncEachCheckFluxo(isHide){
+	$('.check-fluxo').each(function() {
+		if(isHide == true){
+        	if($(this).is(':checked')){
+        		$(this).parent().parent().parent().parent().show();
+		    }else{
+		    	$(this).parent().parent().parent().parent().hide();
+		    }
+	    }else{
+	    	$(this).parent().parent().parent().parent().show();
+		}
+    });
+} 

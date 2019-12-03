@@ -4308,7 +4308,7 @@ Pills vertical
     font-size: 12px;
     font-weight: 600;
     z-index: 0;
-    content: "ON";
+    content: "SIM";
     color: #FFF;
     left: 0;
     text-align: left;
@@ -4324,7 +4324,7 @@ Pills vertical
     font-size: 12px;
     font-weight: 600;
     z-index: 0;
-    content: "OFF";
+    content: " NÃO";
     right: 0;
     display: block;
     width: 100%;

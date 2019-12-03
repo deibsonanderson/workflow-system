@@ -43,16 +43,13 @@ class ViewFluxo {
 			            complete: function() {
 			            	hideLoading();
 			                $('#sortable').css('display', '');
-			                //if (mensagem) {
-			                //   msgSlide(mensagem);
-			                //}
 			            },
 			            error: function(){
-
+			            	msgSlide("18");
 					    }
 			        });
 				}
-            } 
+            }
         </script>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -91,7 +88,16 @@ class ViewFluxo {
 								}
 								?>
 							</select>
-						</div>							
+						</div>
+						<div class="form-group">
+	                        <label class="col-form-label text-sm-right">Filtrar por selecionados</label>
+	                        <div class="pt-1">
+		                        <div class="switch-button switch-button-lg">
+			                        <input onChange="fncSelecionados(this);" type="checkbox" name="switch" id="switch">
+			                        <span><label for="switch"></label></span>
+		                        </div>
+	                        </div>
+                        </div>													
 						<div class="form-group">
 							<label for="pais">Categoria *</label>
 							<select id="categoria" name="categoria"  class="form-control" 
@@ -231,6 +237,15 @@ class ViewFluxo {
 							<label for="descricao">Descrição</label>
 							<textarea class="form-control" id="descricao" rows="3"><?php echo $objFluxo[0]->getDescricao(); ?></textarea>
 						</div>
+						<div class="form-group">
+	                        <label class="col-form-label text-sm-right">Filtrar por selecionados</label>
+	                        <div class="pt-1">
+		                        <div class="switch-button switch-button-lg">
+			                        <input onChange="fncSelecionados(this);" type="checkbox" name="switch" id="switch">
+			                        <span><label for="switch"></label></span>
+		                        </div>
+	                        </div>
+                        </div>							
 						<div class="form-group">
 							<label for="pais">Categoria *</label>
 							<select id="categoria" name="categoria"  class="form-control" 
