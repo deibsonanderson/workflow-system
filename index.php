@@ -41,14 +41,6 @@ unset($_SESSION["login"]);
         <div class="card ">
             <div class="card-header text-center">
 				<a href="./index.php"><img class="logo-img" src="./assets/images/logo.png" alt="logo"></a>
-				<?php 
-				
-				if(isset($_GET["i"]) && $_GET["i"] == '1'){
-					echo '<span style="color:RED;" class="splash-description">Usuário e/ou senha inválido!</span>';
-				} else {	
-					echo '<span class="splash-description">Por favor, insira suas informações de usuário.</span>';
-				}				
-				?>
 			</div>
             <div class="card-body">
 				<form action="login.php" method="post" name="formLogin" id="formLogin" >
@@ -91,6 +83,13 @@ unset($_SESSION["login"]);
 			}
 		}
 		document.onkeypress = enterPressed;
+		<?php 
+		if(isset($_GET["i"]) && $_GET["i"] == "1"){
+			?>
+				fncSlideMessageLogin("Usuário ou senha invalidos!");
+		<?php 
+		} 				
+		?>
 	</script>
 </body>
  

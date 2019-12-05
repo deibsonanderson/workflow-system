@@ -6982,3 +6982,21 @@ Media Query
 
 /* Custom, iPhone Retina */
 @media only screen and (max-width:320px) {} 
+
+.msgSlide {
+  top: 0;	
+  display:none;
+  z-index:9999;
+  position:absolute;
+  background-color:#edf3f5;
+  border:1px solid #d7e0e3;
+  width:99.9%;
+  height:70px;
+  padding-top:20px;
+  color:#000000;
+  font-weight:normal;
+  font-size:18px;
+  font-family:Helvetica;
+  text-align:center;
+  cursor:default;
+}

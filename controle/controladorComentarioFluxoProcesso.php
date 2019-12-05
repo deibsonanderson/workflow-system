@@ -156,6 +156,23 @@ class ControladorComentarioFluxoProcesso {
     	}
     }
     
+    public function showIconFile($arquivo){
+    	if($arquivo){
+	    	$info = new SplFileInfo($arquivo);
+	    	$path = "./assets/main/images/icon-file/".$info->getExtension().".png";
+	    	if(!file_exists($path)){
+	    		$path = "./assets/images/external_link29.png";
+	    	}	    	
+	    	$html =  '<a target="_blank" href="./arquivos/atividade/'.$arquivo.'">';
+			$html .= '<img src="'.$path.'" style="cursor: pointer;width: 29px;" title="Abrir no navegador o Arquivo: ' . $path . '">';		
+			$html .= '</a>';
+			return $html;
+    	}else{
+    		return '-';
+    	}
+    
+    }
+    
     public function listarComentarioFluxoProcessoByFilter($post = null) {
     	try {
     		$filtro = '';

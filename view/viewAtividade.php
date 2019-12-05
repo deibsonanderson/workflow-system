@@ -212,7 +212,8 @@ class ViewAtividade {
 			                            <th>T&iacute;tulo</th>
 			                            <th>Custo</th>  
 			                            <th>Descri&ccedil;&atilde;o</th>
-										<th>Vencimento</th>							
+										<th>Vencimento</th>	
+										<th>Arquivo</th>							
 			                            <th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
 									</tr>
 								</thead>
@@ -239,7 +240,13 @@ class ViewAtividade {
 			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo $atividade->getTitulo(); ?></td> 
 			                                    <td onclick="getId(this)"  class="getId;" style="cursor:pointer;<?php echo $colorcss; ?>"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></td>
 			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo limitarTexto($atividade->getDescricao(), 110); ?></td> 
-			                                     <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center; "  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo ($atividade->getVencimento() == "00" || $atividade->getVencimento() == null || $atividade->getVencimento() == "")?"-":$atividade->getVencimento(); ?></td>
+			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center; "  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo ($atividade->getVencimento() == "00" || $atividade->getVencimento() == null || $atividade->getVencimento() == "")?"-":$atividade->getVencimento(); ?></td>
+											    <td style="text-align: center;">
+						                        <?php
+						                        	$controladorComentario = new ControladorComentarioFluxoProcesso();
+						                        	echo $controladorComentario->showIconFile($atividade->getArquivo());
+						                        ?>
+						                        </td>
 												<td style="text-align:center">
 			                                        <div class="btn-group ml-auto">
 				                                        <?php
@@ -903,7 +910,8 @@ class ViewAtividade {
                         <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Download do Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
-                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<a target="_blank" href="./arquivos/atividade/'.$comentario->getArquivo().'"><img src="assets/images/external_link29.png" style="cursor: pointer;width: 29px;" title="Abrir no navegador o Arquivo: ' . $comentario->getArquivo() . '"></a>' : '-'; ?>
+                        <td style="text-align: center;">
+                        	<?php echo $controladorComentario->showIconFile($comentario->getArquivo()); ?>
                         </td>
                         <td>
 	                        <?php
@@ -1127,7 +1135,12 @@ class ViewAtividade {
 					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
 					                        </td>
-					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() == '')?'-':'<a  target="_blank" href="./arquivos/atividade/'.$comentario->getArquivo().'"><img src="assets/images/external_link29.png" style="cursor: pointer;width: 29px;" title="Abrir no navegador o Arquivo: ' . $comentario->getArquivo() . '"></a>'; ?></td>
+					                        <td style="text-align: center;">
+					                        <?php
+					                        	$controladorComentario = new ControladorComentarioFluxoProcesso();
+					                        	echo $controladorComentario->showIconFile($comentario->getArquivo());
+					                        ?>
+					                        </td>
 					                        <td style="text-align: center;">
 					                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 

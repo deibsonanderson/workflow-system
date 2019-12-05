@@ -256,20 +256,28 @@
                 },
                 complete: function() {
                 	hideLoading();
+                },
+                error: function(){
+                	$('#formLogin').each(function() {
+                        fncSlideMessageLogin('Usuário ou senha invalidos!');
+                    });                	
                 }
             });
 
 
         } else {
             $('#formLogin').each(function() {
-                mensagem = $(this).children('#mensagem').val();
-                $('#msgSlide').html('<span>Usuário ou senha invalidos!</span>');
-                $('#msgSlide').slideDown('slow', function() {
-                    setTimeout("$('#msgSlide').slideUp('slow')", 3000);
-                });            
+                fncSlideMessageLogin('O Usuário ou senha não podem ser vazios!');
             });
         }
     };
+    
+    function fncSlideMessageLogin(texto){
+        $('#msgSlide').html('<span>'+texto+'</span>');
+        $('#msgSlide').slideDown('slow', function() {
+            setTimeout("$('#msgSlide').slideUp('slow')", 3000);
+        });  
+    }
 
 
     function fncRecuperarData(data){
