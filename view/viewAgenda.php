@@ -202,9 +202,9 @@ class ViewAgenda {
 								<?php } ?>
 							</div>
 							<div class="card-footer" id="div_comentarios">
-				        		<?php 
-					        		$viewAtividade = new ViewAtividade();
-					        		echo $viewAtividade->telaComentariosAtividadeProcesso($processoFluxo->getId(), true);
+				        		<?php
+					        		$controladorAtividade = new ControladorAtividade();
+					        		echo $controladorAtividade->comentariosAtividadeProcesso($processoFluxo->getId(),true);
 				        		?>
 						    </div>
 						</div>

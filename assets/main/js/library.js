@@ -1268,6 +1268,33 @@ function telaModalAgendaProcessoFluxo(info){
 	});
 }
 
+function fncTelaModalComentariosProcessoFluxo(element){
+	var id_processo = $(element).attr('id_processo');
+	var titulo_processo_fluxo = $(element).attr('titulo_processo_fluxo');
+	var id_processo_fluxo = $(element).attr('id_processo_fluxo');	
+	$.ajax({
+		url: 'controlador.php',
+		type: 'POST',
+		data: 'retorno=div_modal_timeline_retorno&controlador=controladorProcesso&funcao=telaModalComentariosProcessoFluxo&id='+id_processo+'&titulo_processo_fluxo='+titulo_processo_fluxo+'&id_processo_fluxo='+id_processo_fluxo,
+		success: function(result) {
+			$('#div_modal_timeline_retorno').html(result);
+		    $.blockUI({
+	            message: $('#modalTimeLine'),
+	        });
+	        $('#closeModalTimeLine').click(function() {
+	            $.unblockUI();
+	            return false;
+	        });
+		},
+		beforeSend: function() {
+			//showLoading();
+		},
+		complete: function() {
+			//hideLoading();
+		}
+	});
+}
+
 function fncTelaModalCadastrarProcessoFluxo(element){
 	var id_processo = $(element).attr('id_processo');
 	$.ajax({

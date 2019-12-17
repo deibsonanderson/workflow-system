@@ -584,8 +584,14 @@ class ViewAtividade {
     			}
     		}
     	}
+    	
+    	if ($objProcessoFluxo->getAtividade()->getImagem() == "" || $objProcessoFluxo->getAtividade()->getImagem() == null) {
+    		$imagem = "assets/images/atividade.png";
+    	} else {
+    		$imagem = "imagens/atividade/" . $objProcessoFluxo->getAtividade()->getImagem();
+    	}
     	?>
-        <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
+    	<script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
         <script type="text/javascript" >
 	        $(document).ready(function() {
@@ -614,7 +620,7 @@ class ViewAtividade {
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">          
 			        <div class="card-header d-flex">
-			            <h4 class="card-header-title">Detalhamento</h4>
+			            <h4 class="card-header-title"><img class="" style="width: 32px; height: 33px; <?php echo $estilo; ?>" src="<?php echo $imagem; ?>" /></h4>
 			            <div class="toolbar ml-auto">
 			            	<a href="#" onclick="getId(this)" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" id="<?php echo $processoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
 			                <?php
@@ -670,13 +676,6 @@ class ViewAtividade {
 											<?php echo recuperaData($objProcesso[0]->getData()); ?></td>
 										<td style="text-align: center;">
 											<span>
-			                                    <?php
-			                                    if ($objProcessoFluxo->getAtividade()->getImagem() == "" || $objProcessoFluxo->getAtividade()->getImagem() == null) {
-	                                                $imagem = "assets/images/atividade.png";
-	                                            } else {
-	                                            	$imagem = "imagens/atividade/" . $objProcessoFluxo->getAtividade()->getImagem();
-	                                            }
-	                                            ?>
 	                                            <div style="">
 													<a class="dimensions"
 														atuante="<?php echo $objProcessoFluxo->getAtuante(); ?>"
@@ -800,7 +799,8 @@ class ViewAtividade {
 					</div>
 					<div class="card-footer" id="div_comentarios">
 		        		<?php 
-		        			echo $this->telaComentariosAtividadeProcesso($objProcessoFluxo->getId());
+			        		$controladorAtividade = new ControladorAtividade();
+			        		echo $controladorAtividade->comentariosAtividadeProcesso($processoFluxo->getId(),true);
 		        		?>
 				    </div>
 			        <div class="card-body">
@@ -890,7 +890,7 @@ class ViewAtividade {
     
     
     
-    public function telaComentariosAtividadeProcesso($processoFluxoId){
+    public function telaComentariosAtividadeProcesso($processoFluxoId, $isDelete){
         ?>
         <div class="table-responsive">
 			<table id="example" class="tablesorter table table-striped table-bordered second" style="width:99%">
@@ -906,7 +906,7 @@ class ViewAtividade {
                 ?>
                     <tr>
                         <td><label style="width: 170px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
-                        <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
+                        <td style="min-width: 300px;"><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
                         <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Download do Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
@@ -944,10 +944,12 @@ class ViewAtividade {
 	                        }
 	                        ?>
                         </td>
+                        <?php if($isDelete === true ){ ?>
                         <td style="text-align: center;">
                            <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
+                        <?php } ?>
                     </tr>
                 <?php
 	                }

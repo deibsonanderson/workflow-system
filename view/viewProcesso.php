@@ -125,9 +125,11 @@ class ViewProcesso {
             });
             $('#tooltip').hide();
 
-			if( screen.width > 360){
+            if(detectarMobile() == true){
 				$('#h4_desktop').hide();
+				$('#h4_mobile').show();
 			}else{				
+				$('#h4_desktop').show();
 				$('#h4_mobile').hide();
 			}
 			/*$('.dimensions').tooltip({
@@ -142,10 +144,10 @@ class ViewProcesso {
 				<div class="card">        
 					<div class="card-header d-flex">
 						<h4 id="h4_mobile" class="card-header-title">
-							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 50);?>
+							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 10);?>
 						</h4>
 						<h4 id="h4_desktop" class="card-header-title">
-							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 10);?>
+							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 50);?>
 						</h4>
 						<div class="toolbar ml-auto">
 							<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
@@ -243,13 +245,23 @@ class ViewProcesso {
 						<p>
 						<?php 
 						if($comentario->totalComentario > 0){
-							echo '<i class="fas fa-file-archive"></i> Anexos ('.$comentario->totalComentario.')';
+							echo '<span onclick="fncTelaModalComentariosProcessoFluxo(this)" 
+										titulo_processo_fluxo="'.$tituloProcessoFluxo.'"										
+										id_processo_fluxo="'.$fluxoProcesso->getId().'"
+ 										id_processo="'.$objProcesso[0]->getId().'"
+										style="cursor: pointer;" 
+										><i class="fas fa-file-archive"></i> Anexos ('.$comentario->totalComentario.')</span>';
 						} 
 						if($comentario->totalAnexo > 0 && $comentario->totalComentario > 0){
 							echo '&nbsp&nbsp&nbsp';
 						}		
 						if($comentario->totalAnexo > 0){
-							echo '<i class="fas fa-file-alt"></i> Comentários ('.$comentario->totalAnexo.')'; 
+							echo '<span onclick="fncTelaModalComentariosProcessoFluxo(this)" 
+										titulo_processo_fluxo="'.$tituloProcessoFluxo.'"										
+										id_processo_fluxo="'.$fluxoProcesso->getId().'"
+ 										id_processo="'.$objProcesso[0]->getId().'"
+										style="cursor: pointer;" 
+										><i class="fas fa-file-alt"></i> Comentários ('.$comentario->totalAnexo.')</span>'; 
 						}	 
 					    ?>
 						</p>	
@@ -1088,6 +1100,40 @@ class ViewProcesso {
 		$('.money').mask('000.000.000.000.000,00', {reverse: true});
 		exibirAtividade();
 	</script>		
+	<?php 		
+	}
+	
+	public function telaModalComentariosProcessoFluxo($titulo, $idProcessoFluxo){
+		?>
+    	<div class="modal" id="modalTimeLine" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg" role="document" style="overflow-y: initial !important;">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title"><?php echo $titulo; ?></h5>
+            <div class="toolbar ml-auto">		        
+		        <button type="button" id="closeModalTimeLine" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">Fechar</span>
+		        </button>
+            </div>		 
+	      </div>
+	      <div class="modal-body" style="max-height: 450px; overflow-y: auto;">
+			<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="card">          
+						<div class="card-body">
+						<?php
+							$controladorAtividade = new ControladorAtividade();
+							echo $controladorAtividade->comentariosAtividadeProcesso($idProcessoFluxo,false);
+							$controladorAtividade->__destruct();
+						?>
+						</div>
+					</div>
+				</div>
+			</div>	
+	      </div>
+	    </div>
+	  </div>
+	</div>
 	<?php 		
 	}
 }

@@ -206,10 +206,13 @@ class ControladorAtividade {
     }
     
     
-    public function comentariosAtividadeProcesso($processoFluxoId) {
+    public function comentariosAtividadeProcesso($processoFluxoId, $isDelete) {
         try {
             $viewAtividade = new ViewAtividade();
-            $retorno = $viewAtividade->telaComentariosAtividadeProcesso($processoFluxoId);
+            if($isDelete == null || $isDelete == ''){
+            	$isDelete = false;
+            }
+            $retorno = $viewAtividade->telaComentariosAtividadeProcesso($processoFluxoId, $isDelete);
             $viewAtividade->__destruct();
             return $retorno;
         } catch (Exception $e) {

@@ -441,6 +441,14 @@ class ControladorProcesso {
     	$viewProcesso->__destruct();
     	return $retorno;
     }
+	public function telaModalComentariosProcessoFluxo($post = null) {
+		$viewProcesso = new ViewProcesso ();
+		$retorno = $viewProcesso->telaModalComentariosProcessoFluxo ( $post ["titulo_processo_fluxo"], $post ["id_processo_fluxo"] );
+		$viewProcesso->__destruct ();
+		return $retorno;
+	}
+    
+    
 
 }
 ?>

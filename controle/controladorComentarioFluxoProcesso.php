@@ -150,7 +150,7 @@ class ControladorComentarioFluxoProcesso {
     		}
     		
     		$controladorAtividade = new ControladorAtividade();
-    		return $controladorAtividade->comentariosAtividadeProcesso($post["processoFluxoId"]);
+    		return $controladorAtividade->comentariosAtividadeProcesso($post["processoFluxoId"],true);
     	} catch (Exception $e) {
     		return $e;
     	}
