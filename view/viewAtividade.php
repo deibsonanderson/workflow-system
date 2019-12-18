@@ -597,6 +597,11 @@ class ViewAtividade {
 	        $(document).ready(function() {
     	        $('#tooltip').hide();
     	        fncInserirArquivo("form_arquivo", "progress_arquivo", "porcentagem_arquivo", "arquivo", "arquivoAtual", "./arquivos/atividade/", "arquivo", "anexo-btn");
+
+    	        if(detectarMobile() == true){
+    				$('.desktop').remove();
+    			}
+
             });
 
    			function validarCampo(elemento){
@@ -614,7 +619,12 @@ class ViewAtividade {
             function showInputVencimento(){
                 $('#span_vencimento').css('display','none');
 				$('#div_input_vencimento').css('display','');
-			}   
+			}
+
+			function slideRight(){
+				var leftPos = $('.table-responsive').scrollLeft();
+				$(".table-responsive").animate({scrollLeft: leftPos + 999}, 100);
+			}
         </script>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -652,9 +662,9 @@ class ViewAtividade {
 							<table id="example" class="tablesorter table table-striped table-bordered second" style="width: 100%">
 								<thead>
 									<tr>
-										<th>Código</th>
-										<th>Data</th>
-										<th>Icone</th>
+										<th class="desktop">Código</th>
+										<th class="desktop">Data</th>
+										<th class="desktop">Icone</th>
 										<th>Processo</th>
 										<th>Fluxo</th>
 										<th>Vencimento</th>
@@ -663,18 +673,18 @@ class ViewAtividade {
 								</thead>
 								<tbody>
 				                    <tr style="text-align:center;">
-										<td class="getId dimensions" style="cursor: pointer"
+										<td class="getId dimensions desktop" style="cursor: pointer"
 											id="<?php echo $objProcesso[0]->getId(); ?>"
 											funcao="telaVisualizarProcesso"
 											controlador="ControladorProcesso" retorno="div_central"
 											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>"><?php echo str_pad($objProcesso[0]->getId(), 5, '0', STR_PAD_LEFT); ?></td>
-										<td class="getId dimensions" style="cursor: pointer"
+										<td class="getId dimensions desktop" style="cursor: pointer"
 											id="<?php echo $objProcesso[0]->getId(); ?>"
 											funcao="telaVisualizarProcesso"
 											controlador="ControladorProcesso" retorno="div_central"
 											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>">
 											<?php echo recuperaData($objProcesso[0]->getData()); ?></td>
-										<td style="text-align: center;">
+										<td class="desktop" style="text-align: center;">
 											<span>
 	                                            <div style="">
 													<a class="dimensions"
@@ -738,7 +748,7 @@ class ViewAtividade {
 												onclick="inputShow(
 					                                    '<?php echo $objProcessoFluxo->getId(); ?>',
 					                                    '<?php echo $simbolo.valorMonetario($objProcessoFluxo->getValor(),'2');?>',
-					                                    '<?php echo $objProcessoFluxo->getPropriedade();?>')">
+					                                    '<?php echo $objProcessoFluxo->getPropriedade();?>');slideRight()">
 					                                    <?php
 					                                    	if($objProcessoFluxo->getPropriedade() == '1'){
 						                                    	$simbolo = '';
@@ -905,12 +915,15 @@ class ViewAtividade {
                 ++$cont;
                 ?>
                     <tr>
+                        <td id="mobile"style="text-align: center;">
+                        	<?php echo $controladorComentario->showIconFile($comentario->getArquivo()); ?>
+                        </td>                    
                         <td style="min-width: 300px;"><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
                         <td style="min-width: 170px;"><label ><?php echo recuperaData($comentario->getData()); ?></label></td>
                         <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Download do Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
-                        <td style="text-align: center;">
+                        <td id="desktop" style="text-align: center;">
                         	<?php echo $controladorComentario->showIconFile($comentario->getArquivo()); ?>
                         </td>
                         <td>
@@ -957,7 +970,14 @@ class ViewAtividade {
 	            ?>	    				
 				</tbody>
 			</table>
-		</div>     
+		</div>
+		<script type="text/javascript">
+	        if(detectarMobile() == true){
+				$('#desktop').remove();
+			}else{				
+				$('#mobile').remove();
+			}		
+		</script>     
 		<?php 
     }
     

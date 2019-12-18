@@ -118,36 +118,18 @@ class ViewProcesso {
 				min-width: 62px;
 			}
 		</style>
-        <script type="text/javascript">
-        	$('.tablesorter').dataTable({
-                "sPaginationType": "full_numbers",
-                "aaSorting": [[0, 'desc']]
-            });
-            $('#tooltip').hide();
 
-            if(detectarMobile() == true){
-				$('#h4_desktop').hide();
-				$('#h4_mobile').show();
-			}else{				
-				$('#h4_desktop').show();
-				$('#h4_mobile').hide();
-			}
-			/*$('.dimensions').tooltip({
-                track: true,
-                delay: 0,
-                showURL: true,
-                opacity: 0.85
-			});*/
-        </script>
 		<div id="timeline-top" class="row" onClick="limparListFilter();">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
-					<div class="card-header d-flex">
-						<h4 id="h4_mobile" class="card-header-title">
-							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 10);?>
+					<div id="mobile" class="card-header d-flex">
+						<h4 class="card-header-title">
+							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 30);?>
 						</h4>
-						<h4 id="h4_desktop" class="card-header-title">
-							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 50);?>
+					</div>
+					<div class="card-header d-flex">
+						<h4 id="desktop" class="card-header-title">
+							<?php echo ($objProcesso == null || $objProcesso[0]->getTitulo() == null)?'Processos':limitarTexto($objProcesso[0]->getTitulo(), 80);?>
 						</h4>
 						<div class="toolbar ml-auto">
 							<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
@@ -390,7 +372,25 @@ class ViewProcesso {
 		     	</div>
 		     </div>
 		</div>
-		<!-- script src="./assets/vendor/timeline/js/main.js"></script-->
+		<script type="text/javascript">
+        	$('.tablesorter').dataTable({
+                "sPaginationType": "full_numbers",
+                "aaSorting": [[0, 'desc']]
+            });
+            $('#tooltip').hide();
+
+	        if(detectarMobile() == true){
+				$('#desktop').remove();
+			}else{				
+				$('#mobile').remove();
+			}
+			/*$('.dimensions').tooltip({
+                track: true,
+                delay: 0,
+                showURL: true,
+                opacity: 0.85
+			});*/
+        </script>
 	<?php 
     }
     
@@ -419,7 +419,7 @@ class ViewProcesso {
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
 					<div class="card-header d-flex">
-			            <h4 class="card-header-title">Módulos</h4>
+			            <h4 class="card-header-title">Processos</h4>
 			            <?php
 			            if ($perfil !== 'C') {
 			            ?>            
@@ -755,7 +755,7 @@ class ViewProcesso {
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
 					<div class="card-header d-flex">
-			            <h4 class="card-header-title">Relatório Atividades do Processos</h4>
+			            <h4 class="card-header-title">Relatório</h4>
 			            <div class="toolbar ml-auto">
 			            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
 							<a href="#" onclick="window.open('planilha.php?id=<?php echo $objProcesso[0]->getId();?>');" class="btn btn-primary btn-sm buttonCadastro">Download</a>
