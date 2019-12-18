@@ -737,19 +737,28 @@ class ViewProcesso {
 			//}
             $('#tooltip').hide();
 
-            
+			function slideRight(){
+				var leftPos = $('.table-responsive').scrollLeft();
+				$(".table-responsive").animate({scrollLeft: leftPos + 999}, 100);
+			}
+			            
             function showInput(id){
-				//if(detectarMobile() == false){
-					$('#span_'+id).css('display','none');
-					$('#div_valor_'+id).css('display','');
-				//}
+				$('#span_'+id).css('display','none');
+				$('#div_valor_'+id).css('display','');
+				slideRight();	
             }
 
             function showSpan(id){
             	$('#span_'+id).css('display','block');
-            	$('#span_'+id).html('R$'+ $('#valor_'+id).val());
+            	var val = $('#valor_'+id).val();
+            	$('#span_'+id).html('R$'+ val);
+            	if(Number.parseFloat(val) >= 0){
+			    	$('#span_'+id).css('color','BLUE');
+			    }else{
+			    	$('#span_'+id).css('color','RED');
+				}
 				$('#div_valor_'+id).css('display','none');
-            }
+			}
          </script>    	
 		<div class="row" >
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -830,7 +839,7 @@ class ViewProcesso {
 					                            	       value="<?php echo $sinal.valorMonetario($fluxoProcesso->getValor(),'3'); ?>" 
 					                            	       ativo="<?php echo $fluxoProcesso->getAtivo(); ?>">
 		                                                <div class="input-group-append">
-		                                                    <button onclick="recalcular(); showSpan('<?php echo $fluxoProcesso->getId(); ?>');" type="button" class="btn btn-primary">OK</button>
+		                                                    <button onclick="recalcular('<?php echo $fluxoProcesso->getId(); ?>'); showSpan('<?php echo $fluxoProcesso->getId(); ?>');" type="button" class="btn btn-primary">OK</button>
 		                                                </div>
 		                                            </div>
 					                            </td> 

@@ -1352,7 +1352,7 @@ function hideLoading(){
 	});
 }
 
-function recalcular(){
+function recalcular(processoFluxoId){
 	var totalPositivo = Number.parseFloat(0.0);
 	var totalNegativo = Number.parseFloat(0.0);
 	var totalAberto = Number.parseFloat(0.0);
@@ -1373,11 +1373,39 @@ function recalcular(){
               }else{
             	  totalFechado += Number.parseFloat(valor);
               }
-		  }else if(valor == '0'){
-			  $(this).val("0,00"); 	  
+			  
+			  if(valor == '0'){
+				  $(this).val("0,00");
+			  }
 		  }else{
 			  $(this).val("0,00");		
 	      }
+		  
+		  if($(this).attr('id') == 'valor_'+processoFluxoId){
+			    var propriedade = '0';
+			    if(Number.parseFloat(valor) >= 0){
+			    	propriedade = '1';
+			    }	
+			    
+		    	var valorUpdate = $(this).val();
+				$.ajax({
+				    url: 'controlador.php',
+				    type: 'POST',
+				    data: 'controlador=ControladorProcesso&funcao=atualizarValorFluxoProcesso&valor='+ valorUpdate.replace("-", "") + '&id='+ processoFluxoId + '&propriedade='+propriedade,
+				    success: function(result) {
+				    	console.log(result);
+				    },
+				    beforeSend: function() {
+				    	showLoading();
+				    },
+				    complete: function() {
+				    	hideLoading();
+				    },
+				    error: function(){
+				    	msgSlide("18");
+				    }	        
+				});
+			  }
 	});
     var provisao = $('#provisao').html();
         provisao = provisao.replace(".", "");
