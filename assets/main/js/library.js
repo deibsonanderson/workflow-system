@@ -22,8 +22,9 @@
     $("[data-toggle='treeview.'].is-expanded").parent().toggleClass('is-expanded');
 
     //Activate bootstrip tooltips
-    $("[data-toggle='tooltip']").tooltip();
-
+    try{
+    	$("[data-toggle='tooltip']").tooltip();
+    }catch (e) {}
 })();
 
 
