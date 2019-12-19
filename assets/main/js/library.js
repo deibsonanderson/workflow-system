@@ -1335,21 +1335,11 @@ function fixTableLayout(tableName){
 }
 
 function showLoading(){
-    $('#loader').css({
-        display: "block"
-    });
-    $('#div-loader').css({
-        opacity: 0.5
-    });
+	$("#loading").loading('start');
 }
 
 function hideLoading(){
-	$('#loader').css({
-		display: "none"
-	});
-	$('#div-loader').css({
-		opacity: 1.0
-	});
+	$("#loading").loading('stop');
 }
 
 function recalcular(processoFluxoId){

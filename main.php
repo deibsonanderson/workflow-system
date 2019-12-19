@@ -7,14 +7,13 @@ if (isset($_SESSION["login"])) {
  
 <?php include('head.php') ?>
 
-<body>
+<body id="loading" class="loading-div">
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
     
-	<div id="div-loader" >
-	<img id="loader" class="loader" src="./assets/main/images/preloader.gif"/>
-        <?php
+	<div>
+	    <?php
 			exibirQuestion("question", "sim", "nao", "Tem certeza que deseja remover?", "* Todos os itens que se relacionam também serão removidos");
 		?>
 		<div class="dashboard-main-wrapper">

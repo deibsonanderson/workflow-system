@@ -29,3 +29,5 @@
 	<script src="./assets/vendor/datepicker/moment.js"></script>
 	<script src="./assets/vendor/datepicker/tempusdominus-bootstrap-4.js"></script>
 	<!--script src="./assets/vendor/datepicker/datepicker.js"></script-->
+	
+	<script src="./assets/main/js/jquery-loading/loading.js"></script>

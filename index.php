@@ -15,6 +15,7 @@ unset($_SESSION["login"]);
     <link href="./assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/libs/css/style.css">
     <link rel="stylesheet" href="./assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="./assets/main/css/jquery-loading/loading.css">
     <style>
     html,
     body {
@@ -69,6 +70,7 @@ unset($_SESSION["login"]);
     <script src="./assets/vendor/jquery/jquery-3.3.1.min.js"></script>
 	<script src="./assets/main/js/library.js" type="text/javascript" ></script>
     <script src="./assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="./assets/main/js/jquery-loading/loading.js"></script>
 		<script type="text/javascript">
 		$(document).ready(function(){
 			$('#divLogin').css('padding','100px 0 0 '+((screen.width/2)-242)+'px');
