@@ -260,7 +260,7 @@ class ViewProcesso {
 							funcao="telaVisualizarAtividadeProcesso" 
 							controlador="controladorAtividade" 
 							retorno="div_central"
-							style="cursor: pointer;"><?php echo $fluxoProcesso->getAtividade()->getDescricao(); ?>
+							style="cursor: pointer;"><?php echo ($fluxoProcesso->getDescricao())?$fluxoProcesso->getDescricao():$fluxoProcesso->getAtividade()->getDescricao(); ?>
 							<br />
 							Valor: <?php 
 							$propriedade = ($fluxoProcesso->getPropriedade() == '1')?'':'-';
