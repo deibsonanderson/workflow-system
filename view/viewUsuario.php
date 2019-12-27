@@ -151,7 +151,7 @@ class ViewUsuario {
                                     <td style="text-align:center">
                                     	<div class="btn-group ml-auto">
 	                                        <button onclick="getId(this)" id="<?php echo $usuario->getId(); ?>" funcao="telaAlterarUsuario" controlador="ControladorUsuario" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>
-	                                        <button onclick="fncDeleteId(this)" modal="question" id="<?php echo $usuario->getId(); ?>" funcao="excluirUsuario" controlador="ControladorUsuario" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button> 
+	                                        <button onclick="fcnModalDeleteId(this)" modal="question" id="<?php echo $usuario->getId(); ?>" funcao="excluirUsuario" controlador="ControladorUsuario" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button> 
 	                                        <button onclick="getId(this)" id="<?php echo $usuario->getId(); ?>" funcao="telaListarAcao" controlador="ControladorAcao"  retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-address-card"></i></button>
 	                                    </div> 
                                     </td> 

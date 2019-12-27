@@ -180,54 +180,60 @@
         });
     };
 
-    /**
-     * Função responsavel por gerar uma tela de confirmação se sim execulta 
-     * a ação caso nao apenas fecha a div
-     */
-    function fncDeleteId(element){
+    
+    function fcnModalDeleteId(element){
     	var modal = $(element).attr('modal');
-        $.blockUI({
+    	$.blockUI({
             message: $('#'+modal),
             css: {
                 width: '275px'
             }
         });
-        id = $(element).attr('id');
+        $('#question-confirm').attr('idObjeto',$(element).attr('id'));
+        $('#question-confirm').attr('controlador',$(element).attr('controlador'));
+        $('#question-confirm').attr('funcao',$(element).attr('funcao'));
+        $('#question-confirm').attr('retorno',$(element).attr('retorno'));
+        $('#question-confirm').attr('mensagem',$(element).attr('mensagem'));
+        $('#question-confirm').attr('processoFluxoId',$(element).attr('processoFluxoId'));
+    }
+    /**
+     * Função responsavel por gerar uma tela de confirmação se sim execulta 
+     * a ação caso nao apenas fecha a div
+     */
+    function fncDeleteId(element){
+    	id = $(element).attr('idObjeto');
         controlador = $(element).attr('controlador');
         funcao = $(element).attr('funcao');
         retorno = $(element).attr('retorno');
         mensagem = $(element).attr('mensagem');
         processoFluxoId = $(element).attr('processoFluxoId');
-        
+        	
+        $('#' + retorno).css('display', '');
 
-        $('#sim').click(function() {
-            $('#' + retorno).css('display', '');
-
-            $.ajax({
-                url: 'controlador.php',
-                type: 'POST',
-                data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id + '&processoFluxoId='+processoFluxoId,
-                success: function(result) {
-                    $('#' + retorno).html(result);
-                },
-                beforeSend: function() {
-                	showLoading();
-                },
-                complete: function() {
-                	hideLoading();
-                    $.unblockUI();
-                    if (mensagem) {
-                        msgSlide(mensagem);
-                    }
+        $.ajax({
+            url: 'controlador.php',
+            type: 'POST',
+            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id + '&processoFluxoId='+processoFluxoId,
+            success: function(result) {
+                $('#' + retorno).html(result);
+            },
+            beforeSend: function() {
+            	showLoading();
+            },
+            complete: function() {
+            	hideLoading();
+                $.unblockUI();
+                if (mensagem) {
+                    msgSlide(mensagem);
                 }
-            });
+            }
         });
-
-        $('#nao').click(function() {
-            $.unblockUI();
-            return false;
-        });
-    };
+    }
+    
+    function fcnFecharModalQuestion(){
+        $.unblockUI();
+        return false;    	
+    }
 
 
     /**

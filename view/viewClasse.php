@@ -120,7 +120,7 @@ class ViewClasse{
 									<td style="text-align:center">
 										<div class="btn-group ml-auto">
 				                            <button onclick="getId(this)" id="<?php echo $classe->getId(); ?>" funcao="telaAlterarClasse" controlador="ControladorClasse" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>
-			                                <button onclick="fncDeleteId(this)" modal="question" id="<?php echo $classe->getId(); ?>" funcao="excluirClasse" controlador="ControladorClasse" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button> 
+			                                <button onclick="fcnModalDeleteId(this)" modal="question" id="<?php echo $classe->getId(); ?>" funcao="excluirClasse" controlador="ControladorClasse" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button> 
 			                            </div> 
 									</td> 
 								</tr> 

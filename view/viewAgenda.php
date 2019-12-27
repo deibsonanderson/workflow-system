@@ -531,7 +531,7 @@ class ViewAgenda {
 		                            <td style="text-align:center">
 		                            	<div class="btn-group ml-auto">
 				                            <?php 
-				                            echo ($perfil === 'A') ? '<button onclick="fncDeleteId(this)" modal="question" id="'.$agenda->getId().'" funcao="excluirAgenda" controlador="ControladorAgenda" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>';
+				                            echo ($perfil === 'A') ? '<button onclick="fcnModalDeleteId(this)" modal="question" id="'.$agenda->getId().'" funcao="excluirAgendaList" controlador="ControladorAgenda" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>';
 			                            	?>
 			                            </div> 
 		                            </td>								

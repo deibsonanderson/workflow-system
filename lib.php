@@ -92,16 +92,13 @@ function exibirQuestion($identificador,$sim,$nao, $titulo, $frase) {
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h5 class="modal-title" id="exampleModalLabel"><?php echo $titulo; ?></h5>
-		        <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button-->
 		      </div>
 		      <div class="modal-body">
 		        <?php echo $frase; ?>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" id="<?php echo $nao; ?>" >Não</button>
-		        <button type="button" class="btn btn-primary" id="<?php echo $sim; ?>" >Sim</button>
+		        <button type="button" class="btn btn-secondary" onclick="fcnFecharModalQuestion()" id="question-not-confirm" ><?php echo $nao; ?></button>
+		        <button type="button" class="btn btn-primary" onclick="fncDeleteId(this)" id="question-confirm" ><?php echo $sim; ?></button>
 		      </div>
 		    </div>
 		  </div>

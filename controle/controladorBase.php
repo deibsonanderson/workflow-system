@@ -1,10 +1,9 @@
 <?php
 abstract class ControladorBase {
 	
-	protected function excluirBase($id,$classeDao,$operacaoDao,$retornoView){
+	protected function excluirBase($id,$classeDao,$operacaoDao){
 		$classeDao->$operacaoDao($id);
 		$classeDao->__destruct();
-		return $retornoView;
 	}
 	
 	protected function listarBase($id, $classeDao, $operacaoDao){
@@ -17,8 +16,17 @@ abstract class ControladorBase {
 		$retorno = $classeDao->$operacaoDao($id, $this->getUsuarioLoginId());
 		$classeDao->__destruct();
 		return $retorno;
-	}
+	}	
 	
+	protected function modelMapper($post, $destino){
+		foreach($post as $chave => $valor) {
+			$set = 'set'.ucfirst($chave);
+			if(method_exists($destino, $set)){
+				$destino->$set($valor);
+			}
+		}
+		return $destino;
+	}
 	
 	protected  function getUsuarioLoginId(){
 		$usuario = new Usuario();

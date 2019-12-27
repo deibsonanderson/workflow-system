@@ -491,7 +491,7 @@ class ViewProcesso {
 						                            <div class="btn-group ml-auto">
 			                                        <?php
 			                                        echo ($perfil !== 'C')? '<button onclick="getId(this)" id="'.$processo->getId().'" funcao="telaAlterarProcesso" controlador="ControladorProcesso" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-edit"></i></button>';
-			                                        echo ($perfil === 'A')? '<button onclick="fncDeleteId(this)"  modal="question" id="'.$processo->getId().'" funcao="excluirProcesso" controlador="ControladorProcesso" retorno="div_central" mensagem="4"  class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-trash-alt"></i></button>'; 
+			                                        echo ($perfil === 'A')? '<button onclick="fcnModalDeleteId(this)"  modal="question" id="'.$processo->getId().'" funcao="excluirProcesso" controlador="ControladorProcesso" retorno="div_central" mensagem="4"  class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-trash-alt"></i></button>'; 
 			                                        ?>
 			                                        </div>  	                               
 							    				</td>

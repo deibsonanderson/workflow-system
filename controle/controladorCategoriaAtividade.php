@@ -11,108 +11,93 @@ class ControladorCategoriaAtividade extends ControladorBase {
 	
 	public function listarCategoriaAtividade($id = null){
 		try {
-			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
-			$retorno = $moduloCategoriaAtividade->listarCategoriaAtividade($id,$this->getUsuarioLoginId());
-			$moduloCategoriaAtividade->__destruct();
+			$modulo = new DaoCategoriaAtividade();
+			$retorno = $modulo->listarCategoriaAtividade($id,$this->getUsuarioLoginId());
+			$modulo->__destruct();
 			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
 	}
-
 	
 	public function incluirCategoriaAtividade($post){
 		try {
-			$categoria = new CategoriaAtividade();
-			$categoria->setNome($post["nome"]);
-			$categoria->setStatus('1');
-			
+			$categoria = $this->modelMapper($post, new CategoriaAtividade());
 			$categoria->setUsuario($this->getUsuarioLogin());
 			
-			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
-			if($moduloCategoriaAtividade->incluirCategoriaAtividade($categoria)){
+			$modulo = new DaoCategoriaAtividade();
+			if($modulo->incluirCategoriaAtividade($categoria)){
 				return $this->telaCadastrarCategoriaAtividade();	
 			}		
-			$moduloCategoriaAtividade->__destruct();
+			$modulo->__destruct();
 		} catch (Exception $e) {
-                    return $e;
+            return $e;
 		}
 	}
-
 	
 	public function alterarCategoriaAtividade($post){
 		try {
-			$categoria = new CategoriaAtividade();
-			$categoria->setId($post["id"]);
-			$categoria->setNome($post["nome"]);
-			$categoria->setStatus('1');
-			
-			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
-			if($moduloCategoriaAtividade->alterarCategoriaAtividade($categoria)){
+			$modulo = new DaoCategoriaAtividade();
+			if($modulo->alterarCategoriaAtividade($this->modelMapper($post, new CategoriaAtividade()))){
 				return $this->telaListarCategoriaAtividade();
 			}
-			$moduloCategoriaAtividade->__destruct();
+			$modulo->__destruct();
 		} catch (Exception $e) {
 			return $e;
 		} 
-		
-		
 	}
-
 	
 	public function excluirCategoriaAtividade($post){
 		try {
-			return $this->excluirBase($post["id"], new DaoCategoriaAtividade(), 
-					'excluirCategoriaAtividade', $this->telaListarCategoriaAtividade());
+			$this->excluirBase($post["id"], new DaoCategoriaAtividade(), 
+					'excluirCategoriaAtividade');
+			return $this->telaListarCategoriaAtividade();
 		} catch (Exception $e) {
 			return $e;
 		}
 	}
-
 	
 	public function telaCadastrarCategoriaAtividade($post = null){
 		try {
-			$viewCategoriaAtividade = new ViewCategoriaAtividade();
+			$view = new ViewCategoriaAtividade();
 			$post = null;
-			$retorno = $viewCategoriaAtividade->telaCadastrarCategoriaAtividade($post);
-			$viewCategoriaAtividade->__destruct();
+			$retorno = $view->telaCadastrarCategoriaAtividade($post);
+			$view->__destruct();
 			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
-	}
-	
+	}	
 	
 	public function telaListarCategoriaAtividade($post = null){
 		try {
-			$viewCategoriaAtividade = new ViewCategoriaAtividade();
+			$view = new ViewCategoriaAtividade();
 			$post = null;
-			$retorno =  $viewCategoriaAtividade->telaListarCategoriaAtividade($this->listarCategoriaAtividade($post));
-			$viewCategoriaAtividade->__destruct();
+			$retorno =  $view->telaListarCategoriaAtividade($this->listarCategoriaAtividade($post));
+			$view->__destruct();
 			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
-	}
-	
+	}	
 	
 	public function telaAlterarCategoriaAtividade($post = null){
 		try {
-			$viewCategoriaAtividade = new ViewCategoriaAtividade();
-			$retorno = $viewCategoriaAtividade->telaAlterarCategoriaAtividade($this->listarCategoriaAtividade($post["id"]));
-			$viewCategoriaAtividade->__destruct();
+			$view = new ViewCategoriaAtividade();
+			$retorno = $view->telaAlterarCategoriaAtividade($this->listarCategoriaAtividade($post["id"]));
+			$view->__destruct();
 			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
 	}
-
 	
 	public function telaVisualizarCategoriaAtividade($post = null){
 		try {
-			$viewCategoriaAtividade = new ViewCategoriaAtividade();
-			return $viewCategoriaAtividade->telaVisualizarCategoriaAtividade($this->listarCategoriaAtividade($post["id"]));
-			$viewCategoriaAtividade->__destruct();
+			$view = new ViewCategoriaAtividade();
+			$retorno =  $view->telaVisualizarCategoriaAtividade($this->listarCategoriaAtividade($post["id"]));
+			$view->__destruct();
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}

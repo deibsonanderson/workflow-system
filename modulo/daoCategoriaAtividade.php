@@ -21,7 +21,7 @@ class DaoCategoriaAtividade extends DaoBase {
 	
 	public function incluirCategoriaAtividade($categoria){
 		try {	
-			return $this->executar("INSERT INTO ".DaoBase::TABLE_CATEGORIA_ATIVIDADE."(nome,status,id_usuario) VALUES ('".$categoria->getNome()."','".$categoria->getStatus()."','".$categoria->getUsuario()->getId()."')");
+			return $this->executar("INSERT INTO ".DaoBase::TABLE_CATEGORIA_ATIVIDADE."(nome,status,id_usuario) VALUES ('".$categoria->getNome()."','1','".$categoria->getUsuario()->getId()."')");
 		} catch (Exception $e) {
 			return 'Erro na execução do insert CategoriaAtividade - error:'.$e;
 		}

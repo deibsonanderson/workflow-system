@@ -209,6 +209,18 @@ class ControladorAgenda {
         }
     }
     
+    public function excluirAgendaList($post) {
+    	try {
+    		$id = $post["id"];
+    		$daoAgenda = new DaoAgenda();
+    		$daoAgenda->excluirAgenda($id);
+    		$daoAgenda->__destruct();
+    		return $this->telaListarAgenda();
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
     public function listarComentarioFluxoProcessoByData($post = null) {
     	try {
     		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();

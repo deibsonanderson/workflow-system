@@ -251,7 +251,7 @@ class ViewAtividade {
 			                                        <div class="btn-group ml-auto">
 				                                        <?php
 				                                        echo ($perfil !== 'C')? '<button onclick="getId(this)" id="'.$atividade->getId().'" funcao="telaAlterarAtividade" controlador="ControladorAtividade" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-edit"></i></button>';
-				                                        echo ($perfil === 'A')? '<button onclick="fncDeleteId(this)" modal="question" id="'.$atividade->getId().'" funcao="excluirAtividade" controlador="ControladorAtividade" retorno="div_central" mensagem="4"  class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-trash-alt"></i></button>'; 
+				                                        echo ($perfil === 'A')? '<button onclick="fcnModalDeleteId(this)" modal="question" id="'.$atividade->getId().'" funcao="excluirAtividade" controlador="ControladorAtividade" retorno="div_central" mensagem="4"  class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-trash-alt"></i></button>'; 
 				                                        ?>
 			                                        </div>                                           
 			                                    </td>
@@ -959,7 +959,7 @@ class ViewAtividade {
                         </td>
                         <?php if($isDelete === true ){ ?>
                         <td style="text-align: center;">
-                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
+                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fcnModalDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
                         <?php } ?>
@@ -1164,7 +1164,7 @@ class ViewAtividade {
 					                        ?>
 					                        </td>
 					                        <td style="text-align: center;">
-					                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fncDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
+					                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fcnModalDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
 					                        </td>
 					                    </tr>
