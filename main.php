@@ -98,20 +98,10 @@ if (isset($_SESSION["login"])) {
                     $('#div_central').html(result);
                 },
                 beforeSend: function() {
-                    $('#loader').css({
-                        display: "block"
-                    });
-                    $('#div-loader').css({
-                        opacity: 0.5
-                    });                    
+                	showLoading();                 
                 },
                 complete: function() {
-                    $('#loader').css({
-                        display: "none"
-                    });
-                    $('#div-loader').css({
-                        opacity: 1.0
-                    });
+                	hideLoading();
                     $('#div_a').remove();
                     $('#div_central').css('display', '');
 
@@ -120,16 +110,9 @@ if (isset($_SESSION["login"])) {
             $('.column').equalHeight();
             $('#sidebar').css('height', var_height);
             $('#main').css('height', var_height);
-
-            $('#loader').css({
-                display: "block"
-            });
-            $('#div-loader').css({
-                opacity: 0.5
-            });
-
-
         });
+
+        showLoading(); 
     </script>
     <?php 
     	$controladorMain = new ControladorMain();
