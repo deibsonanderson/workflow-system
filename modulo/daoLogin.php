@@ -1,6 +1,6 @@
 <?php
 error_reporting (E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
-class DaoLogin extends Dados{
+class DaoLogin extends DaoBase{
 
 	//construtor
 	public function __construct(){}

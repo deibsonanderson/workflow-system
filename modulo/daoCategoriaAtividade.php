@@ -1,54 +1,35 @@
 <?php
-class DaoCategoriaAtividade extends Dados{
-
-	//construtor
+class DaoCategoriaAtividade extends DaoBase {
+	
 	public function __construct(){}
 
-	//destruidor
 	public function __destruct(){}
-
-	public function listarCategoriaAtividade($id = null, $id_usuario = null){
-		try {	
-			$retorno = array();
-			$conexao = $this->ConectarBanco();
-			$sql = "SELECT id, nome, status FROM tb_workflow_categoria_atividade WHERE status = '1' ";
-			$sql .= ($id_usuario != null) ? " AND id_usuario = " . $id_usuario : "";
-			$sql .= ($id != null)?" AND id = ".$id:"";
-			$query = mysqli_query($conexao,$sql) or die ('Erro na execução  do listar!');
-			while($objetoCategoriaAtividade =  mysqli_fetch_object($query)){
-				$categoria = new CategoriaAtividade();
-				$categoria->setId($objetoCategoriaAtividade->id);
-				$categoria->setNome($objetoCategoriaAtividade->nome);				
-				$categoria->setStatus($objetoCategoriaAtividade->status);
-				
-				$retorno[] = $categoria; 
+		
+	public function listarCategoriaAtividade($id = null, $id_usuario = null) {
+		try {
+			$retorno = array ();
+			$query = $this->executar ( 'SELECT id, nome, status FROM '.DaoBase::TABLE_CATEGORIA_ATIVIDADE.' WHERE status = "1" ' . 
+					$this->montarIdUsuario ( $id_usuario ) . $this->montarId ( $id ) );
+			while ( $objetoCategoriaAtividade = mysqli_fetch_object ( $query ) ) {
+				$retorno [] = $this->modelMapper($objetoCategoriaAtividade, new CategoriaAtividade() );
 			}
-				$this->FecharBanco($conexao);
-				return $retorno;
-		} catch (Exception $e) {
+			return $retorno;
+		} catch ( Exception $e ) {
 			return $e;
 		}
 	}
-
+	
 	public function incluirCategoriaAtividade($categoria){
 		try {	
-			$conexao = $this->ConectarBanco();
-			$sql = "INSERT INTO tb_workflow_categoria_atividade(nome,status,id_usuario) VALUES ('".$categoria->getNome()."','".$categoria->getStatus()."','".$categoria->getUsuario()->getId()."')";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do insert!');
-			$this->FecharBanco($conexao);
-			return $retorno;
+			return $this->executar("INSERT INTO ".DaoBase::TABLE_CATEGORIA_ATIVIDADE."(nome,status,id_usuario) VALUES ('".$categoria->getNome()."','".$categoria->getStatus()."','".$categoria->getUsuario()->getId()."')");
 		} catch (Exception $e) {
-			return $e;
+			return 'Erro na execução do insert CategoriaAtividade - error:'.$e;
 		}
 	}
 
 	public function alterarCategoriaAtividade($categoria){
 		try {	
-			$conexao = $this->ConectarBanco();
-			$sql = "UPDATE tb_workflow_categoria_atividade SET nome = '".$categoria->getNome()."',status = '".$categoria->getStatus()."' WHERE id =".$categoria->getId()."";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do update!');
-			$this->FecharBanco($conexao);
-			return $retorno;
+			return $this->executar($this->sqlAtualizar(DaoBase::TABLE_CATEGORIA_ATIVIDADE, $categoria));
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -56,24 +37,11 @@ class DaoCategoriaAtividade extends Dados{
 
 	public function excluirCategoriaAtividade($id){
 		try {
-			$conexao = $this->ConectarBanco();
-			
-			//$sql = "UPDATE tb_workflow_atividade SET status = '0' WHERE id_modulo = ".$id."";
-			//$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do delet classe!');
-			
-			$sql = "UPDATE tb_workflow_categoria_atividade SET status = '0' WHERE id = ".$id."";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do delet modulo!');
-			
-			$this->FecharBanco($conexao);
-			return $retorno;
+			return $this->executar($this->sqlExcluir(DaoBase::TABLE_CATEGORIA_ATIVIDADE, $id));
 		} catch (Exception $e) {
 			return $e;
 		}
-
 	}
-
-
-
 
 }
 

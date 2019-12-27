@@ -1,6 +1,6 @@
 <?php
 
-class DaoComentarioFluxoProcesso extends Dados {
+class DaoComentarioFluxoProcesso extends DaoBase {
 
     //construtor
     public function __construct() {

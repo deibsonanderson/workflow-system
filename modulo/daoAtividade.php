@@ -1,6 +1,6 @@
 <?php
 
-class DaoAtividade extends Dados {
+class DaoAtividade extends DaoBase {
 
     //construtor
     public function __construct() {

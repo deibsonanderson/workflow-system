@@ -17,15 +17,15 @@ class Dados{
 
 	public function conectarBanco(){
 
-		$conexao = mysqli_connect($this->local,$this->usuario,$this->senha) or die( "nao foi possivel conectar" );
-		mysqli_set_charset($conexao,"utf8");
+	    $conexao = mysqli_connect($this->local,$this->usuario,$this->senha) or die( "nao foi possivel conectar" );
+	    mysqli_set_charset($conexao,"utf8");
 
-		mysqli_select_db($conexao,$this->banco) or die ("Nao foi possivel selecionar o banco de dados");
-		return $conexao;
+	    mysqli_select_db($conexao,$this->banco) or die ("Nao foi possivel selecionar o banco de dados");
+	    return $conexao;
 	}
 
 	public function fecharBanco($conexao){
-		mysqli_close($conexao);
+	    mysqli_close($conexao);
 	}
 }
 ?>

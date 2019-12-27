@@ -1,6 +1,6 @@
 <?php
 error_reporting (E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
-class DaoProcesso extends Dados {
+class DaoProcesso extends DaoBase {
 
     //construtor
     public function __construct() {

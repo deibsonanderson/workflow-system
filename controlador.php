@@ -2,9 +2,9 @@
 error_reporting (E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
 require_once 'include.php';
 
-$c = new controlador();
+$c = new Controlador();
 
-class controlador{
+class Controlador {
 	
 	public $funcao;
 	public $controlador;
@@ -31,8 +31,6 @@ class controlador{
 			echo $e;
 		}
 	} 	
-	
-	
 	
 }
 ?>

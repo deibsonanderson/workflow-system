@@ -1,5 +1,5 @@
 <?php
-class DaoAcao extends Dados{
+class DaoAcao extends DaoBase{
 
 	//construtor
 	public function __construct(){}

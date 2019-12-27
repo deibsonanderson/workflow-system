@@ -1,6 +1,6 @@
 <?php
 
-class ControladorCategoriaAtividade {
+class ControladorCategoriaAtividade extends ControladorBase {
 
 	//construtor
 	public function __construct(){}
@@ -12,7 +12,7 @@ class ControladorCategoriaAtividade {
 	public function listarCategoriaAtividade($id = null){
 		try {
 			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
-			$retorno = $moduloCategoriaAtividade->listarCategoriaAtividade($id,$_SESSION["login"]->getId());
+			$retorno = $moduloCategoriaAtividade->listarCategoriaAtividade($id,$this->getUsuarioLoginId());
 			$moduloCategoriaAtividade->__destruct();
 			return $retorno;
 		} catch (Exception $e) {
@@ -27,9 +27,7 @@ class ControladorCategoriaAtividade {
 			$categoria->setNome($post["nome"]);
 			$categoria->setStatus('1');
 			
-			$usuario = new Usuario();
-			$usuario->setId($_SESSION["login"]->getId());
-			$categoria->setUsuario($usuario);
+			$categoria->setUsuario($this->getUsuarioLogin());
 			
 			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
 			if($moduloCategoriaAtividade->incluirCategoriaAtividade($categoria)){
@@ -49,10 +47,6 @@ class ControladorCategoriaAtividade {
 			$categoria->setNome($post["nome"]);
 			$categoria->setStatus('1');
 			
-			$usuario = new Usuario();
-			$usuario->setId($_SESSION["login"]->getId());
-			$categoria->setUsuario($usuario);
-			
 			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
 			if($moduloCategoriaAtividade->alterarCategoriaAtividade($categoria)){
 				return $this->telaListarCategoriaAtividade();
@@ -68,11 +62,8 @@ class ControladorCategoriaAtividade {
 	
 	public function excluirCategoriaAtividade($post){
 		try {
-			$id = $post["id"];
-			$moduloCategoriaAtividade = new DaoCategoriaAtividade();
-			$moduloCategoriaAtividade->excluirCategoriaAtividade($id);
-			$moduloCategoriaAtividade->__destruct();
-			return $this->telaListarCategoriaAtividade();
+			return $this->excluirBase($post["id"], new DaoCategoriaAtividade(), 
+					'excluirCategoriaAtividade', $this->telaListarCategoriaAtividade());
 		} catch (Exception $e) {
 			return $e;
 		}
