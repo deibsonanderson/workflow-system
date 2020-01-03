@@ -915,7 +915,7 @@ class ViewAtividade {
                 ++$cont;
                 ?>
                     <tr>
-                        <td id="mobile"style="text-align: center;">
+                        <td class="mobile" style="text-align: center;">
                         	<?php echo $controladorComentario->showIconFile($comentario->getArquivo()); ?>
                         </td>                    
                         <td style="min-width: 300px;"><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
@@ -923,7 +923,7 @@ class ViewAtividade {
                         <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Download do Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
                            <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
                         </td>
-                        <td id="desktop" style="text-align: center;">
+                        <td class="desktop" style="text-align: center;">
                         	<?php echo $controladorComentario->showIconFile($comentario->getArquivo()); ?>
                         </td>
                         <td>
@@ -973,9 +973,9 @@ class ViewAtividade {
 		</div>
 		<script type="text/javascript">
 	        if(detectarMobile() == true){
-				$('#desktop').remove();
+				$('.desktop').remove();
 			}else{				
-				$('#mobile').remove();
+				$('.mobile').remove();
 			}		
 		</script>     
 		<?php 
