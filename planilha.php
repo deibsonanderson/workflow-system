@@ -45,34 +45,34 @@ function addColor($valor){
 		$aberto = 0;
 		$fechado = 0;		
 		foreach ($objProcesso[0]->getFluxoProcesso() as $fluxoProcesso) {
-			if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
-				$positivo += $fluxoProcesso->getAtividade()->getValor();
+			if($fluxoProcesso->getPropriedade() == '1'){
+				$positivo += $fluxoProcesso->getValor();
 				$sinal = '';
 				$colorcss = 'color:BLUE;';
 			}else{
-				$negativo += $fluxoProcesso->getAtividade()->getValor();
+				$negativo += $fluxoProcesso->getValor();
 				$sinal = '-';
 				$colorcss = 'color:RED;';
 			}
 			if($fluxoProcesso->getAtivo() == '1' ){
-				if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
-					$aberto += $fluxoProcesso->getAtividade()->getValor();
+				if($fluxoProcesso->getPropriedade() == '1'){
+					$aberto += $fluxoProcesso->getValor();
 				}else{
-					$aberto -= $fluxoProcesso->getAtividade()->getValor();
+					$aberto -= $fluxoProcesso->getValor();
 				}
 				$colorStatus = 'color:RED;';
 			}else{
-				if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
-					$fechado += $fluxoProcesso->getAtividade()->getValor();
+				if($fluxoProcesso->getPropriedade() == '1'){
+					$fechado += $fluxoProcesso->getValor();
 				}else{
-					$fechado -= $fluxoProcesso->getAtividade()->getValor();
+					$fechado -= $fluxoProcesso->getValor();
 				}
 				$colorStatus = 'color:BLUE;';
 			}						
 			?>    
 				<tr  >
 					<td style="<?php echo addColor($odd);?>"width="400px" ><?php echo utf8_decode(limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 100)); ?></td> 
-					<td style="<?php echo $colorcss; ?><?php echo addColor($odd);?>" ><?php echo $sinal.moneyFormat($fluxoProcesso->getAtividade()->getValor()); ?></td> 
+					<td style="<?php echo $colorcss; ?><?php echo addColor($odd);?>" ><?php echo $sinal.moneyFormat($fluxoProcesso->getValor()); ?></td> 
 					<td style="text-align: center; <?php echo $colorStatus; ?><?php echo addColor($odd);?>"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 				</tr>	
 			<?php
