@@ -1410,7 +1410,7 @@ function recalcular(processoFluxoId){
         provisao = provisao.replace(",", ".");
         provisao = Number.parseFloat(provisao);
     $('#totalAberto').html('R$ '+valorMonetario(totalAberto.toFixed(2),'3'));
-    $('#totalFechado').html('R$ '+valorMonetario(totalPositivo.toFixed(2),'3'));
+    $('#totalFechado').html('R$ '+valorMonetario(totalFechado.toFixed(2),'3'));
     $('#totalPositivo').html('R$ '+valorMonetario(totalPositivo.toFixed(2),'3'));
     $('#totalNegativo').html('R$ '+valorMonetario(totalNegativo.toFixed(2),'3'));
     $('#totalGeral').html('R$ '+valorMonetario((totalPositivo+totalNegativo).toFixed(2),'3'));
