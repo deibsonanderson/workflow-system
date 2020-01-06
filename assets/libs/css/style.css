@@ -4710,6 +4710,10 @@ Vertical Timeline - by CodyHouse.co
     background: #ef172c;
 }
 
+.cd-timeline__img.cd-timeline__img--fixa {
+    background: #ff407b;
+}
+
 .cd-timeline__img.cd-timeline__img--location {
     background: #ffc108;
 }

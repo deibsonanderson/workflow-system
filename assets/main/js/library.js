@@ -960,9 +960,12 @@ function inputUpdateProcessoFluxo(fluxoProcessoId, tipo){
 	}else if(tipo == 'd'){
 		funcao = 'atualizarDescricaoFluxoProcesso';
 		valor = $('#input_descricao').val();
+	}else if(tipo == 'f'){
+		funcao = 'atualizarFixaFluxoProcesso';
+		valor = $('#input_fixa').val();		
 	}
 	
-	if(tipo != 'v' && valor == ''){
+	if(tipo != 'v' && tipo != 'f' && valor == ''){
 		msgSlide("14");
 	}else{	
 		$.ajax({
@@ -977,6 +980,14 @@ function inputUpdateProcessoFluxo(fluxoProcessoId, tipo){
 						$('#span_vencimento').html('-');
 					}else{
 						$('#span_vencimento').html(pad(valor,1,'0')+'/'+mes+'/'+ano);
+					}
+	            }else if(tipo == 'f'){
+	            	$('#span_fixa').css('display','');
+					$('#div_input_fixa').css('display','none');
+					if(valor == '1'){
+						$('#span_fixa').html('Fixa');
+					}else{
+						$('#span_fixa').html('Variável');
 					}
 	            }
 	        },

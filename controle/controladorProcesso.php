@@ -227,6 +227,19 @@ class ControladorProcesso {
     	}
     }
     
+    public function atualizarFixaFluxoProcesso($post){
+    	try {
+    		$fluxoProcesso = new FluxoProcesso();
+    		$fluxoProcesso->setId($post["id"]);
+    		$fluxoProcesso->setFixa($post["valor"]);
+    		$daoProcesso = new DaoProcesso();
+    		$daoProcesso->atualizarFixaFluxoProcesso($fluxoProcesso);
+    		$daoProcesso->__destruct();
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
     public function atualizarVencimentoFluxoProcesso($post){
     	try {
     		$fluxoProcesso = new FluxoProcesso();

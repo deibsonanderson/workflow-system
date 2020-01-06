@@ -34,6 +34,19 @@ class DaoProcesso extends DaoBase {
     	} catch (Exception $e) {
     		return $e;
     	}
+    }    
+    
+    public function atualizarFixaFluxoProcesso($fluxoProcesso) {
+    	try {
+    		$conexao = $this->ConectarBanco();
+    		$sql = "UPDATE tb_workflow_processo_fluxo SET fixa_atividade='". $fluxoProcesso->getFixa(). "' WHERE id = " . $fluxoProcesso->getId() . "";
+    		var_dump($sql);
+    		$retorno = mysqli_query($conexao,$sql) or die('Erro na update tipo despesa processo fluxo atividade!');
+    		$this->FecharBanco($conexao);
+    		return $retorno;
+    	} catch (Exception $e) {
+    		return $e;
+    	}
     }
     
     public function atualizarDescricaoFluxoProcesso($fluxoProcesso) {
@@ -215,9 +228,9 @@ class DaoProcesso extends DaoBase {
             $id_processo = mysqli_insert_id($conexao);
 
             $atuante = 1;
-            $sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade, descricao_atividade, titulo_atividade) VALUES ";
+            $sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade, descricao_atividade, titulo_atividade, fixa_atividade) VALUES ";
             foreach ($listFluxoAtividade as $atividade) {
-            	$sql .= "(" . $id_processo . "," . $atividade->getIdFluxo() . ",".$atuante.",1 , 1, " . $atividade->getValor() . "," . $atividade->getPropriedade() . ",0,'" . $atividade->getVencimento() . "','" . $atividade->getDescricao() . "','" . $atividade->getTitulo() . "' ),";
+            	$sql .= "(" . $id_processo . "," . $atividade->getIdFluxo() . ",".$atuante.",1 , 1, " . $atividade->getValor() . "," . $atividade->getPropriedade() . ",0,'" . $atividade->getVencimento() . "','" . $atividade->getDescricao() . "','" . $atividade->getTitulo() . "','" . $atividade->getFixa() . "' ),";
                 $atuante = 0;
             }
             $sql_fluxo = substr($sql, 0, -1);
@@ -233,8 +246,8 @@ class DaoProcesso extends DaoBase {
     public function incluirProcessoFluxo($fluxoProcesso) {
     	try {
     		$conexao = $this->ConectarBanco();
-    		$sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade,descricao_atividade, titulo_atividade) VALUES ";
-    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "',1," . $fluxoProcesso->getVencimento() . ",'" . $fluxoProcesso->getDescricao() . "','" . $fluxoProcesso->getTitulo() . "' )";
+    		$sql = "INSERT INTO tb_workflow_processo_fluxo (id_processo ,id_fluxo, atuante,ativo ,status, valor_atividade, propriedade_atividade, out_flow, vencimento_atividade,descricao_atividade, titulo_atividade, fixa_atividade) VALUES ";
+    		$sql .= "('" . $fluxoProcesso->getProcesso() . "','" . $fluxoProcesso->getId_fluxo() . "','0', '1' , '1', '" . $fluxoProcesso->getValor() . "','" . $fluxoProcesso->getPropriedade() . "',1," . $fluxoProcesso->getVencimento() . ",'" . $fluxoProcesso->getDescricao() . "','" . $fluxoProcesso->getTitulo() . "','" . $fluxoProcesso->getFixa() . "' )";
     		$retorno = mysqli_query($conexao, $sql) or die('Erro na execução  do insert tb_workflow_processo_fluxo!');
     		$this->FecharBanco($conexao);
     		return $retorno;
@@ -396,6 +409,8 @@ class DaoProcesso extends DaoBase {
 							wpf.valor_atividade AS valor_processo_fluxo,
 							wpf.titulo_atividade AS titulo_processo_fluxo,
 							wpf.propriedade_atividade AS propriedade_processo_fluxo,
+							wpf.fixa_atividade AS fixa_processo_fluxo,
+							wa.fixa AS fixa_atividade,
 							wp.id_usuario,
 							wp.provisao,
 							wf.ordenacao,
@@ -457,6 +472,7 @@ class DaoProcesso extends DaoBase {
                 $fluxoProcesso->setDescricao($objetoFluxoProcesso->descricao_processo_fluxo);
                 $fluxoProcesso->setValor($objetoFluxoProcesso->valor_processo_fluxo);
                 $fluxoProcesso->setPropriedade($objetoFluxoProcesso->propriedade_processo_fluxo);
+                $fluxoProcesso->setFixa($objetoFluxoProcesso->fixa_processo_fluxo);
                 
                 $categoriaAtividade = new CategoriaAtividade();
                 $categoriaAtividade->setNome($objetoFluxoProcesso->titulo_categoria_atividade);
@@ -471,6 +487,7 @@ class DaoProcesso extends DaoBase {
                 $atividade->setVencimento($objetoFluxoProcesso->vencimento_atividade);
                 $atividade->setValor($objetoFluxoProcesso->valor_atividade);
                 $atividade->setPropriedade($objetoFluxoProcesso->propriedade_atividade);
+                $atividade->setFixa($objetoFluxoProcesso->fixa_atividade);
                 $atividade->setCategoria($categoriaAtividade);
 
                 
@@ -518,6 +535,8 @@ class DaoProcesso extends DaoBase {
                             wpf.id_fluxo,
                             wpf.atuante,
                             wp.data as data_processo,
+							wpf.fixa_atividade AS fixa_processo_fluxo,
+							wa.fixa AS fixa_atividade,
                             wpf.ativo,
                             wf.id_atividade,
                             wpf.titulo_atividade AS titulo_atividade,
@@ -591,6 +610,7 @@ class DaoProcesso extends DaoBase {
     			$fluxoProcesso->setId_fluxo($objetoFluxoProcesso->id_fluxo);
     			$fluxoProcesso->setAtivo($objetoFluxoProcesso->ativo);
     			$fluxoProcesso->setAtuante($objetoFluxoProcesso->atuante);
+    			$fluxoProcesso->setFixa($objetoFluxoProcesso->fixa_processo_fluxo);
     			
     			$atividade = new Atividade();
     			$atividade->setId($objetoFluxoProcesso->id_atividade);
@@ -600,6 +620,7 @@ class DaoProcesso extends DaoBase {
     			$atividade->setImagem($objetoFluxoProcesso->imagem_atividade);
     			$atividade->setValor($objetoFluxoProcesso->valor);
     			$atividade->setPropriedade($objetoFluxoProcesso->propriedade);
+    			$atividade->setFixa($objetoFluxoProcesso->fixa_atividade);
     			
     			if($objetoFluxoProcesso->vencimento < date("d")){
     				$dataFormatada = $objetoFluxoProcesso->vencimento_next;

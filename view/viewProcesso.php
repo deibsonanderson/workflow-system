@@ -173,9 +173,16 @@ class ViewProcesso {
             			$imgEstilo = 'ativo';
             			$btnEstilo = 'btn-primary';
 						$opacit = 'opacity:1.0;';
-            		} 
+            		}
+            		
+            		if($fluxoProcesso->getFixa() == '1' && $fluxoProcesso->getAtivo() == '1'){
+            			$imgEstilo = 'fixa';
+            			$btnEstilo = 'btn-secondary';
+            			$opacit = 'opacity:1.0;';
+            		}
+            		
             		if($fluxoProcesso->getOutFlow() == '1' && $fluxoProcesso->getAtivo() == '1'){
-            			$imgEstilo = 'ativo';
+            			$imgEstilo = 'location';
             			$btnEstilo = 'btn-warning';
             			$opacit = 'opacity:1.0;';
             		}
@@ -262,11 +269,11 @@ class ViewProcesso {
 							retorno="div_central"
 							style="cursor: pointer;"><?php echo ($fluxoProcesso->getDescricao())?$fluxoProcesso->getDescricao():$fluxoProcesso->getAtividade()->getDescricao(); ?>
 							<br />
-							Valor: <?php 
-							$propriedade = ($fluxoProcesso->getPropriedade() == '1')?'':'-';
-							echo 'R$ '.$propriedade.moneyFormat($fluxoProcesso->getValor()); 
-							?>
-							</p>
+							Valor: <b><?php $propriedade = ($fluxoProcesso->getPropriedade() == '1')?'':'-';
+							echo 'R$ '.$propriedade.moneyFormat($fluxoProcesso->getValor()); ?></b>
+							<br />
+							Tipo: <b><?php echo ($fluxoProcesso->getFixa() == '1')?'Fixa':'Variável';?></b>
+							</p>							
 						<a  href="#" 
 							id_processo_fluxo="<?php echo $fluxoProcesso->getId(); ?>"
 							id_processo="<?php echo $objProcesso[0]->getId(); ?>" 
@@ -776,7 +783,8 @@ class ViewProcesso {
 								<thead>
 									<tr>
 			                            <th>Imagem</th>
-			                            <th>Título</th> 
+			                            <th>Título</th>
+			                            <th>Tipo</th> 
 			                            <th>Valor (R$)</th>
 										<th>Status</th>
 			                        </tr>
@@ -825,6 +833,7 @@ class ViewProcesso {
 											<tr>
 												<td style="text-align: center;"><img src="<?php echo $imagem; ?>" style="width: 38px;"></td> 
 					                            <td ><?php echo limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 30); ?></td> 
+					                            <td style="text-align: center;"><?php echo ($fluxoProcesso->getFixa() == "1")?"Fixa":"Variável"; ?></td> 
 					                            <td style="<?php echo $colorcss; ?>" >
 					                            	<span onclick="showInput('<?php echo $fluxoProcesso->getId(); ?>');" id="span_<?php echo $fluxoProcesso->getId(); ?>" style="display:block;" 
 					                            	      name="span_<?php echo $fluxoProcesso->getId(); ?>" ativo="<?php echo $fluxoProcesso->getAtivo(); ?>" >

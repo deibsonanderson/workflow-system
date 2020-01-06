@@ -15,6 +15,7 @@ class Atividade {
     private $categoria;
     private $usuario;
     private $vencimento;
+    private $fixa;
     
     public function getUsuario() {
     	return $this->usuario;
@@ -129,6 +130,14 @@ class Atividade {
     
     public function setVencimento($vencimento) {
     	$this->vencimento = $vencimento;
+    }
+    
+    public function getFixa() {
+    	return $this->fixa;
+    }
+    
+    public function setFixa($fixa) {
+    	$this->fixa = $fixa;
     }
 }
 

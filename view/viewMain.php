@@ -49,8 +49,28 @@ class ViewMain{
 											?>    
 												<tr>
 													<td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;"><?php echo $fluxoProcesso->getAtividade()->getVencimento(); ?></td> 
-						                            <td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;"><?php echo $processo->getTitulo(); ?></td> 
-						                            <td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;"><?php echo $fluxoProcesso->getAtividade()->getTitulo(); ?></td>								
+						                            
+						                            <td onclick="getId(this); $.unblockUI();" 
+						                                funcao="telaTimeLineProcesso" 
+						                                controlador="ControladorProcesso" 
+						                                id="<?php echo $processo->getId(); ?>" 
+						                                retorno="div_central"                 
+						                            	style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;cursor: pointer;"><?php echo $processo->getTitulo(); ?></td> 
+						                            
+						                            <td id_processo_fluxo="<?php echo $fluxoProcesso->getId(); ?>"
+														id_processo="<?php echo $processo->getId(); ?>"
+														id="<?php echo $fluxoProcesso->getAtividade()->getId(); ?>"
+														ativo="<?php echo $fluxoProcesso->getAtivo(); ?>"
+														atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+														titulo_processo_fluxo="<?php echo $fluxoProcesso->getTitulo(); ?>"
+														vencimento_processo_fluxo="<?php echo $fluxoProcesso->getVencimento(); ?>"
+														valor_processo_fluxo="<?php echo $fluxoProcesso->getValor(); ?>"
+														descricao_processo_fluxo="<?php echo $fluxoProcesso->getDescricao(); ?>"
+														onclick="getIdProcesso(this); $.unblockUI();"
+														funcao="telaVisualizarAtividadeProcesso"
+														controlador="controladorAtividade"
+														retorno="div_central"
+						                            	style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;cursor: pointer;"><?php echo $fluxoProcesso->getAtividade()->getTitulo(); ?></td>								
 												</tr>	
 											<?php
 										}

@@ -40,7 +40,7 @@ class DaoFluxo extends DaoBase {
         try {
             $retorno = array();
             $conexao = $this->ConectarBanco();
-            $sql = "SELECT wf.id AS id_fluxo, wf.id_atividade, wa.titulo, wf.status, wa.valor, wa.propriedade, wa.descricao AS atividade_descricao, wa.imagem
+            $sql = "SELECT wf.id AS id_fluxo, wf.id_atividade, wa.fixa, wa.titulo, wf.status, wa.valor, wa.propriedade, wa.descricao AS atividade_descricao, wa.imagem
                     FROM tb_workflow_fluxo wf
                     INNER JOIN tb_workflow_atividade wa ON (wf.id_atividade = wa.id )
                     WHERE wf.status = '1' " ;
@@ -58,6 +58,7 @@ class DaoFluxo extends DaoBase {
                 $atividade->setPropriedade($objetoFluxoAtividade->propriedade);
                 $atividade->setImagem($objetoFluxoAtividade->imagem);
                 $atividade->setDescricao($objetoFluxoAtividade->atividade_descricao);
+                $atividade->setFixa($objetoFluxoAtividade->fixa);
 				
                 $retorno[] = $atividade;
             }

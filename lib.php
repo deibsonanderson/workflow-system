@@ -2,7 +2,7 @@
 
 function selecao($valor1, $valor2) {
     $selecao = "";
-    if (($valor1 == "" && $valor2 == 1) || ($valor1 == $valor2)) {
+    if (($valor1 == "") || ($valor1 == $valor2)) {
         $selecao = "selected='selected'";
     }
     return $selecao;

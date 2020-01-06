@@ -82,6 +82,13 @@ class ViewAtividade {
 		        			</select>
 						</div>
 						<div class="form-group">
+							<label for="fixa">Tipo</label>
+							<select id="fixa" name="fixa"  class="mgs_alerta form-control" >
+								<option value="1" selected="selected" >Fixa</option>
+		                        <option value="0" >Variável</option>
+		        			</select>
+						</div>						
+						<div class="form-group">
 							<label for="pais">Categoria *</label>
 							<select id="categoria" name="categoria" class="mgs_alerta form-control">
 							<?php 
@@ -212,7 +219,8 @@ class ViewAtividade {
 			                            <th>T&iacute;tulo</th>
 			                            <th>Custo</th>  
 			                            <th>Descri&ccedil;&atilde;o</th>
-										<th>Vencimento</th>	
+										<th>Vencimento</th>
+										<th>Tipo</th>	
 										<th>Arquivo</th>							
 			                            <th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
 									</tr>
@@ -241,6 +249,7 @@ class ViewAtividade {
 			                                    <td onclick="getId(this)"  class="getId;" style="cursor:pointer;<?php echo $colorcss; ?>"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo 'R$ '.$simbolo.valorMonetario($atividade->getValor(),'2'); ?></td>
 			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer"  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo limitarTexto($atividade->getDescricao(), 110); ?></td> 
 			                                    <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center; "  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo ($atividade->getVencimento() == "00" || $atividade->getVencimento() == null || $atividade->getVencimento() == "")?"-":$atividade->getVencimento(); ?></td>
+											    <td onclick="getId(this)"  class="getId" style="cursor:pointer;text-align: center; "  id="<?php echo $atividade->getId(); ?>" funcao="telaVisualizarAtividade" controlador="ControladorAtividade" retorno="div_central"><?php echo ($atividade->getFixa() == "1")?"Fixa":"Variável"; ?></td>
 											    <td style="text-align: center;">
 						                        <?php
 						                        	$controladorComentario = new ControladorComentarioFluxoProcesso();
@@ -351,6 +360,13 @@ class ViewAtividade {
                         <option value="0" <?php echo $selected_2; ?> >Negativo</option>
         			</select>	
 				</div>
+				<div class="form-group">
+					<label for="fixa">Tipo</label>
+					<select id="fixa" name="fixa"  class="mgs_alerta form-control" >
+                        <option value="1" <?php echo selecao($objAtividade[0]->getFixa(), "1"); ?> >Fixa</option>
+                        <option value="0" <?php echo selecao($objAtividade[0]->getFixa(), "0"); ?> >Variável</option>
+        			</select>	
+				</div>				
 				<div class="form-group">
 					<label for="pais">Categoria *</label>
 					<select id="categoria" name="categoria" class="mgs_alerta form-control">
@@ -509,7 +525,14 @@ class ViewAtividade {
 		                        <option value="1" <?php echo $selected_1; ?> >Prositivo</option>
 		                        <option value="0" <?php echo $selected_2; ?> >Negativo</option>
 		        			</select>	
-						</div>							
+						</div>
+						<div class="form-group">
+							<label for="fixa">Tipo</label>
+							<select id="fixa" name="fixa"  class="mgs_alerta form-control" >
+		                        <option value="1" disabled="disabled" <?php echo selecao($objAtividade[0]->getFixa(), "1"); ?> >Fixa</option>
+		                        <option value="0" disabled="disabled" <?php echo selecao($objAtividade[0]->getFixa(), "0"); ?> >Variável</option>
+		        			</select>	
+						</div>														
 				<div class="form-group">
 					<label for="pais">Categoria *</label>
 					<select id="categoria" disabled="disabled" name="categoria" dis class="mgs_alerta form-control">
@@ -621,6 +644,11 @@ class ViewAtividade {
 				$('#div_input_vencimento').css('display','');
 			}
 
+			function showInputFixa(){
+            	$('#span_fixa').css('display','none');
+				$('#div_input_fixa').css('display','');
+			}
+
 			function slideRight(){
 				var leftPos = $('.table-responsive').scrollLeft();
 				$(".table-responsive").animate({scrollLeft: leftPos + 999}, 100);
@@ -668,6 +696,7 @@ class ViewAtividade {
 										<th>Processo</th>
 										<th>Fluxo</th>
 										<th>Vencimento</th>
+										<th>Tipo</th>
 										<th>Valor</th>
 									</tr>
 								</thead>
@@ -730,7 +759,7 @@ class ViewAtividade {
 											<div id="div_input_vencimento" class="input-group" style="display:none;min-width:100px;max-width:100px;">
 			                            		<select id="input_vencimento" name="input_vencimento" class="form-control" style="width:30px;"
 			                            		        mes="<?php echo date('m',$date); ?>" ano="<?php echo date('Y',$date); ?>"
-			                            		        onchange="inputUpdateProcessoFluxo('<?php echo $processoFluxo->getId(); ?>','v');">
+			                            		        onchange="inputUpdateProcessoFluxo('<?php echo $objProcessoFluxo->getId(); ?>','v');">
 													<option value="">Selecione...</option>
 													<?php 
 														for($i = 1; $i <=31; $i++){
@@ -738,6 +767,18 @@ class ViewAtividade {
 															echo "<option value='".$i."' ".$select." >".$i."</option>";
 														}
 													?>
+												</select>
+                                            </div>
+										</td>
+										<td id="showInputFixa" class="getId dimensions"
+											style="cursor: pointer" onclick="showInputFixa();"
+											title="<?php echo nl2br($objProcesso[0]->getDescricao()); ?>">
+											<span id="span_fixa"><?php echo ($objProcessoFluxo->getFixa() == '1')?'Fixa':'Variável'; ?></span>
+											<div id="div_input_fixa" class="input-group" style="display:none;min-width:100px;max-width:100px;">
+			                            		<select id="input_fixa" name="input_fixa" class="form-control" style="width:30px;"
+			                            		        onchange="inputUpdateProcessoFluxo('<?php echo $objProcessoFluxo->getId(); ?>','f');">
+														<option value="1" <?php echo selecao($objProcessoFluxo->getFixa() , '1'); ?> >Fixa</option>
+								                        <option value="0" <?php echo selecao($objProcessoFluxo->getFixa() , '0'); ?>>Variável</option>
 												</select>
                                             </div>
 										</td>
@@ -810,7 +851,7 @@ class ViewAtividade {
 					<div class="card-footer" id="div_comentarios">
 		        		<?php 
 			        		$controladorAtividade = new ControladorAtividade();
-			        		echo $controladorAtividade->comentariosAtividadeProcesso($processoFluxo->getId(),true);
+			        		echo $controladorAtividade->comentariosAtividadeProcesso($objProcessoFluxo->getId(),true);
 		        		?>
 				    </div>
 			        <div class="card-body">

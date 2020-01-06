@@ -33,6 +33,7 @@ function addColor($valor){
 	<thead>
 		<tr >
 			<th style="background-color:#DCDCDC">T&iacute;tulo</th>
+			<th style="background-color:#DCDCDC">Tipo</th>
 			<th style="background-color:#DCDCDC">Valor</th>
 			<th style="background-color:#DCDCDC">Status</th>
 		</tr>
@@ -72,6 +73,7 @@ function addColor($valor){
 			?>    
 				<tr  >
 					<td style="<?php echo addColor($odd);?>"width="400px" ><?php echo utf8_decode(limitarTexto(($fluxoProcesso->getTitulo())?$fluxoProcesso->getTitulo():$fluxoProcesso->getAtividade()->getTitulo(), 100)); ?></td> 
+					<td style="<?php echo addColor($odd);?>"><?php echo ($fluxoProcesso->getFixa() == "1")?"Fixa":"Vari&aacute;vel"; ?></td>
 					<td style="<?php echo $colorcss; ?><?php echo addColor($odd);?>" ><?php echo $sinal.moneyFormat($fluxoProcesso->getValor()); ?></td> 
 					<td style="text-align: center; <?php echo $colorStatus; ?><?php echo addColor($odd);?>"><?php echo ($fluxoProcesso->getAtivo() == '0')?'Fechado':'Aberto'; ?></td> 
 				</tr>	
@@ -82,34 +84,34 @@ function addColor($valor){
 	}
 	?>
 		<tr >
-			<td colspan="3" style="<?php echo addColor($odd); $odd = !$odd; ?>" >&nbsp;</td> 
+			<td colspan="4" style="<?php echo addColor($odd); $odd = !$odd; ?>" >&nbsp;</td> 
 		</tr>
 		<tr style="">
-			<td style="<?php echo addColor($odd); ?>" colspan="2">Provis&atilde;o:</td> 
+			<td style="<?php echo addColor($odd); ?>" colspan="3">Provis&atilde;o:</td> 
 			<td style="<?php echo addColor($odd); $odd = !$odd; ?>" ><?php echo 'R$ '.moneyFormat($objProcesso[0]->getProvisao()); ?></td> 
 		</tr >
 		<tr style="">
-			<td style="<?php echo addColor($odd); ?>" colspan="2">Total Aberto:</td> 
+			<td style="<?php echo addColor($odd); ?>" colspan="3">Total Aberto:</td> 
 			<td style="color:RED;<?php echo addColor($odd); $odd = !$odd; ?>" ><?php echo 'R$ '.moneyFormat($aberto); ?></td> 
 		</tr>
 		<tr style="">
-			<td style="<?php echo addColor($odd);?>" colspan="2">Total Fechado:</td> 
+			<td style="<?php echo addColor($odd);?>" colspan="3">Total Fechado:</td> 
 			<td style="color:BLUE;<?php echo addColor($odd); $odd = !$odd; ?>" ><?php echo 'R$ '.moneyFormat($fechado); ?></td> 
 		</tr>		
 		<tr style="">
-			<td style="<?php echo addColor($odd);?>" colspan="2">Total Positivo:</td> 
+			<td style="<?php echo addColor($odd);?>" colspan="3">Total Positivo:</td> 
 			<td style="color:BLUE;<?php echo addColor($odd); $odd = !$odd; ?>" ><?php echo 'R$ '.moneyFormat($positivo); ?></td> 
 		</tr>
 		<tr style="">
-			<td style="<?php echo addColor($odd); ?>" colspan="2">Total Negativo:</td> 
+			<td style="<?php echo addColor($odd); ?>" colspan="3">Total Negativo:</td> 
 			<td style="color:RED;<?php echo addColor($odd); $odd = !$odd; ?>" ><?php echo 'R$ '.moneyFormat($negativo); ?></td> 
 		</tr>  
 		<tr style="">
-			<td style="<?php echo addColor($odd);?>" colspan="2">Total Geral (Positivo x Negativo):</td> 
+			<td style="<?php echo addColor($odd);?>" colspan="3">Total Geral (Positivo x Negativo):</td> 
 			<td style="<?php echo addColor($odd); $odd = !$odd; ?>" ><?php echo 'R$ '.moneyFormat(($positivo+$negativo)); ?></td> 
 		</tr>
 		<tr style="">
-			<td style="<?php echo addColor($odd);?>" colspan="2">Provis&atilde;o x Total Geral:</td> 
+			<td style="<?php echo addColor($odd);?>" colspan="3">Provis&atilde;o x Total Geral:</td> 
 			<td style="color:#008000;<?php echo addColor($odd); $odd = !$odd; ?>" ><?php echo 'R$ '.moneyFormat(($objProcesso[0]->getProvisao()+($positivo+$negativo))); ?></td> 
 		</tr>     				
 	</tbody> 

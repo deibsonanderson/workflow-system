@@ -54,6 +54,7 @@ class ControladorAtividade {
             $atividade->setArquivo($post["arquivo"]);
             $atividade->setImagem($post["imagem"]);
             $atividade->setStatus('1');
+            $atividade->setFixa($post["fixa"]);
             $atividade->setCategoria($post["categoria"]);
             if($post["vencimento"] != ""){
 				$atividade->setVencimento($post["vencimento"]);
@@ -88,6 +89,7 @@ class ControladorAtividade {
             $atividade->setArquivo($post["arquivo"]);
             $atividade->setImagem($post["imagem"]);
             $atividade->setStatus('1');
+            $atividade->setFixa($post["fixa"]);
             $atividade->setVencimento($post["vencimento"]);
             $atividade->setCategoria($post["categoria"]);
             $atividade->setValor(valorMonetario($post["valor"], "1"));
