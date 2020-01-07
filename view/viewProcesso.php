@@ -133,6 +133,9 @@ class ViewProcesso {
 						</h4>
 						<div class="toolbar ml-auto">
 							<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+							<a href="#" onclick="fncTelaModalCadastrarProcessoFluxo(this)" id_processo="<?php echo $objProcesso[0]->getId(); ?>" id_fluxo="<?php echo $objProcesso[0]->getFluxo()->getId(); ?>" class="btn btn-secondary btn-sm buttonCadastro">
+								<img style="width: 20px;" src="./assets/images/plus-icon-plus-write.png" alt="Picture">&nbsp;Atividade
+							</a>
 							<?php if($objProcesso != null && $objProcesso[0]->getId() != null ){ ?>
 							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" retorno="div_central" class="btn btn-primary btn-sm formCadastro">Ordernar</a>
 							<?php } ?>
