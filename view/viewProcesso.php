@@ -175,9 +175,9 @@ class ViewProcesso {
 						$opacit = 'opacity:1.0;';
             		}
             		
-            		if($fluxoProcesso->getFixa() == '1' && $fluxoProcesso->getAtivo() == '1'){
+            		if($fluxoProcesso->getFixa() == '0' && $fluxoProcesso->getAtivo() == '1'){
             			$imgEstilo = 'fixa';
-            			$btnEstilo = 'btn-secondary';
+            			$btnEstilo = 'btn-fixa';
             			$opacit = 'opacity:1.0;';
             		}
             		
@@ -398,6 +398,7 @@ class ViewProcesso {
                 opacity: 0.85
 			});*/
         </script>
+        <script src="./assets/vendor/timeline/js/main.js"></script>
 	<?php 
     }
     

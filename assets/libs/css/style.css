@@ -2719,6 +2719,36 @@ clip-path: polygon(10% 25%, 10% 0, 35% 0%, 65% 0%, 90% 0, 90% 25%, 90% 50%, 91% 
     border-color: #f0346e;
 }
 
+/*--- btn fixa --*/
+
+.btn-fixa {
+    color: #fff;
+    background-color: #ef172c;
+    border-color: #ef172c;
+}
+
+.btn-fixa:hover {
+    color: #fff;
+    background-color: #cc1023;
+    border-color: #cc1023;
+}
+
+.btn-fixa.focus,
+.btn-fixa:focus {
+    color: #fff;
+    background-color: #ef172c;
+    border-color: #ef172c;
+    box-shadow: 0 0 0 1px rgb(222, 17, 80);
+}
+
+.btn-fixa:not(:disabled):not(.disabled).active,
+.btn-fixa:not(:disabled):not(.disabled):active,
+.show>.btn-fixa.dropdown-toggle {
+    color: #fff;
+    background-color: #f0346e;
+    border-color: #f0346e;
+}
+
 
 /*--- btn success --*/
 
@@ -4711,7 +4741,7 @@ Vertical Timeline - by CodyHouse.co
 }
 
 .cd-timeline__img.cd-timeline__img--fixa {
-    background: #ff407b;
+    background: #ef172c;
 }
 
 .cd-timeline__img.cd-timeline__img--location {
