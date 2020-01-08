@@ -14,18 +14,9 @@ class DaoAtividade extends DaoBase {
     
     public function listarDistinctAtividade() {
     	try {
-    		$retorno = array();
-    		$conexao = $this->ConectarBanco();
-    		$sql = "SELECT DISTINCT id,titulo FROM tb_workflow_atividade WHERE status = '1' AND id_usuario = " . $_SESSION["login"]->getId();
-    		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
-    		while ($objetoAtividade = mysqli_fetch_object($query)) {
-    			$atividade = new Atividade();
-    			$atividade->setId($objetoAtividade->id);
-    			$atividade->setTitulo($objetoAtividade->titulo);
-    			$retorno[] = $atividade;
-    		}
-    		$this->FecharBanco($conexao);
-    		return $retorno;
+    		return $this->executarQuery(
+    				"SELECT DISTINCT id,titulo FROM ".DaoBase::TABLE_ATIVIDADE." WHERE status = '1' ".    				
+    				$this->montarIdUsuario($_SESSION["login"]->getId()),'Atividade');
     	} catch (Exception $e) {
     		return $e;
     	}
@@ -150,13 +141,7 @@ class DaoAtividade extends DaoBase {
 
     public function excluirAtividade($id) {
         try {
-            $conexao = $this->ConectarBanco();
-
-            $sql = "UPDATE tb_workflow_atividade SET status = '0' WHERE id = " . $id . "";
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet atividade!');
-
-            $this->FecharBanco($conexao);
-            return $retorno;
+            return $this->executar($this->sqlExcluir(DaoBase::TABLE_ATIVIDADE, $id));
         } catch (Exception $e) {
             return $e;
         }

@@ -7,13 +7,8 @@ class DaoCategoriaAtividade extends DaoBase {
 		
 	public function listarCategoriaAtividade($id = null, $id_usuario = null) {
 		try {
-			$retorno = array ();
-			$query = $this->executar ( 'SELECT id, nome, status FROM '.DaoBase::TABLE_CATEGORIA_ATIVIDADE.' WHERE status = "1" ' . 
-					$this->montarIdUsuario ( $id_usuario ) . $this->montarId ( $id ) );
-			while ( $objetoCategoriaAtividade = mysqli_fetch_object ( $query ) ) {
-				$retorno [] = $this->modelMapper($objetoCategoriaAtividade, new CategoriaAtividade() );
-			}
-			return $retorno;
+			return $this->executarQuery($this->sqlSelect(DaoBase::TABLE_CATEGORIA_ATIVIDADE, array('id', 'nome', 'status')).
+					$this->montarIdUsuario($id_usuario).$this->montarId($id),'CategoriaAtividade');
 		} catch ( Exception $e ) {
 			return $e;
 		}

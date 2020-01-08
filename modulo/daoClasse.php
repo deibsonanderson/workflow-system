@@ -71,17 +71,10 @@ class DaoClasse extends DaoBase{
 
 	public function excluirClasse($id){
 		try {
-			$conexao = $this->ConectarBanco();
-			
-			$sql = "UPDATE tb_workflow_classe SET status = '0' WHERE id = ".$id."";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do delet!');
-			
-			$sql = "UPDATE tb_workflow_acao_usuario SET status = '0' WHERE id_classe = ".$id."";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do delet!');
-			
-			
-			$this->FecharBanco($conexao);
-			return $retorno;
+			return $this->executarMulti(
+					array($this->sqlExcluir(DaoBase::TABLE_CLASSE, $id),
+						  "UPDATE ".DaoBase::TABLE_ACAO_USUARIO." SET status = '0' WHERE id_classe = $id"
+					));
 		} catch (Exception $e) {
 			return $e;
 		}

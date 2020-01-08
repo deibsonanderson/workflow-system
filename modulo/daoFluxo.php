@@ -106,16 +106,10 @@ class DaoFluxo extends DaoBase {
 
     public function excluirFluxo($id) {
         try {
-            $conexao = $this->ConectarBanco();
-
-            $sql = "UPDATE tb_workflow_titulo_fluxo SET status = '0' WHERE id = " . $id . "";
-            mysqli_query($conexao,$sql) or die('Erro na execução  do delet tb_workflow_titulo_fluxo!');
-            
-            $sql = "UPDATE tb_workflow_fluxo SET status = '0' WHERE id_titulo_fluxo = " . $id . "";
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet fluxo!');
-
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	return $this->executarMulti(
+        			array($this->sqlExcluir(DaoBase::TABLE_TITULO_FLUXO, $id),
+        					"UPDATE ".DaoBase::TABLE_FLUXO." SET status = '0' WHERE id_titulo_fluxo = $id")
+        			);
         } catch (Exception $e) {
             return $e;
         }

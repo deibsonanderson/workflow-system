@@ -39,7 +39,7 @@ class DaoUsuario extends DaoBase{
 	}
 	
 	
-        public function listarUsuarioLogin($id = null){
+    public function listarUsuarioLogin($id = null){
 		try {	
 			$retorno = array();
 			$conexao = $this->ConectarBanco();
@@ -71,12 +71,8 @@ class DaoUsuario extends DaoBase{
 
         
 	public function incluirUsuario($usuario){
-		try {	
-			$conexao = $this->ConectarBanco();
-			$sql = "INSERT INTO tb_workflow_usuario(nome,imagem,login,senha,id_perfil,status) VALUES ('".$usuario->getNome()."','".$usuario->getImagem()."','".$usuario->getLogin()."','".$usuario->getSenha()."','".$usuario->getPerfil()."','".$usuario->getStatus()."')";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução do insert relacional!');
-			$this->FecharBanco($conexao);
-			return $retorno;
+		try {
+			return $this->executar("INSERT INTO ".DaoBase::TABLE_USUARIO." (nome,imagem,login,senha,id_perfil,status) VALUES ('".$usuario->getNome()."','".$usuario->getImagem()."','".$usuario->getLogin()."','".$usuario->getSenha()."','".$usuario->getPerfil()."','".$usuario->getStatus()."')");
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -85,8 +81,6 @@ class DaoUsuario extends DaoBase{
         
 	public function alterarUsuario($usuario){
 		try {	
-
-			$conexao = $this->ConectarBanco();
 			$sql = "UPDATE tb_workflow_usuario SET  
 					nome = '".$usuario->getNome()."',
 					imagem = '".$usuario->getImagem()."',
@@ -94,10 +88,8 @@ class DaoUsuario extends DaoBase{
 					senha = '".$usuario->getSenha()."',
 					id_perfil = '".$usuario->getPerfil()."',
 					status = '".$usuario->getStatus()."' 
-					WHERE id =".$usuario->getId()."";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução do update relacional!');
-			$this->FecharBanco($conexao);                        
-			return $retorno;
+					WHERE id =".$usuario->getId();
+			return $this->executar($sql);
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -106,11 +98,7 @@ class DaoUsuario extends DaoBase{
         
 	public function excluirUsuario($id){
 		try {
-			$conexao = $this->ConectarBanco();
-			$sql = "UPDATE tb_workflow_usuario SET status = '0' WHERE id =".$id."";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução do delet!');
-			$this->FecharBanco($conexao);
-			return $retorno;
+			return $this->executar($this->sqlExcluir(DaoBase::TABLE_USUARIO, $id));
 		} catch (Exception $e) {
 			return $e;
 		}

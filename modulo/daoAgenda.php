@@ -14,36 +14,11 @@ class DaoAgenda extends DaoBase {
 
     public function listarAgenda($data = null, $ordem = null) {
         try {
-            $retorno = array();
-            $conexao = $this->ConectarBanco();
-            $sql = "SELECT id,data,descricao,arquivo,ordem,ativo,link,status FROM tb_workflow_agenda WHERE status = '1' ";
-            if ($_SESSION["login"]->getId()) {
-                $sql .= " AND id_usuario = " . $_SESSION["login"]->getId() . "";
-            }
-            $sql .= ($data != null) ? " AND data = '" . $data . "'" : " ";
-            if($ordem == null){
-				$sql .= " ORDER BY data DESC ";
-			}else{
-				$sql .= " ORDER BY ordem ASC ";
-			}
-			//var_dump($sql);
-			$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
-			while ($objetoAgenda = mysqli_fetch_object($query)) {
-                $agenda = new Agenda();
-                $agenda->setId($objetoAgenda->id);
-                $agenda->setData($objetoAgenda->data);
-                $agenda->setStatus($objetoAgenda->status);
-                $agenda->setDescricao($objetoAgenda->descricao);
-                $agenda->setArquivo($objetoAgenda->arquivo);
-                $agenda->setOrdem($objetoAgenda->ordem);
-				$agenda->setLink($objetoAgenda->link);
-                $agenda->setAtivo($objetoAgenda->ativo);
-
-                $retorno[] = $agenda;
-            }
-
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	$sqlOrdem = ($ordem == null)?" ORDER BY data DESC ":" ORDER BY ordem ASC ";
+        	return $this->executarQuery(
+        			$this->sqlSelect(DaoBase::TABLE_AGENDA, array('id', 'data','descricao','arquivo','ordem','ativo','link','status')).
+        			$this->montarIdUsuario($_SESSION["login"]->getId()).$this->montarData($data).$sqlOrdem,
+        			'Agenda');
         } catch (Exception $e) {
             return $e;
         }
@@ -91,13 +66,9 @@ class DaoAgenda extends DaoBase {
         }
     }
     
-        public function alterarAgenda($agenda) {
+    public function alterarAgenda($agenda) {
         try {
-            $conexao = $this->ConectarBanco();
-            $sql = " UPDATE tb_workflow_agenda SET ativo = '" . $agenda->getAtivo() . "' WHERE id = " . $agenda->getId() . "";
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do update tb_workflow_agenda!'.$sql);
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	return $this->executar($this->sqlAtualizarCustom(DaoBase::TABLE_AGENDA, $agenda, array('ativo')));
         } catch (Exception $e) {
             return $e;
         }
@@ -105,13 +76,7 @@ class DaoAgenda extends DaoBase {
 
     public function excluirAgenda($id) {
         try {
-            $conexao = $this->ConectarBanco();
-
-            $sql = "UPDATE tb_workflow_agenda SET status = '0' WHERE id = " . $id . "";
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet agenda!');
-
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	return $this->executar($this->sqlExcluir(DaoBase::TABLE_AGENDA, $id));
         } catch (Exception $e) {
             return $e;
         }

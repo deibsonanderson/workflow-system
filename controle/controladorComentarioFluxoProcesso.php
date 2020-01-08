@@ -98,17 +98,17 @@ class ControladorComentarioFluxoProcesso {
         }
     }
 
-    public function excluirComentarioFluxoProcesso($post) {
-        try {
-            $id = $post["id"];
-            $daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
-            $daoComentarioFluxoProcesso->excluirComentarioFluxoProcesso($id);
-            $daoComentarioFluxoProcesso->__destruct();
-            return $this->telaListarComentarioFluxoProcesso();
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
+//     public function excluirComentarioFluxoProcesso($post) {
+//         try {
+//             $id = $post["id"];
+//             $daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
+//             $daoComentarioFluxoProcesso->excluirComentarioFluxoProcesso($id);
+//             $daoComentarioFluxoProcesso->__destruct();
+//             return $this->telaListarComentarioFluxoProcesso();
+//         } catch (Exception $e) {
+//             return $e;
+//         }
+//     }
     
     
     public function buscarComentario($id = null) {

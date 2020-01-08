@@ -258,16 +258,10 @@ class DaoProcesso extends DaoBase {
 
     public function excluirProcesso($id) {
         try {
-            $conexao = $this->ConectarBanco();
-
-            $sql = "UPDATE tb_workflow_processo SET status = '0' WHERE id = " . $id . "";
-            mysqli_query($conexao,$sql) or die('Erro na execução  do delet processo!');
-
-            $sql = "UPDATE tb_workflow_processo_fluxo SET status = '0' WHERE id_processo = " . $id . "";
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet processo!');
-            
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	return $this->executarMulti(array(
+        			"UPDATE ".DaoBase::TABLE_PROCESSO_FLUXO." SET status = '0' WHERE id_processo = $id",
+        			$this->sqlExcluir(DaoBase::TABLE_PROCESSO, $id)
+        	));
         } catch (Exception $e) {
             return $e;
         }
@@ -275,13 +269,7 @@ class DaoProcesso extends DaoBase {
     
     public function excluirProcessoFluxo($id) {
     	try {
-    		$conexao = $this->ConectarBanco();
-
-    		$sql = "UPDATE tb_workflow_processo_fluxo SET status = '0' WHERE id = " . $id . "";
-    		$retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet processo!');
-    		
-    		$this->FecharBanco($conexao);
-    		return $retorno;
+    		return $this->executar($this->sqlExcluir(DaoBase::TABLE_PROCESSO_FLUXO, $id));
     	} catch (Exception $e) {
     		return $e;
     	}

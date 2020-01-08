@@ -160,7 +160,7 @@ class DaoAcao extends DaoBase{
 	}	
 
         
-        public function retornaPerfilClasseAcao($usuario = null,$acao){
+    public function retornaPerfilClasseAcao($usuario = null,$acao){
 		try {	
 			$conexao = $this->ConectarBanco();
 			$sql = "SELECT aue.perfil 

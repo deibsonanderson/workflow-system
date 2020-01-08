@@ -173,31 +173,23 @@ class DaoComentarioFluxoProcesso extends DaoBase {
         }
     }
 
-    public function excluirComentarioFluxoProcesso($id) {
-        try {
-            $conexao = $this->ConectarBanco();
+//     public function excluirComentarioFluxoProcesso($id) {
+//         try {
+//             $conexao = $this->ConectarBanco();
 
-            $sql = "UPDATE tb_workflow_comentario SET status = '0' WHERE id = " . $id . "";
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet comentarioFluxoProcesso!');
+//             $sql = "UPDATE tb_workflow_comentario SET status = '0' WHERE id = " . $id . "";
+//             $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do delet comentarioFluxoProcesso!');
 
-            $this->FecharBanco($conexao);
-            return $retorno;
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
+//             $this->FecharBanco($conexao);
+//             return $retorno;
+//         } catch (Exception $e) {
+//             return $e;
+//         }
+//     }
     
     public function excluirComentario($id) {
     	try {
-    		$conexao = $this->ConectarBanco();
-    		
-    		$sql = "DELETE FROM tb_workflow_comentario WHERE id = " . $id . "";
-    		
-    		//debug($sql);
-    		$retorno = mysqli_query($conexao,$sql) or die('Erro na execução do delete comentarioFluxoProcesso!');
-    		
-    		$this->FecharBanco($conexao);
-    		return $retorno;
+    		return $this->executar("DELETE FROM tb_workflow_comentario WHERE id = $id");
     	} catch (Exception $e) {
     		return $e;
     	}
