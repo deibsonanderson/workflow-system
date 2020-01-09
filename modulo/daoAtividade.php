@@ -15,7 +15,7 @@ class DaoAtividade extends DaoBase {
     public function listarDistinctAtividade() {
     	try {
     		return $this->executarQuery(
-    				"SELECT DISTINCT id,titulo FROM ".DaoBase::TABLE_ATIVIDADE." WHERE status = '1' ".    				
+    				$this->sqlSelect(DaoBase::TABLE_ATIVIDADE, array('id', 'titulo'), true).    				
     				$this->montarIdUsuario($_SESSION["login"]->getId()),'Atividade');
     	} catch (Exception $e) {
     		return $e;

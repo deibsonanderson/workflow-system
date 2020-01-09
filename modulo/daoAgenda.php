@@ -16,7 +16,7 @@ class DaoAgenda extends DaoBase {
         try {
         	$sqlOrdem = ($ordem == null)?" ORDER BY data DESC ":" ORDER BY ordem ASC ";
         	return $this->executarQuery(
-        			$this->sqlSelect(DaoBase::TABLE_AGENDA, array('id', 'data','descricao','arquivo','ordem','ativo','link','status')).
+        			$this->sqlSelect(DaoBase::TABLE_AGENDA, array('id', 'data','descricao','arquivo','ordem','ativo','link','status'), false).
         			$this->montarIdUsuario($_SESSION["login"]->getId()).$this->montarData($data).$sqlOrdem,
         			'Agenda');
         } catch (Exception $e) {

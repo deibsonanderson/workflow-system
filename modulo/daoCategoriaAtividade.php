@@ -7,7 +7,7 @@ class DaoCategoriaAtividade extends DaoBase {
 		
 	public function listarCategoriaAtividade($id = null, $id_usuario = null) {
 		try {
-			return $this->executarQuery($this->sqlSelect(DaoBase::TABLE_CATEGORIA_ATIVIDADE, array('id', 'nome', 'status')).
+			return $this->executarQuery($this->sqlSelect(DaoBase::TABLE_CATEGORIA_ATIVIDADE, array('id', 'nome', 'status'), false).
 					$this->montarIdUsuario($id_usuario).$this->montarId($id),'CategoriaAtividade');
 		} catch ( Exception $e ) {
 			return $e;

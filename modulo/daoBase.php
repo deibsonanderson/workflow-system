@@ -231,8 +231,9 @@ abstract class DaoBase {
 	 * @param Array $campos
 	 * @return string
 	 */
-	protected function sqlSelect($tabela, $campos){
+	protected function sqlSelect($tabela, $campos, $isDistinct){
 		$sql = "SELECT ";
+		$sql .= ($isDistinct === true)?'DISTINCT ':'';
 		foreach($campos as $campo) {
 			$sql .= " ".strtolower($campo).",";
 		}

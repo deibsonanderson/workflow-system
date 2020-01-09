@@ -47,16 +47,6 @@ class DaoLogin extends DaoBase{
 		}
 	}
 
-	
-	public function ultimoAcesso($id){
-		$conexao = $this->ConectarBanco();
-		$sql = "SELECT timediff(NOW(),data) as tempo_de_diferenca FROM tb_workflow_login WHERE id_usuario = '".$id."' ORDER BY id DESC LIMIT 1,1";
-		$query = mysqli_query($conexao,$sql) or die ('Erro na execução  do listar!');
-		if($obj =  mysqli_fetch_object($query)){
-			return $tempo_de_diferenca = $obj->tempo_de_diferenca;
-		}
-	}
-	
 }
 
 ?>

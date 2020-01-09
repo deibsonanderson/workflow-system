@@ -54,17 +54,5 @@ class ControladorLogin {
 		}
 	}
 
-	public function ultimoAcesso($id){
-		$moduloLogin = new DaoLogin();
-		$hora = explode(":", $moduloLogin->ultimoAcesso($id));
-		if($hora[0] > 99){
-			$retorno = "h&aacute; mais de 99:99:99";
-		} else{
-			$retorno = $moduloLogin->ultimoAcesso($id);
-		}
-		$moduloLogin->__destruct();
-		return $retorno;		
-	}
-
 }
 ?>

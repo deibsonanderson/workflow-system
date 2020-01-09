@@ -10,7 +10,7 @@ class DaoModulo extends DaoBase{
 	public function listarModulo($id = null){
 		try {
 			return $this->executarQuery(
-					$this->sqlSelect(DaoBase::TABLE_MODULO, array('id', 'nome', 'status')).$this->montarId($id),
+					$this->sqlSelect(DaoBase::TABLE_MODULO, array('id', 'nome', 'status'), false).$this->montarId($id),
 					'Modulo');
 		} catch (Exception $e) {
 			return $e;
