@@ -14,23 +14,9 @@ class DaoFluxo extends DaoBase {
 
     public function listarFluxo($id = null, $id_usuario = null) {
         try {
-            $retorno = array();
-            $conexao = $this->ConectarBanco();
-            $sql = "SELECT id,titulo,descricao,status FROM tb_workflow_titulo_fluxo WHERE status = '1' ";
-			$sql .= ($id_usuario != null) ? " AND id_usuario = " . $id_usuario : "";
-            $sql .= ($id != null) ? " AND id = " . $id : "";
-            
-            $query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar tb_workflow_titulo_fluxo!');
-            while ($objetoFluxo = mysqli_fetch_object($query)) {
-                $fluxo = new Fluxo();
-                $fluxo->setId($objetoFluxo->id);
-                $fluxo->setTitulo($objetoFluxo->titulo);
-                $fluxo->setDescricao($objetoFluxo->descricao);
-                $fluxo->setStatus($objetoFluxo->status);
-                $retorno[] = $fluxo;
-            }
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	return $this->executarQuery(
+	        			$this->sqlSelect(DaoBase::TABLE_TITULO_FLUXO, array('id', 'titulo', 'descricao', 'status'), false).
+	        			$this->montarIdUsuario($_SESSION["login"]->getId()).$this->montarId($id), 'Fluxo');
         } catch (Exception $e) {
             return $e;
         }
@@ -38,31 +24,21 @@ class DaoFluxo extends DaoBase {
 
     public function listarFluxoAtividades($id_titulo_fluxo = null, $id_usuario = null) {
         try {
-            $retorno = array();
-            $conexao = $this->ConectarBanco();
-            $sql = "SELECT wf.id AS id_fluxo, wf.id_atividade, wa.fixa, wa.titulo, wf.status, wa.valor, wa.propriedade, wa.descricao AS atividade_descricao, wa.imagem
+        	$sql = ($id_titulo_fluxo != null) ? " AND id_titulo_fluxo = " . $id_titulo_fluxo : "";
+        	$sql .= ' ORDER BY wf.ordenacao ASC ';
+        	$query = $this->executar("SELECT wf.id AS id_fluxo, wf.id_atividade, wa.fixa, wa.titulo, wf.status, wa.valor, wa.propriedade, wa.descricao AS atividade_descricao, wa.imagem
                     FROM tb_workflow_fluxo wf
                     INNER JOIN tb_workflow_atividade wa ON (wf.id_atividade = wa.id )
-                    WHERE wf.status = '1' " ;
-			$sql .= ($id_usuario != null) ? " AND wf.id_usuario = " . $id_usuario : "";		
-            $sql .= ($id_titulo_fluxo != null) ? " AND id_titulo_fluxo = " . $id_titulo_fluxo : "";
-            $sql .= " ORDER BY wf.ordenacao ASC ";
-            $query = mysqli_query($conexao,$sql) or die('Erro na execução  do listarFluxoAtividades tb_workflow_fluxo!');
+                    WHERE wf.status = '1' ".$this->montarIdUsuario($id_usuario,'wf').$sql);
             while ($objetoFluxoAtividade = mysqli_fetch_object($query)) {
-                $atividade = new Atividade();
-                $atividade->setId($objetoFluxoAtividade->id_atividade);
-                $atividade->setTitulo($objetoFluxoAtividade->titulo);
-                $atividade->setStatus($objetoFluxoAtividade->status);
+          		$atividade = $this->modelMapper($objetoFluxoAtividade, new Atividade());
+          		$atividade->setId($objetoFluxoAtividade->id_atividade);
                 $atividade->setIdFluxo($objetoFluxoAtividade->id_fluxo);
-                $atividade->setValor($objetoFluxoAtividade->valor);
-                $atividade->setPropriedade($objetoFluxoAtividade->propriedade);
-                $atividade->setImagem($objetoFluxoAtividade->imagem);
                 $atividade->setDescricao($objetoFluxoAtividade->atividade_descricao);
-                $atividade->setFixa($objetoFluxoAtividade->fixa);
-				
+
                 $retorno[] = $atividade;
             }
-            $this->FecharBanco($conexao);
+
             return $retorno;
         } catch (Exception $e) {
             return $e;
@@ -114,31 +90,6 @@ class DaoFluxo extends DaoBase {
             return $e;
         }
     }
-    
-    
-    public function buscarFluxo($id = null, $id_usuario = null) {
-        try {
-            $retorno = array();
-            $conexao = $this->ConectarBanco();
-            $sql = "SELECT id,titulo,descricao,status FROM tb_workflow_titulo_fluxo ";
-			$sql .= ($id != null) ? " WHERE id = " . $id : "";
-			$sql .= ($id_usuario != null) ? " AND id_usuario = " . $id_usuario : "";
-            $query = mysqli_query($conexao,$sql) or die('Erro na execução  do buscarFluxo tb_workflow_titulo_fluxo!');
-            while ($objetoFluxo = mysqli_fetch_object($query)) {
-                $fluxo = new Fluxo();
-                $fluxo->setId($objetoFluxo->id);
-                $fluxo->setTitulo($objetoFluxo->titulo);
-                $fluxo->setDescricao($objetoFluxo->descricao);
-                $fluxo->setStatus($objetoFluxo->status);
-                $retorno[] = $fluxo;
-            }
-            $this->FecharBanco($conexao);
-            return $retorno;
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
-    
     
     public function listarDistinctFluxo() {
     	try {

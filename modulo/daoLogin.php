@@ -10,11 +10,7 @@ class DaoLogin extends DaoBase{
 
 	public function validarLogin($post){
 		try {	
-			$conexao = $this->ConectarBanco();
-			
-			$sql = "SELECT id,login,senha FROM tb_workflow_usuario WHERE login = '".$post["login"]."' AND senha = '".$post["senha"]."' AND status = '1'";
-			//debug($sql);
-			$query = mysqli_query($conexao,$sql) or die ('Erro na execução  do listar!');
+			$query = $this->executar("SELECT id,login,senha FROM tb_workflow_usuario WHERE login = '".$post["login"]."' AND senha = '".$post["senha"]."' AND status = '1'");
 			if(mysqli_num_rows($query) == 1){
 				$obj =  mysqli_fetch_object($query);
 				
@@ -28,8 +24,7 @@ class DaoLogin extends DaoBase{
 			}else{
 				$retorno = null;
 			}
-				$this->FecharBanco($conexao);
-				return $retorno;
+			return $retorno;
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -37,11 +32,7 @@ class DaoLogin extends DaoBase{
 
 	public function incluirLogin($login){
 		try {	
-			$conexao = $this->ConectarBanco();
-			$sql = "INSERT INTO tb_workflow_login (id_usuario,data,status) VALUES ('".$login->getUsuario()."',NOW(),'".$login->getStatus()."')";
-			$retorno = mysqli_query($conexao,$sql) or die ('Erro na execução  do insert!');
-			$this->FecharBanco($conexao);
-			return $retorno;
+			return $this->executar("INSERT INTO tb_workflow_login (id_usuario,data,status) VALUES ('".$login->getUsuario()."',NOW(),'".$login->getStatus()."')");
 		} catch (Exception $e) {
 			return $e;
 		}

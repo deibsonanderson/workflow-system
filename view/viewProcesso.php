@@ -272,8 +272,9 @@ class ViewProcesso {
 							retorno="div_central"
 							style="cursor: pointer;"><?php echo ($fluxoProcesso->getDescricao())?$fluxoProcesso->getDescricao():$fluxoProcesso->getAtividade()->getDescricao(); ?>
 							<br />
-							Valor: <b><?php $propriedade = ($fluxoProcesso->getPropriedade() == '1')?'':'-';
-							echo 'R$ '.$propriedade.moneyFormat($fluxoProcesso->getValor()); ?></b>
+							<?php $propriedade = ($fluxoProcesso->getPropriedade() == '1')?'':'-'; ?>
+							Valor: <b style="color:<?php echo ($fluxoProcesso->getAtivo() == '1')?($propriedade == '-' )?'RED':'BLUE':''; ?>" >
+							<?php echo 'R$ '.$propriedade.moneyFormat($fluxoProcesso->getValor()); ?></b>
 							<br />
 							Tipo: <b><?php echo ($fluxoProcesso->getFixa() == '1')?'Fixa':'Variável';?></b>
 							</p>							

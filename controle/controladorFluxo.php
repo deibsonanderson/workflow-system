@@ -267,17 +267,6 @@ class ControladorFluxo {
             return $e;
         }
     }
-
-    public function buscarFluxo($id = null) {
-        try {
-            $daoFluxo = new DaoFluxo();
-            $retorno = $daoFluxo->buscarFluxo($id,$_SESSION["login"]->getId());
-            $daoFluxo->__destruct();
-            return $retorno;
-        } catch (Exception $e) {
-            return $e;
-        }
-    }
     
     public function listarDistinctFluxo() {
     	try {

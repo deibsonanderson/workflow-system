@@ -153,7 +153,7 @@ class DaoComentarioFluxoProcesso extends DaoBase {
     	try {
     		$retorno = $this->montarListarComentarioFluxoProcesso($this->executar(
     				$this->montarSQlListarComentarioFluxoProcesso($this->montarId($id))));    		
-    		return ($retorno != null && count($retorno) > 0 )?$retorno[0]:null;
+    		return (count($retorno) > 0 )?$retorno[0]:null;
     	} catch (Exception $e) {
     		return $e;
     	}

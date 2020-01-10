@@ -79,8 +79,10 @@ class DaoProcesso extends DaoBase {
         try {
             $retorno = array();
             $conexao = $this->ConectarBanco();
-            $sql = "SELECT id,id_usuario,id_titulo_fluxo,titulo,provisao, descricao,data, status FROM tb_workflow_processo WHERE status = '1' ";
-            $sql .= ($id != null) ? " AND id = " . $id : "";
+            $sql = "SELECT p.id, p.id_usuario, p.id_titulo_fluxo, p.titulo, p.provisao, p.descricao, p.data, p.status, tf.titulo AS titulo_fluxo ";
+            $sql .= " FROM tb_workflow_processo p INNER JOIN tb_workflow_titulo_fluxo tf ON (tf.id = p.id_titulo_fluxo) ";
+            $sql .= "WHERE p.status = '1' ";
+            $sql .= ($id != null) ? " AND p.id = " . $id : "";
             $query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
             while ($objetoProcesso = mysqli_fetch_object($query)) {
                 $processo = new Processo();
@@ -93,12 +95,7 @@ class DaoProcesso extends DaoBase {
                 
                 $fluxo = new Fluxo();
                 $fluxo->setId($objetoProcesso->id_titulo_fluxo);
-				
-                    $controladorFluxo = new ControladorFluxo();
-                    $listFluxo = $controladorFluxo->buscarFluxo($objetoProcesso->id_titulo_fluxo);
-                    if($listFluxo != null){
-                            $fluxo->setTitulo($listFluxo[0]->getTitulo());
-                    }
+                $fluxo->setTitulo($objetoProcesso->titulo_fluxo);
                 $processo->setFluxo($fluxo);
 
                 $usuario = new Usuario();

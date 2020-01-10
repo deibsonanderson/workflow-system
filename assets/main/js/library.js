@@ -201,19 +201,20 @@
      * a ação caso nao apenas fecha a div
      */
     function fncDeleteId(element){
-    	id = $(element).attr('idObjeto');
-        controlador = $(element).attr('controlador');
-        funcao = $(element).attr('funcao');
-        retorno = $(element).attr('retorno');
-        mensagem = $(element).attr('mensagem');
-        processoFluxoId = $(element).attr('processoFluxoId');
-        	
+    	var id = $(element).attr('idObjeto');
+    	var controlador = $(element).attr('controlador');
+    	var funcao = $(element).attr('funcao');
+    	var retorno = $(element).attr('retorno');
+    	var mensagem = $(element).attr('mensagem');
+    	var processoFluxoId = $(element).attr('processoFluxoId');
+    	var id_processo = $(element).attr('id_processo');
+        
         $('#' + retorno).css('display', '');
 
         $.ajax({
             url: 'controlador.php',
             type: 'POST',
-            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id + '&processoFluxoId='+processoFluxoId,
+            data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id + '&processoFluxoId='+processoFluxoId + '&id_processo='+id_processo,
             success: function(result) {
                 $('#' + retorno).html(result);
             },
@@ -467,41 +468,12 @@
                 width: '275px'
             }
         });
-        var id = $(element).attr('id');
-        var id_processo = $(element).attr('id_processo');
-        controlador = $(element).attr('controlador');
-        funcao = $(element).attr('funcao');
-        retorno = $(element).attr('retorno');
-        mensagem = $(element).attr('mensagem');
-        
-
-        $('#sim').click(function() {
-            $('#' + retorno).css('display', '');
-            $.ajax({
-                url: 'controlador.php',
-                type: 'POST',
-                data: 'retorno=' + retorno + '&controlador=' + controlador + '&funcao=' + funcao + '&id=' + id+'&id_processo='+ id_processo,
-                success: function(result) {
-                    $('#' + retorno).html(result);
-                },
-                beforeSend: function() {
-                	showLoading();
-                },
-                complete: function() {
-                	hideLoading();
-                    $('#div_a').remove();
-                    $('#' + retorno).css('display', '');
-                    if (mensagem) {
-                        msgSlide(mensagem);
-                    }
-                }
-            });
-        });
-
-        $('#nao').click(function() {
-            $.unblockUI();
-            return false;
-        });
+        $('#question-confirm').attr('idObjeto',$(element).attr('id'));
+        $('#question-confirm').attr('controlador',$(element).attr('controlador'));
+        $('#question-confirm').attr('funcao',$(element).attr('funcao'));
+        $('#question-confirm').attr('retorno',$(element).attr('retorno'));
+        $('#question-confirm').attr('mensagem',$(element).attr('mensagem'));
+        $('#question-confirm').attr('id_processo',$(element).attr('id_processo'));
     }
 
 

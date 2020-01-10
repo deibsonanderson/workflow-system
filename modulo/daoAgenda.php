@@ -26,41 +26,32 @@ class DaoAgenda extends DaoBase {
 
     public function incluirAgenda($agenda) {
         try {
-            $conexao = $this->ConectarBanco();
-
-            $sql_ordem = "SELECT MAX(ordem) AS ordem FROM `tb_workflow_agenda` WHERE data = '" . $agenda->getData() . "'";
-            $query_ordem = mysqli_query($conexao, $sql_ordem) or die('Erro na execução  do cad!');
-
-            while ($objetoModulo = mysqli_fetch_assoc($query_ordem)) {
-                if ($objetoModulo["ordem"] > 0) {
-                    $max_ordem = $objetoModulo["ordem"];
-                    ++$max_ordem;
-                } else {
-                    $max_ordem = "1";
-                }
-            }
-            $sql = "INSERT INTO tb_workflow_agenda(data,descricao,arquivo,ordem,id_usuario,ativo,link, status) VALUES ('" . $agenda->getData() . "','" . $agenda->getDescricao() . "','" . $agenda->getArquivo() . "','" . $max_ordem . "','" . $_SESSION["login"]->getId() . "','1','" . $agenda->getLink() . "','" . $agenda->getStatus() . "')";
-            $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do insert!');
-
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	return $this->executar("INSERT INTO tb_workflow_agenda(data,descricao,arquivo,ordem,id_usuario,ativo,link, status) VALUES ('" . $agenda->getData() . "','" . $agenda->getDescricao() . "','" . $agenda->getArquivo() . "','" . $this->recuperarMaiorOrder($agenda) . "','" . $_SESSION["login"]->getId() . "','1','" . $agenda->getLink() . "','" . $agenda->getStatus() . "')");
         } catch (Exception $e) {
             return $e;
         }
     }
+    
+    private function recuperarMaiorOrder($agenda){
+    	$query_ordem = $this->executar("SELECT MAX(ordem) AS ordem FROM `tb_workflow_agenda` WHERE data = '" . $agenda->getData() . "'");
+    	$max_ordem = "1";
+    	while ($objetoModulo = mysqli_fetch_assoc($query_ordem)) {
+    		if ($objetoModulo["ordem"] > 0) {
+    			$max_ordem = $objetoModulo["ordem"];
+    			++$max_ordem;
+    		} 
+    	}
+    	return $max_ordem;
+    }
 
     public function ordernarAgenda($agenda,$updateRecordsArray) {
         try {
-            $conexao = $this->ConectarBanco();
-            $listingCounter = 1;
-            $sql = "";
-            foreach ($updateRecordsArray as $recordIDValue) {
-                $sql = " UPDATE tb_workflow_agenda SET ordem = '" . $listingCounter . "' WHERE id = " . $recordIDValue . " AND data = '" . $agenda->getData() . "'";
-                $retorno = mysqli_query($conexao,$sql) or die('Erro na execução  do update tb_workflow_agenda!'.$sql);
-                $listingCounter = $listingCounter + 1;
-            }
-            $this->FecharBanco($conexao);
-            return $retorno;
+        	$listingCounter = 1;
+        	foreach ($updateRecordsArray as $recordIDValue) {
+        		$this->executar(" UPDATE tb_workflow_agenda SET ordem = '" . $listingCounter . "' WHERE id = " . $recordIDValue . " AND data = '" . $agenda->getData() . "'");
+        		$listingCounter+= 1;
+        	}
+        	return $this->executar($sql);
         } catch (Exception $e) {
             return $e;
         }
