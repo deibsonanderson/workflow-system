@@ -177,12 +177,12 @@ class ControladorAtividade {
             $viewAtividade = new ViewAtividade();
             $processoFluxo = new FluxoProcesso();
             $processoFluxo->setId($post["id_processo_fluxo"]);        
-            $processoFluxo->setAtivo($post["ativo"]);
-            $processoFluxo->setAtuante($post["atuante"]);
-            $processoFluxo->setTitulo($post["titulo_processo_fluxo"]);
-            $processoFluxo->setVencimento($post["vencimento_processo_fluxo"]);
-            $processoFluxo->setDescricao($post["descricao_processo_fluxo"]);
-            $processoFluxo->setValor($post["valor_processo_fluxo"]);
+//             $processoFluxo->setAtivo($post["ativo"]);
+//             $processoFluxo->setAtuante($post["atuante"]);
+//             $processoFluxo->setTitulo($post["titulo_processo_fluxo"]);
+//             $processoFluxo->setVencimento($post["vencimento_processo_fluxo"]);
+//             $processoFluxo->setDescricao($post["descricao_processo_fluxo"]);
+//             $processoFluxo->setValor($post["valor_processo_fluxo"]);
             
             $processo = new Processo();
             $processo->setId($post["id_processo"]);
@@ -216,6 +216,7 @@ class ControladorAtividade {
             }
             $retorno = $viewAtividade->telaComentariosAtividadeProcesso($processoFluxoId, $isDelete);
             $viewAtividade->__destruct();
+            
             return $retorno;
         } catch (Exception $e) {
             return $e;

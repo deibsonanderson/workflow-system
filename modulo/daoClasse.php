@@ -12,8 +12,9 @@ class DaoClasse extends DaoBase{
 		try {
 			$query = $this->executar("SELECT c.id,c.nome,c.id_perfil,c.controlador,c.funcao,c.status,
 					       c.id_modulo, m.nome as nome_modulo, m.status as status_modulo
-					FROM tb_workflow_classe c INNER JOIN tb_workflow_modulo m ON (c.id_modulo = m.id)
-					WHERE c.status = '1'".$this->montarId($id));
+					FROM ".DaoBase::TABLE_CLASSE." c 
+                    INNER JOIN ".DaoBase::TABLE_MODULO." m ON (c.id_modulo = m.id)
+					WHERE c.status = '1'".$this->montarId($id,'c'));
 			while($objetoClasse =  mysqli_fetch_object($query)){
 				$classe = $this->modelMapper($objetoClasse, new Classe());
 				$classe->setPerfil($objetoClasse->id_perfil);

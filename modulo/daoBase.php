@@ -26,7 +26,7 @@ abstract class DaoBase {
  	private $usuario = 'root';
  	private $senha = '';
  	private $banco = 'workflow';
-	
+	 
 	protected function __construct() {
 	}
 	
@@ -67,7 +67,7 @@ abstract class DaoBase {
 	/**
 	 * Operação responsavel por execução da query
 	 * @param String $sql
-	 * @return object
+	 * @return $query
 	 */
 	protected function executar($sql) {
 		try {
@@ -83,7 +83,7 @@ abstract class DaoBase {
 	/**
 	 * Operação responsavel por execução da query
 	 * @param String $sql
-	 * @return object
+	 * @return array
 	 */
 	protected function executarQuery($sql, $classe) {
 		try {
@@ -165,7 +165,7 @@ abstract class DaoBase {
 	 * Operação responsavel por converter um objeto simples em uma classe simples.
 	 * @param strClass $origem
 	 * @param Class $destino
-	 * @return unknown
+	 * @return $destino
 	 */
 	protected function modelMapper($origem, $destino){
 		foreach($origem as $chave => $valor) {
@@ -215,6 +215,14 @@ abstract class DaoBase {
 		return $sql .= ' WHERE id = '.$objeto->getId();
 	}
 	
+	/**
+	 * Operação responsável por gerar sql de atualização costumizada com base nos campos pegando direto no objeto
+	 * @param String $tabela
+	 * @param Object $objeto
+	 * @param array $valores
+	 * @throws Exception
+	 * @return string|Exception
+	 */
 	protected function sqlAtualizarCustom($tabela, $objeto, $campos){
 		$sql = "UPDATE $tabela SET ";
 		foreach($campos as $campo) {
@@ -223,6 +231,32 @@ abstract class DaoBase {
 		}
 		$sql = substr($sql, 0, -1);
 		return $sql .= ' WHERE id = '.$objeto->getId();
+	}
+	
+	/**
+	 * Operação responsável por gerar sql de atualização costumizada usando campos e valores 
+	 * @param String $tabela
+	 * @param integer $id
+	 * @param array $campos
+	 * @param array $valores
+	 * @throws Exception
+	 * @return string|Exception
+	 */
+	protected function sqlAtualizarMultiCustom($tabela, $id, $campos, $valores){
+		try {
+			if(count($campos) > 0 && count($valores) > 0){
+				$sql = "UPDATE $tabela SET ";
+				for($i=0; $i < count($campos); $i++) {
+					$sql .= " ".strtolower($campos[$i])." = '".$valores[$i]."',";
+				}
+				$sql = substr($sql, 0, -1).' WHERE id = '.$id;
+			}else{
+				throw new Exception('valores ou campos inválidos','500');
+			}
+			return $sql;
+		} catch (Exception $e) {
+			return $e;
+		}
 	}
 	
 	/**

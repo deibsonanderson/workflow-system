@@ -52,7 +52,7 @@ class DaoComentarioFluxoProcesso extends DaoBase {
     
     public function checarComentarioExistent($id = null) {
     	try {
-    		$query = $this->executar("SELECT id_processo_fluxo, SUM(anexo) as anexo, SUM(comentario) as comentario FROM ( SELECT id_processo_fluxo, (CASE WHEN LENGTH(arquivo) <= 0 THEN 1 ELSE 0 END) anexo, (CASE WHEN LENGTH(arquivo) > 0 THEN 1 ELSE 0 END) comentario FROM tb_workflow_comentario WHERE status = '1' AND id_processo_fluxo = " . $id. " ) AS X GROUP BY id_processo_fluxo");
+    		$query = $this->executar("SELECT id_processo_fluxo, SUM(anexo) as anexo, SUM(comentario) as comentario FROM ( SELECT id_processo_fluxo, (CASE WHEN LENGTH(arquivo) <= 0 THEN 1 ELSE 0 END) anexo, (CASE WHEN LENGTH(arquivo) > 0 THEN 1 ELSE 0 END) comentario FROM ".DaoBase::TABLE_COMENTARIO." WHERE status = '1' AND id_processo_fluxo = " . $id. " ) AS X GROUP BY id_processo_fluxo");
     		while ($objetoComentarioFluxoProcesso = mysqli_fetch_object($query)) {
     			$objeto = new stdClass();
     			
@@ -85,12 +85,12 @@ class DaoComentarioFluxoProcesso extends DaoBase {
 						   wf.id_titulo_fluxo,
 						   wtf.titulo as titulo_fluxo,
 						   wa.titulo as titulo_atividade
-                 FROM tb_workflow_comentario wc
-                 LEFT JOIN tb_workflow_processo_fluxo wpf ON (wpf.id = wc.id_processo_fluxo)
-				 LEFT JOIN tb_workflow_fluxo wf ON ( wf.id = wpf.id_fluxo )
-                 LEFT JOIN tb_workflow_titulo_fluxo wtf ON ( wf.id_titulo_fluxo = wtf.id )
-                 LEFT JOIN tb_workflow_processo wp ON (wp.id = wpf.id_processo)
-                 LEFT JOIN tb_workflow_atividade wa ON (wa.id = wf.id_atividade)
+                 FROM ".DaoBase::TABLE_COMENTARIO." wc
+                 LEFT JOIN ".DaoBase::TABLE_PROCESSO_FLUXO." wpf ON (wpf.id = wc.id_processo_fluxo)
+				 LEFT JOIN ".DaoBase::TABLE_FLUXO." wf ON ( wf.id = wpf.id_fluxo )
+                 LEFT JOIN ".DaoBase::TABLE_TITULO_FLUXO." wtf ON ( wf.id_titulo_fluxo = wtf.id )
+                 LEFT JOIN ".DaoBase::TABLE_PROCESSO." wp ON (wp.id = wpf.id_processo)
+                 LEFT JOIN ".DaoBase::TABLE_ATIVIDADE." wa ON (wa.id = wf.id_atividade)
                  WHERE wc.status = '1' ".$filter;
     }
     
@@ -135,7 +135,7 @@ class DaoComentarioFluxoProcesso extends DaoBase {
 
     public function incluirComentarioFluxoProcesso($comentarioFluxoProcesso) {
         try {
-            return $this->executar("INSERT INTO tb_workflow_comentario(descricao,arquivo,categoria,id_processo_fluxo,data,status) VALUES ('" . $comentarioFluxoProcesso->getDescricao() . "','" . $comentarioFluxoProcesso->getArquivo() . "','" . $comentarioFluxoProcesso->getCategoria() . "','" . $comentarioFluxoProcesso->getFluxoProcesso()->getId() . "',".$comentarioFluxoProcesso->getData().",'" . $comentarioFluxoProcesso->getStatus() . "')");
+        	return $this->executar("INSERT INTO ".DaoBase::TABLE_COMENTARIO." (descricao,arquivo,categoria,id_processo_fluxo,data,status) VALUES ('" . $comentarioFluxoProcesso->getDescricao() . "','" . $comentarioFluxoProcesso->getArquivo() . "','" . $comentarioFluxoProcesso->getCategoria() . "','" . $comentarioFluxoProcesso->getFluxoProcesso()->getId() . "',".$comentarioFluxoProcesso->getData().",'" . $comentarioFluxoProcesso->getStatus() . "')");
         } catch (Exception $e) {
             return $e;
         }
@@ -153,6 +153,7 @@ class DaoComentarioFluxoProcesso extends DaoBase {
     	try {
     		$retorno = $this->montarListarComentarioFluxoProcesso($this->executar(
     				$this->montarSQlListarComentarioFluxoProcesso($this->montarId($id))));    		
+    		
     		return (count($retorno) > 0 )?$retorno[0]:null;
     	} catch (Exception $e) {
     		return $e;

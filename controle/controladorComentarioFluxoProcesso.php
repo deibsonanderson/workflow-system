@@ -113,32 +113,49 @@ class ControladorComentarioFluxoProcesso {
     
     public function excluirComentarioAtividadeFluxoProcesso($post) {
     	try {
-    		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
-    		
-    		$comentario = $daoComentarioFluxoProcesso->buscarComentario($post["id"]);
-    		if($comentario != null){
-    		
-        		if($comentario->getArquivo() !== null && $comentario->getArquivo() !== ''){
-        		     
-        			$pastaArquivo = getcwd()."/arquivos/atividade";
-        			$arquivoExclusao = $comentario->getArquivo();
-        			if (!empty($arquivoExclusao)) {
-        				if (file_exists($pastaArquivo . "/" . $arquivoExclusao)) {
-        					unlink($pastaArquivo . "/" . $arquivoExclusao);
-        				}
-        				if (file_exists($pastaArquivo . "/thumbnail" . $arquivoExclusao)) {
-        					unlink($pastaArquivo . "/thumbnail" . $arquivoExclusao);
-        				}
-        			}
-    	   		}
-
-    	   		$daoComentarioFluxoProcesso->excluirComentario($comentario->getId());
-    	   		$daoComentarioFluxoProcesso->__destruct();
-    	   		
-    		}
-    		
+    		$this->excluirComentario($post["id"]);
     		$controladorAtividade = new ControladorAtividade();
     		return $controladorAtividade->comentariosAtividadeProcesso($post["processoFluxoId"],true);
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    public function excluirComentarioFluxoProcesso($post) {
+    	try {
+    		$this->excluirComentario($post["id"]);
+    		$controladorAtividade = new ControladorAtividade();
+    		return $controladorAtividade->telaListarComentariosAtividadeProcesso(null);
+    	} catch (Exception $e) {
+    		return $e;
+    	}
+    }
+    
+    private function excluirComentario($id){
+    	try {
+    		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
+    		
+    		$comentario = $daoComentarioFluxoProcesso->buscarComentario($id);
+    		
+    		if($comentario != null){
+    			
+    			if($comentario->getArquivo() !== null && $comentario->getArquivo() !== ''){
+    				
+    				$pastaArquivo = getcwd()."/arquivos/atividade";
+    				$arquivoExclusao = $comentario->getArquivo();
+    				if (!empty($arquivoExclusao)) {
+    					if (file_exists($pastaArquivo . "/" . $arquivoExclusao)) {
+    						unlink($pastaArquivo . "/" . $arquivoExclusao);
+    					}
+    					if (file_exists($pastaArquivo . "/thumbnail" . $arquivoExclusao)) {
+    						unlink($pastaArquivo . "/thumbnail" . $arquivoExclusao);
+    					}
+    				}
+    			}
+    			$daoComentarioFluxoProcesso->excluirComentario($comentario->getId());
+    			$daoComentarioFluxoProcesso->__destruct();
+    			
+    		}
     	} catch (Exception $e) {
     		return $e;
     	}

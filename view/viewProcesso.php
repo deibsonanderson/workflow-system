@@ -978,7 +978,7 @@ class ViewProcesso {
 						</div>
 						<div class="form-group">
 							<label for="descricao">Descrição</label>
-							<textarea class="form-control" id="descricao" rows="3"><?php echo $objProcesso[0]->getDescricao(); ?></textarea>
+							<textarea class="form-control" name="descricao" id="descricao" rows="3"><?php echo $objProcesso[0]->getDescricao(); ?></textarea>
 						</div>				
 						<div class="form-group">
 							<label for="titulo" class="col-form-label">Fluxo *</label>

@@ -36,7 +36,7 @@ class DaoModulo extends DaoBase{
 	public function excluirModulo($id){
 		try {
 			return $this->executarMulti(
-					array("UPDATE ".DaoBase::TABLE_ACAO_USUARIO." SET status = '0' WHERE id_classe IN (SELECT id FROM tb_workflow_classe WHERE id_modulo = $id)", 
+					array("UPDATE ".DaoBase::TABLE_ACAO_USUARIO." SET status = '0' WHERE id_classe IN (SELECT id FROM ".DaoBase::TABLE_CLASSE." WHERE id_modulo = $id)", 
 							"UPDATE ".DaoBase::TABLE_CLASSE." SET status = '0' WHERE id_modulo = $id", 
 						  $this->sqlExcluir(DaoBase::TABLE_MODULO, $id))
 					);

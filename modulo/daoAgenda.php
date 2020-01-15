@@ -26,14 +26,14 @@ class DaoAgenda extends DaoBase {
 
     public function incluirAgenda($agenda) {
         try {
-        	return $this->executar("INSERT INTO tb_workflow_agenda(data,descricao,arquivo,ordem,id_usuario,ativo,link, status) VALUES ('" . $agenda->getData() . "','" . $agenda->getDescricao() . "','" . $agenda->getArquivo() . "','" . $this->recuperarMaiorOrder($agenda) . "','" . $_SESSION["login"]->getId() . "','1','" . $agenda->getLink() . "','" . $agenda->getStatus() . "')");
+        	return $this->executar("INSERT INTO ".DaoBase::TABLE_AGENDA." (data,descricao,arquivo,ordem,id_usuario,ativo,link, status) VALUES ('" . $agenda->getData() . "','" . $agenda->getDescricao() . "','" . $agenda->getArquivo() . "','" . $this->recuperarMaiorOrder($agenda) . "','" . $_SESSION["login"]->getId() . "','1','" . $agenda->getLink() . "','" . $agenda->getStatus() . "')");
         } catch (Exception $e) {
             return $e;
         }
     }
     
     private function recuperarMaiorOrder($agenda){
-    	$query_ordem = $this->executar("SELECT MAX(ordem) AS ordem FROM `tb_workflow_agenda` WHERE data = '" . $agenda->getData() . "'");
+    	$query_ordem = $this->executar("SELECT MAX(ordem) AS ordem FROM `".DaoBase::TABLE_AGENDA."` WHERE data = '" . $agenda->getData() . "'");
     	$max_ordem = "1";
     	while ($objetoModulo = mysqli_fetch_assoc($query_ordem)) {
     		if ($objetoModulo["ordem"] > 0) {
@@ -48,7 +48,7 @@ class DaoAgenda extends DaoBase {
         try {
         	$listingCounter = 1;
         	foreach ($updateRecordsArray as $recordIDValue) {
-        		$this->executar(" UPDATE tb_workflow_agenda SET ordem = '" . $listingCounter . "' WHERE id = " . $recordIDValue . " AND data = '" . $agenda->getData() . "'");
+        		$this->executar(" UPDATE ".DaoBase::TABLE_AGENDA." SET ordem = '" . $listingCounter . "' WHERE id = " . $recordIDValue . " AND data = '" . $agenda->getData() . "'");
         		$listingCounter+= 1;
         	}
         	return $this->executar($sql);

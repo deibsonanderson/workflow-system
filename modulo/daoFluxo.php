@@ -27,8 +27,8 @@ class DaoFluxo extends DaoBase {
         	$sql = ($id_titulo_fluxo != null) ? " AND id_titulo_fluxo = " . $id_titulo_fluxo : "";
         	$sql .= ' ORDER BY wf.ordenacao ASC ';
         	$query = $this->executar("SELECT wf.id AS id_fluxo, wf.id_atividade, wa.fixa, wa.titulo, wf.status, wa.valor, wa.propriedade, wa.descricao AS atividade_descricao, wa.imagem
-                    FROM tb_workflow_fluxo wf
-                    INNER JOIN tb_workflow_atividade wa ON (wf.id_atividade = wa.id )
+                    FROM ".DaoBase::TABLE_FLUXO." wf
+                    INNER JOIN ".DaoBase::TABLE_ATIVIDADE." wa ON (wf.id_atividade = wa.id )
                     WHERE wf.status = '1' ".$this->montarIdUsuario($id_usuario,'wf').$sql);
             while ($objetoFluxoAtividade = mysqli_fetch_object($query)) {
           		$atividade = $this->modelMapper($objetoFluxoAtividade, new Atividade());
@@ -50,11 +50,11 @@ class DaoFluxo extends DaoBase {
             $conexao = $this->ConectarBanco();
             
             if($fluxo->getAtividades()){
-            	$sql = "INSERT INTO tb_workflow_titulo_fluxo(titulo,descricao, id_usuario, status) VALUES ('" . $fluxo->getTitulo() . "','" . $fluxo->getDescricao() . "','" . $fluxo->getUsuario()->getId() . "', '" . $fluxo->getStatus() . "')";
+            	$sql = "INSERT INTO ".DaoBase::TABLE_TITULO_FLUXO." (titulo,descricao, id_usuario, status) VALUES ('" . $fluxo->getTitulo() . "','" . $fluxo->getDescricao() . "','" . $fluxo->getUsuario()->getId() . "', '" . $fluxo->getStatus() . "')";
                 mysqli_query($conexao,$sql) or die('Erro na execução  do insert tb_workflow_titulo_fluxo!');
                 sleep(1);
                 $id_titulo_fluxo = mysqli_insert_id($conexao);
-                $sql = "INSERT INTO `tb_workflow_fluxo` (
+                $sql = "INSERT INTO `".DaoBase::TABLE_FLUXO."` (
                                                                 `id_atividade` ,
                                                                 `id_titulo_fluxo` ,
                                                                 `ordenacao` ,

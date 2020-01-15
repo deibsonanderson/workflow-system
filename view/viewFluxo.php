@@ -72,7 +72,7 @@ class ViewFluxo {
 						</div>
 						<div class="form-group">
 							<label for="descricao">Descrição</label>
-							<textarea class="form-control" id="descricao" rows="3"></textarea>
+							<textarea class="form-control" name="descricao" id="descricao" rows="3"></textarea>
 						</div>
 						<div class="form-group">
 							<label for="pais">Fluxos</label>
@@ -234,7 +234,7 @@ class ViewFluxo {
 						</div>
 						<div class="form-group">
 							<label for="descricao">Descrição</label>
-							<textarea class="form-control" id="descricao" rows="3"><?php echo $objFluxo[0]->getDescricao(); ?></textarea>
+							<textarea class="form-control" name="descricao" id="descricao" rows="3"><?php echo $objFluxo[0]->getDescricao(); ?></textarea>
 						</div>
 						<div class="form-group">
 	                        <label class="col-form-label text-sm-right">Filtrar por selecionados</label>

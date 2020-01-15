@@ -600,6 +600,7 @@ class ViewAtividade {
     				foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
     					if($fluxoProcesso->getId() == $processoFluxo->getId()){
     						$objProcessoFluxo = $fluxoProcesso;
+    						$objProcessoFluxo->setProcesso($processo);
     						break;
     					}
     				}
@@ -660,7 +661,7 @@ class ViewAtividade {
 			        <div class="card-header d-flex">
 			            <h4 class="card-header-title"><img class="" style="width: 32px; height: 33px; <?php echo $estilo; ?>" src="<?php echo $imagem; ?>" /></h4>
 			            <div class="toolbar ml-auto">
-			            	<a href="#" onclick="getId(this)" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" id="<?php echo $processoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+			            	<a href="#" onclick="getId(this)" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" id="<?php echo $objProcessoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
 			                <?php
 			                if ($objProcessoFluxo->getAtuante() == 1) {
 			                ?>
@@ -861,7 +862,7 @@ class ViewAtividade {
 			                <input type="hidden" name="funcao" id="funcao" value="incluirComentarioFluxoProcesso"/>
 			                <input type="hidden" name="mensagem" id="mensagem" value="1"/>
 			                <input type="hidden" name="id_processo_fluxo" id="id_fluxo_processo" value="<?php echo $objProcessoFluxo->getId(); ?>" />
-			                <input type="hidden" name="id_processo" id="id_processo" value="<?php echo $processoFluxo->getProcesso()->getId(); ?>" />				
+			                <input type="hidden" name="id_processo" id="id_processo" value="<?php echo $objProcessoFluxo->getProcesso()->getId(); ?>" />				
 			                <input type="hidden" name="id" id="id_atividade" value="<?php echo ($objAtividade != null) ? $objAtividade[0]->getId() : ''; ?>" />  
 			                <input type="hidden" name="ativo" id="ativo" value="<?php echo $objProcessoFluxo->getAtivo(); ?>" />
 			                <input type="hidden" name="arquivo" id="arquivo" value="" />						
@@ -1205,7 +1206,7 @@ class ViewAtividade {
 					                        ?>
 					                        </td>
 					                        <td style="text-align: center;">
-					                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fcnModalDeleteId(this)" modal="question" funcao="excluirComentarioAtividadeFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_comentarios" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
+					                           <?php echo ($comentario->getDescricao() != '') ? '<img onclick="fcnModalDeleteId(this)" modal="question" funcao="excluirComentarioFluxoProcesso" controlador="ControladorComentarioFluxoProcesso" id="'.$comentario->getId().'" processoFluxoId="'.$processoFluxoId.'" retorno="div_central" src="./assets/images/remove.png" style="cursor: pointer;width: 29px;" title="Remover arquivo: ' . $comentario->getArquivo() . '">' : ''; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
 					                        </td>
 					                    </tr>

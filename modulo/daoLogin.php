@@ -10,7 +10,7 @@ class DaoLogin extends DaoBase{
 
 	public function validarLogin($post){
 		try {	
-			$query = $this->executar("SELECT id,login,senha FROM tb_workflow_usuario WHERE login = '".$post["login"]."' AND senha = '".$post["senha"]."' AND status = '1'");
+			$query = $this->executar("SELECT id,login,senha FROM ".DaoBase::TABLE_USUARIO." WHERE login = '".$post["login"]."' AND senha = '".$post["senha"]."' AND status = '1'");
 			if(mysqli_num_rows($query) == 1){
 				$obj =  mysqli_fetch_object($query);
 				
@@ -32,7 +32,7 @@ class DaoLogin extends DaoBase{
 
 	public function incluirLogin($login){
 		try {	
-			return $this->executar("INSERT INTO tb_workflow_login (id_usuario,data,status) VALUES ('".$login->getUsuario()."',NOW(),'".$login->getStatus()."')");
+			return $this->executar("INSERT INTO ".DaoBase::TABLE_LOGIN." (id_usuario,data,status) VALUES ('".$login->getUsuario()."',NOW(),'".$login->getStatus()."')");
 		} catch (Exception $e) {
 			return $e;
 		}

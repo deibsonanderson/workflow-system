@@ -48,14 +48,14 @@ class ViewMain{
 										foreach($processo->getFluxoProcesso() as $fluxoProcesso){
 											?>    
 												<tr>
-													<td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;"><?php echo $fluxoProcesso->getAtividade()->getVencimento(); ?></td> 
+													<td style="<?php echo $this->checkStyleVencido($fluxoProcesso->getVencimento()); ?>text-align:center;"><?php echo $fluxoProcesso->getVencimento(); ?></td> 
 						                            
 						                            <td onclick="getId(this); $.unblockUI();" 
 						                                funcao="telaTimeLineProcesso" 
 						                                controlador="ControladorProcesso" 
 						                                id="<?php echo $processo->getId(); ?>" 
 						                                retorno="div_central"                 
-						                            	style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;cursor: pointer;"><?php echo $processo->getTitulo(); ?></td> 
+						                            	style="<?php echo $this->checkStyleVencido($fluxoProcesso->getVencimento()); ?>text-align:center;cursor: pointer;"><?php echo $processo->getTitulo(); ?></td> 
 						                            
 						                            <td id_processo_fluxo="<?php echo $fluxoProcesso->getId(); ?>"
 														id_processo="<?php echo $processo->getId(); ?>"
@@ -70,7 +70,7 @@ class ViewMain{
 														funcao="telaVisualizarAtividadeProcesso"
 														controlador="controladorAtividade"
 														retorno="div_central"
-						                            	style="<?php echo $this->checkStyleVencido($fluxoProcesso->getAtividade()->getVencimento()); ?>text-align:center;cursor: pointer;"><?php echo $fluxoProcesso->getAtividade()->getTitulo(); ?></td>								
+						                            	style="<?php echo $this->checkStyleVencido($fluxoProcesso->getVencimento()); ?>text-align:center;cursor: pointer;"><?php echo $fluxoProcesso->getTitulo(); ?></td>								
 												</tr>	
 											<?php
 										}

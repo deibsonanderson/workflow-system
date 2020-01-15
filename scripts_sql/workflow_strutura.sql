@@ -1,17 +1,23 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.2
--- http://www.phpmyadmin.net
+-- version 4.6.4
+-- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: 07-Maio-2019 às 18:33
--- Versão do servidor: 10.1.13-MariaDB
--- PHP Version: 5.6.21
+-- Host: fdb12.eohost.com
+-- Generation Time: 15-Jan-2020 às 16:18
+-- Versão do servidor: 5.7.20-log
+-- PHP Version: 5.5.38
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
--- Database: `workflow`
+-- Database: `2181795_bd`
 --
 
 -- --------------------------------------------------------
@@ -26,7 +32,7 @@ CREATE TABLE `tb_workflow_acao_usuario` (
   `id_usuario` int(11) NOT NULL,
   `perfil` varchar(1) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,7 +50,7 @@ CREATE TABLE `tb_workflow_agenda` (
   `id_usuario` int(11) DEFAULT NULL,
   `ativo` int(11) DEFAULT NULL,
   `status` varchar(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -63,8 +69,10 @@ CREATE TABLE `tb_workflow_atividade` (
   `propriedade` int(11) DEFAULT '1',
   `id_categoria` int(11) DEFAULT NULL,
   `status` int(11) NOT NULL,
+  `vencimento` int(11) DEFAULT NULL,
+  `fixa` int(11) DEFAULT NULL,
   `id_usuario` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -94,7 +102,7 @@ CREATE TABLE `tb_workflow_classe` (
   `secao` varchar(20) DEFAULT NULL,
   `id_modulo` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -107,9 +115,10 @@ CREATE TABLE `tb_workflow_comentario` (
   `id_processo_fluxo` int(11) NOT NULL,
   `descricao` text,
   `arquivo` varchar(100) DEFAULT NULL,
+  `categoria` varchar(10) DEFAULT NULL,
   `data` datetime DEFAULT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -124,7 +133,7 @@ CREATE TABLE `tb_workflow_fluxo` (
   `ordenacao` int(11) DEFAULT NULL,
   `status` int(11) NOT NULL,
   `id_usuario` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -137,7 +146,7 @@ CREATE TABLE `tb_workflow_login` (
   `id_usuario` int(11) NOT NULL,
   `data` datetime NOT NULL,
   `status` int(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -149,18 +158,7 @@ CREATE TABLE `tb_workflow_modulo` (
   `id` int(11) NOT NULL,
   `nome` varchar(20) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `tb_workflow_pais`
---
-
-CREATE TABLE `tb_workflow_pais` (
-  `id` int(11) NOT NULL,
-  `nome` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -177,7 +175,7 @@ CREATE TABLE `tb_workflow_processo` (
   `data` datetime DEFAULT NULL,
   `provisao` double(9,2) DEFAULT '0.00',
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -190,48 +188,16 @@ CREATE TABLE `tb_workflow_processo_fluxo` (
   `id_processo` int(11) NOT NULL,
   `id_fluxo` int(11) NOT NULL,
   `ativo` int(11) DEFAULT NULL,
+  `fixa_atividade` int(11) DEFAULT NULL,
   `atuante` int(11) DEFAULT '0',
   `propriedade_atividade` int(11) NOT NULL DEFAULT '1',
   `titulo_atividade` varchar(50) DEFAULT NULL,
   `valor_atividade` double(9,2) DEFAULT '0.00',
+  `vencimento_atividade` int(11) DEFAULT NULL,
+  `descricao_atividade` text,
+  `out_flow` int(11) NOT NULL DEFAULT '0',
   `status` varchar(2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `tb_workflow_template`
---
-
-CREATE TABLE `tb_workflow_template` (
-  `id` int(11) NOT NULL,
-  `nome` varchar(60) NOT NULL,
-  `sexo` char(1) NOT NULL,
-  `estado_civil` char(1) DEFAULT NULL,
-  `profissao` varchar(30) DEFAULT NULL,
-  `faixa_salarial` double DEFAULT NULL,
-  `data_nascimento` datetime DEFAULT NULL,
-  `cpf` varchar(14) DEFAULT NULL,
-  `identidade` varchar(15) DEFAULT NULL,
-  `imagem` varchar(255) DEFAULT NULL,
-  `arquivo` varchar(255) DEFAULT NULL,
-  `logradouro` varchar(50) DEFAULT NULL,
-  `numero` int(11) DEFAULT NULL,
-  `complemento` varchar(30) DEFAULT NULL,
-  `bairro` varchar(30) DEFAULT NULL,
-  `cidade` varchar(40) DEFAULT NULL,
-  `cep` varchar(9) DEFAULT NULL,
-  `estado` char(2) DEFAULT NULL,
-  `telefone_residencial` varchar(14) DEFAULT NULL,
-  `telefone_celular` varchar(14) DEFAULT NULL,
-  `telefone_comercial` varchar(14) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `data_cadastro` datetime NOT NULL,
-  `data_modificacao` datetime DEFAULT NULL,
-  `id_pais` int(11) NOT NULL,
-  `id_empresa` int(11) NOT NULL,
-  `status` int(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -245,9 +211,7 @@ CREATE TABLE `tb_workflow_titulo_fluxo` (
   `descricao` text,
   `status` int(11) NOT NULL,
   `id_usuario` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Estrutura da tabela `tb_workflow_usuario`
@@ -333,12 +297,6 @@ ALTER TABLE `tb_workflow_modulo`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tb_workflow_pais`
---
-ALTER TABLE `tb_workflow_pais`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `tb_workflow_processo`
 --
 ALTER TABLE `tb_workflow_processo`
@@ -353,14 +311,6 @@ ALTER TABLE `tb_workflow_processo_fluxo`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_processo` (`id_processo`,`id_fluxo`,`status`),
   ADD KEY `id_fluxo` (`id_fluxo`);
-
---
--- Indexes for table `tb_workflow_template`
---
-ALTER TABLE `tb_workflow_template`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_pais` (`id_pais`),
-  ADD KEY `id_empresa` (`id_empresa`);
 
 --
 -- Indexes for table `tb_workflow_titulo_fluxo`
@@ -380,10 +330,15 @@ ALTER TABLE `tb_workflow_usuario`
 --
 
 --
+-- AUTO_INCREMENT for table `tb_workflow_usuario`
+--
+ALTER TABLE `tb_workflow_usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `tb_workflow_acao_usuario`
 --
 ALTER TABLE `tb_workflow_acao_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=637;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_agenda`
 --
@@ -393,17 +348,17 @@ ALTER TABLE `tb_workflow_agenda`
 -- AUTO_INCREMENT for table `tb_workflow_atividade`
 --
 ALTER TABLE `tb_workflow_atividade`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_categoria_atividade`
 --
 ALTER TABLE `tb_workflow_categoria_atividade`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_classe`
 --
 ALTER TABLE `tb_workflow_classe`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_comentario`
 --
@@ -413,54 +368,30 @@ ALTER TABLE `tb_workflow_comentario`
 -- AUTO_INCREMENT for table `tb_workflow_fluxo`
 --
 ALTER TABLE `tb_workflow_fluxo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_login`
 --
 ALTER TABLE `tb_workflow_login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_modulo`
 --
 ALTER TABLE `tb_workflow_modulo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
---
--- AUTO_INCREMENT for table `tb_workflow_pais`
---
-ALTER TABLE `tb_workflow_pais`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=238;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `tb_workflow_processo`
 --
 ALTER TABLE `tb_workflow_processo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_processo_fluxo`
 --
 ALTER TABLE `tb_workflow_processo_fluxo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `tb_workflow_template`
---
-ALTER TABLE `tb_workflow_template`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tb_workflow_titulo_fluxo`
 --
 ALTER TABLE `tb_workflow_titulo_fluxo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `tb_workflow_usuario`
---
-ALTER TABLE `tb_workflow_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-  
-ALTER TABLE `tb_workflow_atividade` ADD `vencimento` INT NULL DEFAULT NULL AFTER `status`; 
-
-ALTER TABLE `tb_workflow_comentario` ADD `categoria` VARCHAR(10) NULL DEFAULT NULL AFTER `arquivo`; 
-
-ALTER TABLE `tb_workflow_processo_fluxo` ADD `out_flow` INT NOT NULL DEFAULT 0 AFTER `valor_atividade`; 
-
-ALTER TABLE `tb_workflow_processo_fluxo` ADD `vencimento_atividade` INT NULL DEFAULT NULL AFTER `valor_atividade`; 
-
-ALTER TABLE `tb_workflow_processo_fluxo` ADD `descricao_atividade` TEXT NULL DEFAULT NULL AFTER `vencimento_atividade`;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;  

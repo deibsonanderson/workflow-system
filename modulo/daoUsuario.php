@@ -49,7 +49,7 @@ class DaoUsuario extends DaoBase{
         
 	public function alterarUsuario($usuario){
 		try {	
-			$sql = "UPDATE tb_workflow_usuario SET  
+			$sql = "UPDATE ".DaoBase::TABLE_USUARIO." SET  
 					nome = '".$usuario->getNome()."',
 					imagem = '".$usuario->getImagem()."',
 					login = '".$usuario->getLogin()."',

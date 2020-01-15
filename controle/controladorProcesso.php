@@ -115,8 +115,9 @@ class ControladorProcesso {
         try {
             $fluxoProcesso = new FluxoProcesso();
             $fluxoProcesso->setId($post["id"]);
+            $fluxoProcesso->setAtivo('1');
             $daoProcesso = new DaoProcesso();
-            if ($daoProcesso->abrirFluxoProcesso($fluxoProcesso)) {
+            if ($daoProcesso->abrirFecharFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
             	if($post["ordem"] == '2'){
             		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
@@ -134,8 +135,9 @@ class ControladorProcesso {
         try {
             $fluxoProcesso = new FluxoProcesso();
             $fluxoProcesso->setId($post["id"]);
+            $fluxoProcesso->setAtivo('0');
             $daoProcesso = new DaoProcesso();
-            if ($daoProcesso->fecharFluxoProcesso($fluxoProcesso)) {
+            if ($daoProcesso->abrirFecharFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
             	if($post["ordem"] == '2'){
             		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
@@ -276,7 +278,7 @@ class ControladorProcesso {
     		if($post["vigencia"] == null || $post["vigencia"] == '' || !validarDate($post["vigencia"])){
     			$processo->setData("NOW()");
     		}else{
-    			$processo->setData("'".desformataData($post["vigencia"])."'");
+    			$processo->setData(desformataData($post["vigencia"]));
     		}
     		
     		$daoProcesso = new DaoProcesso();
