@@ -471,9 +471,9 @@ class ViewProcesso {
 											if ($processo->getFluxoProcesso() != null) {
 												foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {		
 													if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
-														$total += $fluxoProcesso->getAtividade()->getValor();
+														$total += $fluxoProcesso->getValor();
 													}else{
-														$total -= $fluxoProcesso->getAtividade()->getValor();
+														$total -= $fluxoProcesso->getValor();
 													}
 													
 													if($fluxoProcesso->getAtivo() == '1'){
