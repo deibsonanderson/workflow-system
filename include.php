@@ -4,6 +4,9 @@ date_default_timezone_set('America/Sao_Paulo');
 
 require_once "modulo/daoBase.php";
 require_once "controle/controladorBase.php";
+require_once "view/viewBase.php";
+require_once "classe/Campo.php";
+require_once "classe/Tela.php";
 
 require_once "view/viewAcao.php";
 require_once "modulo/daoAcao.php";

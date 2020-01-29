@@ -402,7 +402,7 @@ class ViewProcesso {
                 opacity: 0.85
 			});*/
         </script>
-        <script src="./assets/vendor/timeline/js/main.js"></script>
+        <!-- script src="./assets/vendor/timeline/js/main.js"></script-->
 	<?php 
     }
     

@@ -136,6 +136,7 @@ class ControladorProcesso {
             $fluxoProcesso = new FluxoProcesso();
             $fluxoProcesso->setId($post["id"]);
             $fluxoProcesso->setAtivo('0');
+            $fluxoProcesso->setAtuante('0');
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->abrirFecharFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());

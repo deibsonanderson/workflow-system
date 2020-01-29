@@ -1,6 +1,6 @@
 <?php
 
-class ViewCategoriaAtividade {
+class ViewCategoriaAtividade extends ViewBase {
 
     //construtor
     public function __construct() {
@@ -19,31 +19,31 @@ class ViewCategoriaAtividade {
         echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
         ?>			        
         </script>
-<div class="row">
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-		<div class="card">        
-        <form action="#" method="post" id="formCadastro" class="">
-            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
-            <input type="hidden" name="controlador" id="controlador" value="ControladorCategoriaAtividade"/>
-            <input type="hidden" name="funcao" id="funcao" value="incluirCategoriaAtividade"/>
-            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
-			<div class="card-header d-flex">
-	            <h4 class="card-header-title">Cadatro Categoria</h4>
-	            <div class="toolbar ml-auto">
-	            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarCategoriaAtividade" controlador="ControladorCategoriaAtividade" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
-	            	<a href="#" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Cadastrar</a>
-	            </div>
-            </div>
-			<div class="card-body">				
-				<div class="form-group">
-					<label for="nome" class="col-form-label">Nome *</label>
-					<input id="nome" name="nome" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card">        
+		        <form action="#" method="post" id="formCadastro" class="">
+		            <input type="hidden" name="retorno" id="retorno" value="div_central"/>
+		            <input type="hidden" name="controlador" id="controlador" value="ControladorCategoriaAtividade"/>
+		            <input type="hidden" name="funcao" id="funcao" value="incluirCategoriaAtividade"/>
+		            <input type="hidden" name="mensagem" id="mensagem" value="1"/>
+					<div class="card-header d-flex">
+			            <h4 class="card-header-title">Cadatro Categoria</h4>
+			            <div class="toolbar ml-auto">
+			            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarCategoriaAtividade" controlador="ControladorCategoriaAtividade" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+			            	<a href="#" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Cadastrar</a>
+			            </div>
+		            </div>
+					<div class="card-body">				
+						<div class="form-group">
+							<label for="nome" class="col-form-label">Nome *</label>
+							<input id="nome" name="nome" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
+						</div>
+					</div>
+				</form>
 				</div>
 			</div>
-		</form>
-		</div>
-	</div>
-</div>		
+		</div>		
         <?php
     }
 

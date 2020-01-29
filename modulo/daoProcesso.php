@@ -139,7 +139,7 @@ class DaoProcesso extends DaoBase {
 
     public function abrirFecharFluxoProcesso($fluxoProcesso) {
         try {
-        	return $this->executar($this->sqlAtualizarCustom(DaoBase::TABLE_PROCESSO_FLUXO, $fluxoProcesso, array('ativo')));
+        	return $this->executar($this->sqlAtualizarCustom(DaoBase::TABLE_PROCESSO_FLUXO, $fluxoProcesso, array('ativo', 'atuante')));
         } catch (Exception $e) {
             return $e;
         }
@@ -351,32 +351,42 @@ class DaoProcesso extends DaoBase {
     	try {
     		$retorno = array();
     		$limitDay = 25;
+
     		$sql = "SELECT  wpf.id,
-                            wpf.vencimento_atividade AS vencimento_processo_fluxo,
-							wpf.titulo_atividade AS titulo_processo_fluxo,
-							wpf.valor_atividade AS valor_processo_fluxo,
-							wpf.propriedade_atividade AS propriedade_processo_fluxo,
-                            wpf.descricao_atividade AS descricao_processo_fluxo,
-                            wpf.id_fluxo,
-                            wpf.atuante,
-							wpf.fixa_atividade AS fixa_processo_fluxo,
-                            wpf.ativo,
+                            wp.id_titulo_fluxo,
+                            wtf.titulo AS titulo_fluxo,
                             wp.id as id_processo,
                             wp.titulo as titulo_processo,
+			                wp.descricao as descricao_processo,
+							wp.provisao as provisao,
+                            wpf.id_fluxo,
+                            wpf.atuante,
+                            wp.data as data_processo,
+							wpf.fixa_atividade AS fixa_processo_fluxo,
+							wa.fixa AS fixa_atividade,
+                            wpf.ativo,
                             wf.id_atividade,
-                            CONCAT(LPAD( (CASE WHEN wpf.vencimento_atividade > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wpf.vencimento_atividade END ), 2, 0) ,'/',LPAD( MONTH(wp.data), 2, 0),'/',YEAR(wp.data)) as vencimento_format,
-							CONCAT(LPAD( (CASE WHEN wpf.vencimento_atividade > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wpf.vencimento_atividade END ), 2, 0),'/',LPAD( MONTH(wp.data+ INTERVAL ".$limitDay." DAY), 2, 0),'/', YEAR(wp.data+ INTERVAL ".$limitDay." DAY)) as vencimento_next
-					
-                    FROM ".DaoBase::TABLE_PROCESSO_FLUXO." wpf
-                    INNER JOIN ".DaoBase::TABLE_PROCESSO." wp ON (wpf.id_processo = wp.id)
-                    INNER JOIN ".DaoBase::TABLE_TITULO_FLUXO." wtf ON (wtf.id = wp.id_titulo_fluxo)
-                    INNER JOIN ".DaoBase::TABLE_FLUXO." wf ON (wpf.id_fluxo = wf.id)
-                    INNER JOIN ".DaoBase::TABLE_ATIVIDADE." wa ON (wf.id_atividade = wa.id)
-                    WHERE wpf.status = '1' AND wpf.ativo = '1' AND wp.status = '1' AND wpf.vencimento_atividade != '' AND wpf.vencimento_atividade IS NOT NULL
+                            wpf.titulo_atividade AS titulo_atividade,
+                            wa.imagem AS imagem_atividade,
+                            wa.arquivo AS arquivo_atividade,
+                            wa.descricao AS descricao_atividade,
+							wpf.valor_atividade AS valor,
+							wpf.propriedade_atividade AS propriedade,
+                            wpf.titulo_atividade AS titulo_processo_fluxo,
+                            wp.id_usuario,
+							wa.vencimento,
+                            CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0) ,'/',LPAD( MONTH(wp.data), 2, 0),'/',YEAR(wp.data)) as vencimento_format,
+							CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0),'/',LPAD( MONTH(wp.data+ INTERVAL ".$limitDay." DAY), 2, 0),'/', YEAR(wp.data+ INTERVAL ".$limitDay." DAY)) as vencimento_next
+					FROM tb_workflow_processo_fluxo wpf
+                    INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
+                    INNER JOIN tb_workflow_titulo_fluxo wtf ON (wtf.id = wp.id_titulo_fluxo)
+                    INNER JOIN tb_workflow_fluxo wf ON (wpf.id_fluxo = wf.id)
+                    INNER JOIN tb_workflow_atividade wa ON (wf.id_atividade = wa.id)
+                    WHERE wpf.status = '1' AND wpf.ativo = '1' AND wp.status = '1' AND wa.vencimento != '' AND wa.vencimento IS NOT NULL
                     AND (
 									
 	                    STR_TO_DATE(CONCAT(YEAR(wp.data),'-',MONTH(wp.data),'-',
-	                    (CASE WHEN wpf.vencimento_atividade > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wpf.vencimento_atividade END )
+	                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END )
 	                    ), '%Y-%m-%d') BETWEEN
 	                    STR_TO_DATE(CONCAT(YEAR(NOW() - INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() - INTERVAL ".$limitDay." DAY),'-',DAY(NOW() - INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') AND
 	                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d')
@@ -384,7 +394,7 @@ class DaoProcesso extends DaoBase {
 					OR
 	                    		
 						STR_TO_DATE(CONCAT(YEAR(wp.data + INTERVAL ".$limitDay." DAY),'-',MONTH(wp.data + INTERVAL ".$limitDay." DAY),'-',
-	                    (CASE WHEN wpf.vencimento_atividade > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wpf.vencimento_atividade END )
+	                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END )
 	                    ), '%Y-%m-%d') BETWEEN
 	                    STR_TO_DATE(CONCAT(YEAR(NOW() - INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() - INTERVAL ".$limitDay." DAY),'-',DAY(NOW() - INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') AND
 	                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d')
@@ -393,7 +403,7 @@ class DaoProcesso extends DaoBase {
     		
     		$sql .= ($id_usuario != null) ? " AND wp.id_usuario = " . $id_usuario : "";
     		
-    		$sql .= " ORDER BY CONCAT(YEAR(wp.data),'-',LPAD( MONTH(wp.data), 2, 0),'-',LPAD( (CASE WHEN wpf.vencimento_atividade > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wpf.vencimento_atividade END ), 2, 0)) ASC ";
+    		$sql .= " ORDER BY CONCAT(YEAR(wp.data),'-',LPAD( MONTH(wp.data), 2, 0),'-',LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0)) ASC ";
     		
     		$query = $this->executar($sql);
     		$ultimo_id = 0;
@@ -445,134 +455,6 @@ class DaoProcesso extends DaoBase {
     	}
     }
     
-    /*BACK UP
-    public function listarAtividadesProcessosHaVencerBKP($id_usuario = null) {
-    	try {
-    		$retorno = array();
-    		$limitDay = 25;
-    		$conexao = $this->ConectarBanco();
-    		$sql = "SELECT  wpf.id,
-                            wp.id_titulo_fluxo,
-                            wtf.titulo AS titulo_fluxo,
-                            wp.id as id_processo,
-                            wp.titulo as titulo_processo,
-			                wp.descricao as descricao_processo,
-							wp.provisao as provisao,
-                            wpf.id_fluxo,
-                            wpf.atuante,
-                            wp.data as data_processo,
-							wpf.fixa_atividade AS fixa_processo_fluxo,
-							wa.fixa AS fixa_atividade,
-                            wpf.ativo,
-                            wf.id_atividade,
-                            wpf.titulo_atividade AS titulo_atividade,
-                            wa.imagem AS imagem_atividade,
-                            wa.arquivo AS arquivo_atividade,
-                            wa.descricao AS descricao_atividade,
-							wpf.valor_atividade AS valor,
-							wpf.propriedade_atividade AS propriedade,
-                            wp.id_usuario,
-							wa.vencimento,
-                            CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0) ,'/',LPAD( MONTH(wp.data), 2, 0),'/',YEAR(wp.data)) as vencimento_format,
-							CONCAT(LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0),'/',LPAD( MONTH(wp.data+ INTERVAL ".$limitDay." DAY), 2, 0),'/', YEAR(wp.data+ INTERVAL ".$limitDay." DAY)) as vencimento_next
-					FROM tb_workflow_processo_fluxo wpf
-                    INNER JOIN tb_workflow_processo wp ON (wpf.id_processo = wp.id)
-                    INNER JOIN tb_workflow_titulo_fluxo wtf ON (wtf.id = wp.id_titulo_fluxo)
-                    INNER JOIN tb_workflow_fluxo wf ON (wpf.id_fluxo = wf.id)
-                    INNER JOIN tb_workflow_atividade wa ON (wf.id_atividade = wa.id)
-                    WHERE wpf.status = '1' AND wpf.ativo = '1' AND wp.status = '1' AND wa.vencimento != '' AND wa.vencimento IS NOT NULL
-                    AND (
-									
-	                    STR_TO_DATE(CONCAT(YEAR(wp.data),'-',MONTH(wp.data),'-',
-	                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END )
-	                    ), '%Y-%m-%d') BETWEEN
-	                    STR_TO_DATE(CONCAT(YEAR(NOW() - INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() - INTERVAL ".$limitDay." DAY),'-',DAY(NOW() - INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') AND
-	                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d')
-	                    		
-					OR
-	                    		
-						STR_TO_DATE(CONCAT(YEAR(wp.data + INTERVAL ".$limitDay." DAY),'-',MONTH(wp.data + INTERVAL ".$limitDay." DAY),'-',
-	                    (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END )
-	                    ), '%Y-%m-%d') BETWEEN
-	                    STR_TO_DATE(CONCAT(YEAR(NOW() - INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() - INTERVAL ".$limitDay." DAY),'-',DAY(NOW() - INTERVAL ".$limitDay." DAY)), '%Y-%m-%d') AND
-	                    STR_TO_DATE(CONCAT(YEAR(NOW() + INTERVAL ".$limitDay." DAY),'-',MONTH(NOW() + INTERVAL ".$limitDay." DAY),'-',DAY(NOW() + INTERVAL ".$limitDay." DAY)), '%Y-%m-%d')
-	                    		
-					)";
-    		
-    		$sql .= ($id_usuario != null) ? " AND wp.id_usuario = " . $id_usuario : "";
-    		
-    		$sql .= " ORDER BY CONCAT(YEAR(wp.data),'-',LPAD( MONTH(wp.data), 2, 0),'-',LPAD( (CASE WHEN wa.vencimento > DAY(LAST_DAY(wp.data)) THEN DAY(LAST_DAY(wp.data)) ELSE wa.vencimento END ), 2, 0)) ASC ";
-    		debug($sql);
-    		$query = mysqli_query($conexao,$sql) or die('Erro na execução  do listar!');
-    		$ultimo_id = 0;
-    		$processo = new Processo();
-    		while ($objetoFluxoProcesso = mysqli_fetch_object($query)) {
-    			if ($ultimo_id != $objetoFluxoProcesso->id_processo) {
-    				if ($ultimo_id !== 0) {
-    					$processo->setFluxoProcesso($aux);
-    					$aux = null;
-    					$retorno[] = $processo;
-    				}
-    				$processo = new Processo();
-    				$processo->setId($objetoFluxoProcesso->id_processo);
-    				$processo->setTitulo($objetoFluxoProcesso->titulo_processo);
-    				$processo->setDescricao($objetoFluxoProcesso->descricao_processo);
-    				$processo->setData($objetoFluxoProcesso->data_processo);
-    				$processo->setProvisao($objetoFluxoProcesso->provisao);
-    				
-    				$fluxo = new Fluxo();
-    				$fluxo->setId($objetoFluxoProcesso->id_titulo_fluxo);
-    				$fluxo->setTitulo($objetoFluxoProcesso->titulo_fluxo);
-    				$processo->setFluxo($fluxo);
-    				
-    				$usuario = new Usuario();
-    				$usuario->setId($objetoFluxoProcesso->id_usuario);
-    				$processo->setUsuario($usuario);
-    				
-    				$ultimo_id = $objetoFluxoProcesso->id_processo;
-    			}
-    			
-    			$fluxoProcesso = new FluxoProcesso();
-    			$fluxoProcesso->setId($objetoFluxoProcesso->id);
-    			$fluxoProcesso->setId_fluxo($objetoFluxoProcesso->id_fluxo);
-    			$fluxoProcesso->setAtivo($objetoFluxoProcesso->ativo);
-    			$fluxoProcesso->setAtuante($objetoFluxoProcesso->atuante);
-    			$fluxoProcesso->setFixa($objetoFluxoProcesso->fixa_processo_fluxo);
-    			$fluxoProcesso->setTitulo($objetoFluxoProcesso->titulo_processo_fluxo);
-    			
-    			$atividade = new Atividade();
-    			$atividade->setId($objetoFluxoProcesso->id_atividade);
-    			$atividade->setTitulo($objetoFluxoProcesso->titulo_atividade);
-    			$atividade->setDescricao($objetoFluxoProcesso->descricao_atividade);
-    			$atividade->setArquivo($objetoFluxoProcesso->arquivo_atividade);
-    			$atividade->setImagem($objetoFluxoProcesso->imagem_atividade);
-    			$atividade->setValor($objetoFluxoProcesso->valor);
-    			$atividade->setPropriedade($objetoFluxoProcesso->propriedade);
-    			$atividade->setFixa($objetoFluxoProcesso->fixa_atividade);
-    			
-    			if($objetoFluxoProcesso->vencimento_processo_fluxo < date("d")){
-    				$dataFormatada = $objetoFluxoProcesso->vencimento_next;
-    			}else{
-    				$dataFormatada = $objetoFluxoProcesso->vencimento_format;
-    			}
-    			$atividade->setVencimento($dataFormatada);
-    			$fluxoProcesso->setVencimento($dataFormatada);
-    			
-    			$fluxoProcesso->setAtividade($atividade);
-    			
-    			$aux[] = $fluxoProcesso;
-    		}
-    		$processo->setFluxoProcesso($aux);
-    		
-    		$retorno[] = $processo;
-    		
-    		$this->FecharBanco($conexao);
-    		return $retorno;
-    	} catch (Exception $e) {
-    		return $e;
-    	}
-    }*/
-
 }
 
 ?>
