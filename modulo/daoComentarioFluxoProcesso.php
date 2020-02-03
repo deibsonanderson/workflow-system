@@ -102,6 +102,7 @@ class DaoComentarioFluxoProcesso extends DaoBase {
     		$fluxoProcesso->setId($objetoComentarioFluxoProcesso->id_processo_fluxo);
     		$fluxoProcesso->setAtivo($objetoComentarioFluxoProcesso->ativo);
     		$fluxoProcesso->setAtuante($objetoComentarioFluxoProcesso->atuante);
+    		$fluxoProcesso->setTitulo($objetoComentarioFluxoProcesso->titulo_atividade_processo);
     		
     		$atividade = new Atividade();
     		$atividade->setId($objetoComentarioFluxoProcesso->id_atividade);
@@ -116,6 +117,11 @@ class DaoComentarioFluxoProcesso extends DaoBase {
     		$processo->setId($objetoComentarioFluxoProcesso->id_processo);
     		$processo->setDescricao($objetoComentarioFluxoProcesso->processo_descricao);
     		$processo->setTitulo($objetoComentarioFluxoProcesso->processo_titulo);
+    		
+    		$fluxo = new Fluxo();
+    		$fluxo->setTitulo($objetoComentarioFluxoProcesso->titulo_fluxo);
+    		$processo->setFluxo($fluxo);
+    		
     		$comentarioFluxoProcesso->setProcesso($processo);
     		
     		$retorno[] = $comentarioFluxoProcesso;

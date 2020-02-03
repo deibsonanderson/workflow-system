@@ -1104,7 +1104,7 @@ class ViewAtividade {
 				"sPaginationType": "full_numbers",
 				"bFilter": false,
 				"bLengthChange" : true,
-				"aaSorting": [[1, 'desc']]
+				"aaSorting": [[0, 'desc']]
 			});
             $(document).ready(function() {
 	            $('#tooltip').hide();
@@ -1174,9 +1174,9 @@ class ViewAtividade {
 							<thead>
 								<tr>
 									<th>Data</th> 
-									<th>Fluxo</th> 
-									<th>Processo</th> 
 									<th>Atividade</th> 
+									<th>Processo</th> 
+									<th>Fluxo</th> 
 									<th>Descri&ccedil;&atilde;o</th> 
 									<th>Download Anexo</th> 
 									<th>Link Anexo</th> 
@@ -1194,7 +1194,7 @@ class ViewAtividade {
 					                        <td><label style="width: 80px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
 					                        <td><?php echo $comentario->getFluxoProcesso()->getTitulo(); ?></td>
 					                        <td><?php echo $comentario->getProcesso()->getTitulo(); ?></td>
-					                        <td><?php echo $comentario->getFluxoProcesso()->getAtividade()->getTitulo(); ?></td>
+					                        <td><?php echo $comentario->getProcesso()->getFluxo()->getTitulo(); ?></td>
 					                        <td><?php echo ($comentario->getDescricao() != '') ? nl2br($comentario->getDescricao()) : $comentario->getArquivo(); ?></td>
 					                        <td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;width: 29px;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : '-'; ?>
 					                           <input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
