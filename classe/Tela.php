@@ -7,7 +7,12 @@ class Tela {
 	private $mensagem; 
 	private $titulo;
 	private $campos;
-	private $botaoVoltar;
+	private $botaoRedirect;
+	private $botaoCadastrarAlterar;
+	
+	private $botaoListarAlterar;
+	private $botaoListarExcluir;
+	private $botaoListarVisualizar;
 	
 	
 	public function getTitulo() {
@@ -23,7 +28,7 @@ class Tela {
 	}
 	
 	public function setFuncao($Funcao) {
-		$this->Funcao = $Funcao;
+		$this->funcao = $Funcao;
 	}
 	
 	public function getControlador() {
@@ -58,13 +63,44 @@ class Tela {
 		$this->campos = $campos;
 	}
 	
-	public function getBotaoVoltar() {
-		return $this->botaoVoltar;
+	public function getBotaoRedirect() {
+		return $this->botaoRedirect;
 	}
 	
-	public function setBotaoVoltar($botaoVoltar) {
-		$this->botaoVoltar = $botaoVoltar;
+	public function setBotaoRedirect($botaoRedirect) {
+		$this->botaoRedirect = $botaoRedirect;
 	}
 	
+	public function getBotaoCadastrarAlterar() {
+		return $this->botaoCadastrarAlterar;
+	}
+	
+	public function setBotaoCadastrarAlterar($botaoCadastrarAlterar) {
+		$this->botaoCadastrarAlterar = $botaoCadastrarAlterar;
+	}
+
+	public function getBotaoListarAlterar() {
+		return $this->botaoListarAlterar;
+	}
+	
+	public function setBotaoListarAlterar($botaoListarAlterar) {
+		$this->botaoListarAlterar = $botaoListarAlterar;
+	}
+	
+	public function getBotaoListarExcluir() {
+		return $this->botaoListarExcluir;
+	}
+	
+	public function setBotaoListarExcluir($botaoListarExcluir) {
+		$this->botaoListarExcluir = $botaoListarExcluir;
+	}
+	
+	public function getBotaoListarVisualizar() {
+		return $this->botaoListarVisualizar;
+	}
+	
+	public function setBotaoListarVisualizar($botaoListarVisualizar) {
+		$this->botaoListarVisualizar = $botaoListarVisualizar;
+	}
 }
 ?>
