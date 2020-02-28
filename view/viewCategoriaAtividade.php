@@ -34,6 +34,10 @@ class ViewCategoriaAtividade extends ViewBase {
     			$this->criarCampo ( 'Codigo', 'id', $this::CODIGO ),
     			$this->criarCampo ( 'Descrição', 'nome', $this::TEXT ));
     	
+    	$botoesListar = array($this->criarBotaoListarAcao($this::CONTROLADOR, 'telaAlterarCategoriaAtividade',$this::ALTERAR),
+    			$this->criarBotaoListarAcao($this::CONTROLADOR, 'excluirCategoriaAtividade', $this::EXCLUIR),
+    			$this->criarBotaoListarAcao($this::CONTROLADOR, 'telaVisualizarCategoriaAtividade', $this::VISUALIZAR));
+    	
     	$tela = $this->criarTela (
     			$this::CONTROLADOR,
     			'incluirCategoriaAtividade',
@@ -42,11 +46,8 @@ class ViewCategoriaAtividade extends ViewBase {
     			$this->montarBtnNovo($this::CONTROLADOR, 'telaCadastrarCategoriaAtividade'),
     			$this->montarBotaoAcao($this::CADASTRAR),
     			'Categorias',
-    			$campos );
-    	
-    	$tela->setBotaoListarAlterar($this->criarBotaoListarAcao($this::CONTROLADOR, 'telaAlterarCategoriaAtividade'));
-    	$tela->setBotaoListarExcluir($this->criarBotaoListarAcao($this::CONTROLADOR, 'excluirCategoriaAtividade'));
-    	$tela->setBotaoListarVisualizar($this->criarBotaoListarAcao($this::CONTROLADOR, 'telaVisualizarCategoriaAtividade'));
+    			$campos,
+    			$botoesListar);
     	
     	return $this->criarTelaListar( $tela, $objCategoriaAtividade, ViewBase::VERDADEIRO, ViewBase::VERDADEIRO );
     	

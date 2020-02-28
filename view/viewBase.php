@@ -10,6 +10,8 @@ abstract class ViewBase {
 	const BTN_SMALL_PRIMARY = 'btn btn-primary btn-sm';
 	const CADASTRAR = 'Cadastrar';
 	const ALTERAR = 'Alterar';
+	const VISUALIZAR = 'Visualizar';
+	const EXCLUIR = 'Excluir';
 	
 	//input types
 	const CODIGO = 'id';
@@ -17,7 +19,7 @@ abstract class ViewBase {
 	const TEXT_AREA = 'textarea';
 	
 	/**
-	 * Operação responsavel por montar o script batão de informação de growlUI2
+	 * Operacao responsavel por montar o script batão de informacao de growlUI2
 	 * @param $_POST $post
 	 * @return string
 	 */
@@ -26,7 +28,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavelp por carregar o asteristico para campos obrigatorios conforme definido em cada objeto campo.
+	 * Operacao responsavelp por carregar o asteristico para campos obrigatorios conforme definido em cada objeto campo.
 	 * @param Campo $campo
 	 * @return string
 	 */
@@ -35,7 +37,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavelp por carregar a classe css mgs_alerta para campos obrigatorios conforme definido em cada objeto campo.
+	 * Operacao responsavelp por carregar a classe css mgs_alerta para campos obrigatorios conforme definido em cada objeto campo.
 	 * @param Campo $campo
 	 * @return string
 	 */
@@ -44,7 +46,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por montar o script de aumentativo conforme definido em cada objeto campo
+	 * Operacao responsavel por montar o script de aumentativo conforme definido em cada objeto campo
 	 * @param Campo $campo
 	 * @return string
 	 */
@@ -53,7 +55,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por montar o botão de acao cadastrar ou alterar
+	 * Operacao responsavel por montar o botão de acao cadastrar ou alterar
 	 * @param String $titulo
 	 * @return BotaoLink
 	 */
@@ -62,7 +64,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por criar campos que redirecionar para a pagina anterior no topo da pagina
+	 * Operacao responsavel por criar campos que redirecionar para a pagina anterior no topo da pagina
 	 * @param String $controlador
 	 * @param String $funcao
 	 * @return BotaoLink
@@ -72,7 +74,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por criar campos que redirecionar para a cada de cadastrar no topo da pagina
+	 * Operacao responsavel por criar campos que redirecionar para a cada de cadastrar no topo da pagina
 	 * @param String $controlador
 	 * @param String $funcao
 	 * @return BotaoLink
@@ -82,7 +84,7 @@ abstract class ViewBase {
 	}
 		
 	/**
-	 * Operação responsavel por montar os botão de redirecionamento Ex: voltar, novo, etc.
+	 * Operacao responsavel por montar os botão de redirecionamento Ex: voltar, novo, etc.
 	 * @param Tela $tela
 	 * @param String $css
 	 * @return string
@@ -98,7 +100,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por montar o botão cadastrar ou alterar padrão do formulario
+	 * Operacao responsavel por montar o botão cadastrar ou alterar padrão do formulario
 	 * @param unknown $tela
 	 * @return string
 	 */
@@ -109,7 +111,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por montar os inputs padrão dos forms
+	 * Operacao responsavel por montar os inputs padrão dos forms
 	 * @param Tela $tela
 	 * @param Object $objeto
 	 * @return string
@@ -129,7 +131,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por inicializar o script das tabelas
+	 * Operacao responsavel por inicializar o script das tabelas
 	 * @return string
 	 */
 	protected function montarInitDataTable(){
@@ -147,7 +149,7 @@ abstract class ViewBase {
 	//BLOCO MONTAR INPUTS GERAIS INICIO ***************************************************************
 	
 	/**
-	 * Operação responsavel por montar os inputs que serão exibidos na tela de manter
+	 * Operacao responsavel por montar os inputs que serão exibidos na tela de manter
 	 * @param Tela $tela - informações que iram compor a tela, onde tera um array de campos com seus respectivos tipos e valores
 	 * @param Object $objeto - objeto que sera carregado ex: update e view
 	 * @param boolean $view - booleano responsavel por informar se a tela é update ou view
@@ -162,7 +164,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por checar qual o tipo do input sera carregado no momento.
+	 * Operacao responsavel por checar qual o tipo do input sera carregado no momento.
 	 * @param Campo $campo
 	 * @param Object $objeto
 	 * @param boolean $view
@@ -177,7 +179,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por montar campos input do tipo text
+	 * Operacao responsavel por montar campos input do tipo text
 	 * @param Campo $campo
 	 * @param Object $objeto
 	 * @param boolean $view
@@ -205,7 +207,7 @@ abstract class ViewBase {
 	
 	//BLOCO MONTAR BOTAO ACAO INICIO ***************************************************************
 	/**
-	 * Operação responsavel por montar os botões de ação na listagens
+	 * Operacao responsavel por montar os botões de acao na listagens
 	 * @param Tela $tela
 	 * @param integer $id
 	 * @param boolean $alterar
@@ -217,7 +219,7 @@ abstract class ViewBase {
 		if($alterar || $excluir){
 			$html .= '<td style="text-align:center">
 						<div class="btn-group ml-auto">
-						'.$this->montarBtnAlterarLista($tela, $alterar, $id).$this->montarBtnDeletarLista($tela, $excluir, $id).'
+						'.$this->montarBtnAlterarLista($tela, $id).$this->montarBtnDeletarLista($tela, $id).'
 						</div>
 					</td>';
 		}
@@ -225,45 +227,56 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por montar o botão de alterar da listagem
+	 * Operacao responsavel por montar o botão de alterar da listagem
 	 * @param Tela $tela
-	 * @param boolean $alterar
 	 * @param integer $id
 	 * @return string
 	 */
-	protected function montarBtnAlterarLista($tela, $alterar = null, $id = null){
-		return ($alterar)?'<button onclick="getId(this)" id="'.$id.'" funcao="'.$tela->getBotaoListarAlterar()->getFuncao().'" controlador="'.$tela->getBotaoListarAlterar()->getControlador().'" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>':'';
+	protected function montarBtnAlterarLista($tela, $id = null){
+		if($tela->getBotoesListar()){
+			foreach ($tela->getBotoesListar() as $botaoLink){
+				if($botaoLink->getTipo() == $this::ALTERAR){
+					return '<button onclick="getId(this)" id="'.$id.'" funcao="'.$botaoLink->getFuncao().'" controlador="'.$botaoLink->getControlador().'" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>';
+				}
+			}
+		}
 	}
 	
 	/**
-	 * Operação responsavel por montar o botão de excluir da listagem
+	 * Operacao responsavel por montar o botão de excluir da listagem
 	 * @param Tela $tela
-	 * @param boolean $excluir
 	 * @param integer $id
 	 * @return string
 	 */
-	protected function montarBtnDeletarLista($tela, $excluir = null, $id = null){
-		return ($excluir)?'<button onclick="fcnModalDeleteId(this)" modal="question" id="'.$id.'" funcao="'.$tela->getBotaoListarExcluir()->getFuncao().'" controlador="'.$tela->getBotaoListarExcluir()->getControlador().'" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'';
+	protected function montarBtnDeletarLista($tela, $id = null){
+		if($tela->getBotoesListar()){
+			foreach ($tela->getBotoesListar() as $botaoLink){
+				if($botaoLink->getTipo() == $this::EXCLUIR){
+					return '<button onclick="fcnModalDeleteId(this)" modal="question" id="'.$id.'" funcao="'.$botaoLink->getFuncao().'" controlador="'.$botaoLink->getControlador().'" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>';
+				}
+			}
+		}
 	}	
 	//BLOCO MONTAR BOTAO ACAO FIM ***************************************************************
 	
 	//CRIAR CLASSES GERAL INICIO ***************************************************************
 	
 	/**
-	 * Operação de criar botão ou link simplicado 
+	 * Operacao de criar botão ou link simplicado 
 	 * @param String $controlador
 	 * @param String $funcao
 	 * @return BotaoLink
 	 */
-	protected function criarBotaoListarAcao($controlador, $funcao) {
+	protected function criarBotaoListarAcao($controlador, $funcao, $tipo = null) {
 		$btnLink = new BotaoLink ();
 		$btnLink->setControlador ( $controlador );
 		$btnLink->setFuncao ( $funcao );
+		$btnLink->setTipo($tipo);
 		return $btnLink;
 	}
 	
 	/**
-	 * Operação de criar botão ou link passando todos os parametros necessarios 
+	 * Operacao de criar botão ou link passando todos os parametros necessarios 
 	 * @param String $titulo
 	 * @param String $acao
 	 * @param String $controlador
@@ -284,7 +297,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por criar a classe Tela
+	 * Operacao responsavel por criar a classe Tela
 	 * @param String $controlador
 	 * @param String $funcao
 	 * @param String $retorno
@@ -293,9 +306,10 @@ abstract class ViewBase {
 	 * @param BotaoLink $btnCadAlt
 	 * @param String $titulo
 	 * @param Campo[] $campos
+	 * @param BotaoLink[] $botoesListar;
 	 * @return Tela
 	 */
-	protected function criarTela($controlador, $funcao, $retorno, $mensagem, $btnVoltar, $btnCadAlt, $titulo, $campos) {
+	protected function criarTela($controlador, $funcao, $retorno, $mensagem, $btnVoltar, $btnCadAlt, $titulo, $campos, $botoesListar = null) {
 		$tela = new Tela ();
 		$tela->setControlador ( $controlador );
 		$tela->setFuncao ( $funcao );
@@ -305,11 +319,12 @@ abstract class ViewBase {
 		$tela->setCampos ( $campos );
 		$tela->setBotaoRedirect ( $btnVoltar );
 		$tela->setBotaoCadastrarAlterar ( $btnCadAlt );
+		$tela->setBotoesListar($botoesListar);
 		return $tela;
 	}
 	
 	/**
-	 * Operação responsavel por criar a classe Campo
+	 * Operacao responsavel por criar a classe Campo
 	 * @param String $titulo
 	 * @param String $nome
 	 * @param String $tipo
@@ -327,14 +342,82 @@ abstract class ViewBase {
 		return $campo;
 	}
 	
-	//CRIAR CLASSES GERAL FIM ***************************************************************
+	//CRIAR CLASSES GERAL FIM ******************************************************************************
+	
+	//BLOCO MONTAR TABLES GERAIS INICIO ********************************************************************
+	
+	/**
+	 * Operacao responsavel por carregar o cabecalho das tabelas
+	 * @param Tela $tela
+	 * @param boolean $alterar
+	 * @param boolean $excluir
+	 * @return string
+	 */
+	protected function montarTabelaHead($tela, $alterar = null, $excluir = null){
+		$html = '<thead><tr>';
+		
+		foreach ($tela->getCampos() as $campo){
+			$html .= '<th>'.$campo->getTitulo().'</th>';
+		}
+		
+		if($alterar || $excluir){
+			$html .= '<th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th>';
+		}
+		
+		return $html .= '</tr></thead>';
+	}
+	
+	/**
+	 * Operacao responsavel por carregar o corpo das tabelas
+	 * @param Tela $tela
+	 * @param Object $objetos
+	 * @param boolean $alterar
+	 * @param boolean $excluir
+	 * @return string
+	 */
+	protected function montarTabelaCorpo($tela, $objetos, $alterar = null, $excluir = null ){
+		$html = '';
+		if ($objetos) {
+			$html .= '<tbody>';
+			foreach ($objetos as $objeto) {
+				$html .= '<tr>';
+				foreach ($tela->getCampos() as $campo){
+					$method = 'get'.ucfirst($campo->getNome());
+					if(method_exists(get_class($objeto), $method) ){
+						if($campo->getTipo() == $this::CODIGO){
+							$html .= '<td '.$this->montarTdVisualizar($id, $tela).' >'.str_pad($objeto->$method(), 5, "0", STR_PAD_LEFT).'</td>';
+						}else{
+							$html .= '<td '.$this->montarTdVisualizar($id, $tela).' >'.$objeto->$method().'</td>';
+						}
+					}
+				}
+				$html .= $this->montarBtnAcaoListar($tela, $objeto->getId(), $alterar, $excluir);
+				$html .= '</tr>';
+			}
+			$html .= '</tbody>';
+		}
+		return $html;
+	}
+	
+	protected function montarTdVisualizar($id, $tela ){
+		if($tela->getBotoesListar()){
+			foreach ($tela->getBotoesListar() as $botaoLink){
+				if($botaoLink->getTipo() == $this::VISUALIZAR){
+					return 'onclick="getId(this)" class="getId" style="cursor:pointer"  id="'.$id.'" funcao="'.$botaoLink->getFuncao().'" controlador="'.$botaoLink->getControlador().'" retorno="div_central"';
+				}
+			}
+		}
+	}
+	
+	//BLOCO MONTAR TABLES GERAIS FIM ***********************************************************************
+	
 	
 	//OPERACOES DE MONTATEGEM DE TELA INICIO ***************************************************************
 	
 	/**
-	 * Operação responsavel por criar toda a tela de incluir e alterar padrão
-	 * @param unknown $tela
-	 * @param unknown $post
+	 * Operacao responsavel por criar toda a tela de incluir e alterar padrão
+	 * @param Table $tela
+	 * @param $_POST $post
 	 * @param string $view
 	 * @param unknown $objeto
 	 */
@@ -368,7 +451,7 @@ abstract class ViewBase {
 	}
 	
 	/**
-	 * Operação responsavel por criar toda a tela de listagem padrão
+	 * Operacao responsavel por criar toda a tela de listagem padrão
 	 * @param Tela $tela
 	 * @param Object $objetos
 	 * @param boolean $alterar
@@ -380,54 +463,24 @@ abstract class ViewBase {
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
-				<div class="card-header d-flex">
-		            <h4 class="card-header-title"><?php echo $tela->getTitulo(); ?></h4>
-		            <div class="toolbar ml-auto">
-		            	<?php 	echo $this->montarBotaoRedirect($tela, $this::BTN_SMALL_PRIMARY); ?>
-		            </div>
-		        </div>		
-				<div class="card-body">
-					<div class="table-responsive">
-						<?php if($tela->getCampos()){ ?>
-						<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
-							<thead>
-								<tr>
-									<?php 
-									foreach ($tela->getCampos() as $campoTh){
-										echo '<th>'.$campoTh->getTitulo().'</th>';
-									} 
-									
-									if($alterar || $excluir){
-										echo '<th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th>';
-									}
-									?> 
-								</tr>
-							</thead>								
-							<?php   
-							if ($objetos) {
-								echo '<tbody>';
-								foreach ($objetos as $objeto) {
-									echo '<tr>';
-									foreach ($tela->getCampos() as $campo){
-										$method = 'get'.ucfirst($campo->getNome());
-										if(method_exists(get_class($objeto), $method) ){
-											if($campo->getTipo() == $this::CODIGO){
-												echo '<td onclick="getId(this)" class="getId" style="cursor:pointer"  id="'.$objeto->getId().'" funcao="'.$tela->getBotaoListarVisualizar()->getFuncao().'" controlador="'.$tela->getBotaoListarVisualizar()->getControlador().'" retorno="div_central">'.str_pad($objeto->$method(), 5, "0", STR_PAD_LEFT).'</td>';
-											}else{
-												echo '<td onclick="getId(this)" class="getId" style="cursor:pointer"  id="'.$objeto->getId().'" funcao="'.$tela->getBotaoListarVisualizar()->getFuncao().'" controlador="'.$tela->getBotaoListarVisualizar()->getControlador().'" retorno="div_central">'.$objeto->$method().'</td>';
-											}
-										}										
-									}
-									echo $this->montarBtnAcaoListar($tela, $objeto->getId(), $alterar, $excluir);
-									echo '</tr>';
-		                        } 		                    
-							echo '</tbody>';
-							}   
-		                    ?>         		
-						</table>
-						<?php } ?>
+					<div class="card-header d-flex">
+			            <h4 class="card-header-title"><?php echo $tela->getTitulo(); ?></h4>
+			            <div class="toolbar ml-auto">
+			            	<?php 	echo $this->montarBotaoRedirect($tela, $this::BTN_SMALL_PRIMARY); ?>
+			            </div>
+			        </div>		
+					<div class="card-body">
+						<div class="table-responsive">
+							<?php if($tela->getCampos()){ ?>
+							<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
+								<?php 
+									echo $this->montarTabelaHead($tela, $alterar, $excluir); 
+									echo $this->montarTabelaCorpo($tela, $objetos, $alterar, $excluir);
+			                    ?>         		
+							</table>
+							<?php } ?>
+						</div>
 					</div>
-				</div>
 				</div>
 			</div>
 		</div>	

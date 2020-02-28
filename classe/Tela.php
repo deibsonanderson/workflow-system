@@ -9,11 +9,7 @@ class Tela {
 	private $campos;
 	private $botaoRedirect;
 	private $botaoCadastrarAlterar;
-	
-	private $botaoListarAlterar;
-	private $botaoListarExcluir;
-	private $botaoListarVisualizar;
-	
+	private $botoesListar;
 	
 	public function getTitulo() {
 		return $this->titulo;
@@ -79,28 +75,12 @@ class Tela {
 		$this->botaoCadastrarAlterar = $botaoCadastrarAlterar;
 	}
 
-	public function getBotaoListarAlterar() {
-		return $this->botaoListarAlterar;
+	public function getBotoesListar() {
+		return $this->botoesListar;
 	}
 	
-	public function setBotaoListarAlterar($botaoListarAlterar) {
-		$this->botaoListarAlterar = $botaoListarAlterar;
-	}
-	
-	public function getBotaoListarExcluir() {
-		return $this->botaoListarExcluir;
-	}
-	
-	public function setBotaoListarExcluir($botaoListarExcluir) {
-		$this->botaoListarExcluir = $botaoListarExcluir;
-	}
-	
-	public function getBotaoListarVisualizar() {
-		return $this->botaoListarVisualizar;
-	}
-	
-	public function setBotaoListarVisualizar($botaoListarVisualizar) {
-		$this->botaoListarVisualizar = $botaoListarVisualizar;
+	public function setBotoesListar($botoesListar) {
+		$this->botoesListar = $botoesListar;
 	}
 }
 ?>

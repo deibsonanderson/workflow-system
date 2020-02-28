@@ -7,6 +7,7 @@ class BotaoLink {
 	private $retorno;
 	private $mensagem;
 	private $acao;
+	private $tipo;
 	
 	public function getTitulo() {
 		return $this->titulo;
@@ -55,5 +56,13 @@ class BotaoLink {
 	
 	public function setAcao($acao) {
 		$this->acao = $acao;
+	}
+	
+	public function getTipo() {
+		return $this->tipo;
+	}
+	
+	public function setTipo($tipo) {
+		$this->tipo = $tipo;
 	}
 }
