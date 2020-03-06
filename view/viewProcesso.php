@@ -134,11 +134,14 @@ class ViewProcesso {
 						<div class="toolbar ml-auto">
 							<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
 							<a href="#" onclick="fncTelaModalCadastrarProcessoFluxo(this)" id_processo="<?php echo $objProcesso[0]->getId(); ?>" id_fluxo="<?php echo $objProcesso[0]->getFluxo()->getId(); ?>" class="btn btn-secondary btn-sm buttonCadastro">
-								<img style="width: 20px;" src="./assets/images/plus-icon-plus-write.png" alt="Picture">&nbsp;Atividade
+								&nbsp;<img style="width: 20px;" src="./assets/images/plus-icon-plus-write.png" alt="Picture">&nbsp;
 							</a>
-							<?php if($objProcesso != null && $objProcesso[0]->getId() != null ){ ?>
-							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" retorno="div_central" class="btn btn-primary btn-sm formCadastro">Ordernar</a>
-							<?php } ?>
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="telaRelatorioProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" class="btn btn-warning btn-sm buttonCadastro">
+								&nbsp;<img style="width: 20px;" src="./assets/images/relatorio-btn.png" alt="Picture">&nbsp;
+							</a>
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="telaGraficoProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" class="btn btn-success btn-sm buttonCadastro">
+								&nbsp;<img style="width: 20px;" src="./assets/images/bar-chart-icon-png.png" alt="Picture">&nbsp;
+							</a>							
 						</div>
 					</div>
 					<div class="card-header d-flex">
@@ -147,7 +150,12 @@ class ViewProcesso {
 							<div class="input-group-append">
 								<button type="button" onClick="filtrarTimeline('', false)" class="btn btn-light">Limpar</button>
 							</div>
-						</div>						
+						</div>
+						<?php if($objProcesso != null && $objProcesso[0]->getId() != null ){ ?>
+						<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" retorno="div_central" class="btn btn-primary btn-sm formCadastro">
+							<img style="width: 30px;" src="./assets/images/order-btn.png" alt="Picture">
+						</a>
+						<?php } ?>						
 					</div>						
 		     	</div>
 		     </div>
@@ -419,7 +427,7 @@ class ViewProcesso {
             $(document).ready(function() {
                 $('#tooltip').hide();
                 fixTableLayout('example');                
-            });  
+            }); 
             /*$('.dimensions').tooltip({
                 track: true,
                 delay: 0,
@@ -582,10 +590,19 @@ class ViewProcesso {
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">
+					<div id="mobile" class="card-header d-flex">
+						<h4 class="card-header-title">Gráfico Atividades</h4>
+					</div>
 					<div class="card-header d-flex">
-			            <h4 class="card-header-title">Gráfico Atividades</h4>
+						<h4 id="desktop" class="card-header-title">Gráfico Atividades</h4>			            
 			            <div class="toolbar ml-auto">
 			            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-success btn-sm buttonCadastro">
+								&nbsp;<img style="width: 20px;" src="./assets/images/flow-btn.png" alt="Picture">&nbsp;
+							</a>	
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="telaRelatorioProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" class="btn btn-warning btn-sm buttonCadastro">
+								&nbsp;<img style="width: 20px;" src="./assets/images/relatorio-btn.png" alt="Picture">&nbsp;
+							</a>		            
 			            </div>
 		            </div>
 					<div class="card-body">
@@ -614,7 +631,13 @@ class ViewProcesso {
 
     	    });
 
-    	})(window, document, window.jQuery); 
+    	})(window, document, window.jQuery);
+
+        if(detectarMobile() == true){
+			$('#desktop').remove();
+		}else{				
+			$('#mobile').remove();
+		}    	 
     	</script>
 		<?php 
     }
@@ -775,10 +798,20 @@ class ViewProcesso {
 		<div class="row" >
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
+					
+					<div id="mobile" class="card-header d-flex">
+						<h4 class="card-header-title">Relatório</h4>
+					</div>
 					<div class="card-header d-flex">
-			            <h4 class="card-header-title">Relatório</h4>
+						<h4 id="desktop" class="card-header-title">Relatório</h4>
 			            <div class="toolbar ml-auto">
 			            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" retorno="div_central" class="btn btn-success btn-sm buttonCadastro">
+								&nbsp;<img style="width: 20px;" src="./assets/images/flow-btn.png" alt="Picture">&nbsp;
+							</a>	
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="telaGraficoProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" class="btn btn-warning btn-sm buttonCadastro">
+								&nbsp;<img style="width: 20px;" src="./assets/images/bar-chart-icon-png.png" alt="Picture">&nbsp;
+							</a>
 							<a href="#" onclick="window.open('planilha.php?id=<?php echo $objProcesso[0]->getId();?>');" class="btn btn-primary btn-sm buttonCadastro">Download</a>
 			            </div>
 			        </div>		
@@ -924,6 +957,12 @@ class ViewProcesso {
 			  }
 			});
 			recalcular();
+
+	        if(detectarMobile() == true){
+				$('#desktop').remove();
+			}else{				
+				$('#mobile').remove();
+			}    
 		</script>			
 	<?php 
     }

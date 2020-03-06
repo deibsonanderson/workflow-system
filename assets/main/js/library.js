@@ -995,7 +995,7 @@ function filtrarTimeline(texto, isDiv){
 		$('.cd-timeline__block').each(function() {
 			var divs = $(this).children();
 			var titulo = $(divs[1]).children().html();
-			if(titulo.trim().toUpperCase().indexOf(texto.trim().toUpperCase()) !== -1){
+			if(titulo != undefined && titulo.trim().toUpperCase().indexOf(texto.trim().toUpperCase()) !== -1){
 				
 				if(isDiv === false){
 					var html = '<div class="list-filter col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="background-color: #ffffff;min-height: 2.5rem;border: 1px solid #d2d2e4;padding-top: 8px;" onClick="filtrarTimeline(\''+titulo.trim()+'\', true)" >'+titulo.trim()+'</div>';
