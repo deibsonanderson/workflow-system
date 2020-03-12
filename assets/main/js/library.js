@@ -1423,6 +1423,35 @@ function fncSelecionados(elemento){
     }				
 }
 
+function fncRecuperarMes(mes){
+	if(mes){
+		var meses = new Array ("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Agosto", "Outubro", "Novembro", "Dezembro");
+		return meses[mes];
+	}
+}
+
+function fncIncludeText(element){
+	if($(element).val() != undefined && $(element).val() != ''){
+		var data = new Date();
+		var periodo = fncRecuperarMes(data.getMonth())+' '+data.getFullYear(); 
+		
+		switch($(element).val()){
+			case '1':
+				$('#descricao').html('Boleto - '+periodo);
+			break;	
+			case '2':
+				$('#descricao').html('Comprovante de pagamento - '+periodo);
+			break;
+			case '3':
+				$('#descricao').html('Fatura - '+periodo);
+			break;						
+			default:
+				$('#descricao').html('');
+			break;		
+		}
+	}
+}
+
 function fncEachCheckFluxo(isHide){
 	$('.check-fluxo').each(function() {
 		if(isHide == true){

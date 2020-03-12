@@ -625,7 +625,6 @@ class ViewAtividade {
     	        if(detectarMobile() == true){
     				$('.desktop').remove();
     			}
-
             });
 
    			function validarCampo(elemento){
@@ -878,7 +877,7 @@ class ViewAtividade {
 								</div>
 								<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
 									<label for="descricao">Categoria *</label>
-									<select id="categoria_comentario" name="categoria_comentario"  class="mgs_alerta form-control" >
+									<select id="categoria_comentario" name="categoria_comentario" onchange="fncIncludeText(this)"  class="mgs_alerta form-control" >
 										<option value="0" selected="selected" >Sem Anexo</option>
 				                        <option value="1" >Boleto</option>
 				                        <option value="2" >Comprovante</option>
