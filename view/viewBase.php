@@ -17,6 +17,7 @@ abstract class ViewBase {
 	const CODIGO = 'id';
 	const TEXT = 'text';
 	const TEXT_AREA = 'textarea';
+	const LISTAGEM = 'listagem';
 	
 	/**
 	 * Operacao responsavel por montar o script batão de informacao de growlUI2
@@ -155,10 +156,10 @@ abstract class ViewBase {
 	 * @param boolean $view - booleano responsavel por informar se a tela é update ou view
 	 * @return string
 	 */
-	protected function montarInputs($tela, $objeto, $view){
+	protected function montarInputs($tela, $objeto, $view, $id = null){
 		$inputs = '';
 		foreach ($tela->getCampos() as $campo) {
-			$inputs .= $this->checkTipoInput($campo, $objeto, $view);
+			$inputs .= $this->checkTipoInput($campo, $objeto, $view, $id);
 		}
 		return $inputs;
 	}
@@ -170,10 +171,12 @@ abstract class ViewBase {
 	 * @param boolean $view
 	 * @return string
 	 */
-	protected function checkTipoInput($campo, $objeto, $view){
-		if ($campo->getTipo() == 'textArea') {
+	protected function checkTipoInput($campo, $objeto, $view, $id = null){
+		if ($campo->getTipo() == $this::TEXT_AREA) {
 			return 'TODO';
-		} else {
+		} else if ($campo->getTipo() == $this::LISTAGEM) {
+			return $this->montarSelectBasico($campo, $id, $view);
+		} else if ($campo->getTipo() == $this::TEXT){
 			return $this->montarInputText($campo, $objeto, $view);
 		}
 	}
@@ -187,7 +190,11 @@ abstract class ViewBase {
 	 */
 	protected function montarInputText($campo, $objeto, $view){
 		if($objeto){
-			$method = 'get'.ucfirst($campo->getNome());
+			if($campo->getAtribudo()){
+				$method = 'get'.ucfirst($campo->getAtribudo());
+			}else{
+				$method = 'get'.ucfirst($campo->getNome());
+			}			
 			if(method_exists(get_class($objeto), $method)){
 				$valor = $objeto->$method();
 			}
@@ -195,12 +202,35 @@ abstract class ViewBase {
 		
 		$disabled = ($view)?'disabled="disabled"':'';
 		
-		return '<div class="card-body">
+		return '
 								<div class="form-group">
 									<label for="'.strtolower($campo->getTitulo()).'" class="col-form-label">'.ucfirst($campo->getTitulo()).$this->getAsterisco($campo).' </label>
 									<input id="'.strtolower($campo->getNome()).'" name="'.strtolower($campo->getNome()).'" type="text" value="'.$valor.'" '.$disabled.' class="form-control '.$this->getMgsAlerta($campo).'" '.$this->getUpperCase($campo).'>
-								</div>
-							</div>';
+								</div>';
+	}
+	
+		
+	function montarSelectBasico($campo, $id, $view = null){
+		$disabled = ($view)?' disabled="disabled" ':'';
+		$html = '<div class="form-group">
+                      <label for="modulo">'.ucfirst($campo->getTitulo()).$this->getAsterisco($campo).'</label>
+					  <select id="'.strtolower($campo->getNome()).'" name="'.strtolower($campo->getNome()).'" '.$disabled.' class="'.$this->getMgsAlerta($campo).' form-control">
+					  		<option value="">Selecione...</option>';
+							$controlador = $campo->getControlador();
+							$funcao = $campo->getFuncao();
+							
+							$c = new $controlador();
+							$objeto = $c->$funcao();
+
+							$atributo = 'get'.ucfirst($campo->getAtribudo());
+							foreach ($objeto as $objeto){
+								$selected = ($objeto->getId() == $id)?' selected="selected" ':'';
+								$html .= '<option value="'.$objeto->getId().'" '.$selected.' >'.$objeto->$atributo().'</option>';
+							}
+		
+		$html .= ' 	  </select>
+				 </div>';
+		return $html;
 	}
 	
 	//BLOCO MONTAR INPUTS GERAIS FIM ***************************************************************
@@ -332,13 +362,14 @@ abstract class ViewBase {
 	 * @param boolean $upperCase
 	 * @return Campo
 	 */
-	protected function criarCampo($titulo, $nome, $tipo = null, $obrigatorio = null, $upperCase = null) {
+	protected function criarCampo($titulo, $nome, $tipo = null, $obrigatorio = null, $upperCase = null, $atributo = null) {
 		$campo = new Campo ();
 		$campo->setTitulo ( $titulo );
 		$campo->setNome ( $nome );
 		$campo->setTipo( $tipo );
 		$campo->setObrigatorio ( $obrigatorio );
 		$campo->setUpperCase ( $upperCase );
+		$campo->setAtributo($atributo);
 		return $campo;
 	}
 	
@@ -421,7 +452,7 @@ abstract class ViewBase {
 	 * @param string $view
 	 * @param unknown $objeto
 	 */
-	protected function criarTelaManter($tela, $post, $view = false, $objeto = null){
+	protected function criarTelaManter($tela, $post, $view = false, $objeto = null, $id = null){
 		echo $this->montarGrowlUI($post);
 		?>
 		<div class="row">
@@ -440,9 +471,11 @@ abstract class ViewBase {
 			            	?>			            	
 			            </div>
 		            </div>
+		            <div class="card-body">
 		            <?php 
-		            echo $this->montarInputs($tela, $objeto, $view);
+		            echo $this->montarInputs($tela, $objeto, $view, $id);
 				 	?>
+				 	</div>
 				</form>
 				</div>
 			</div>

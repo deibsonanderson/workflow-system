@@ -3,9 +3,13 @@ class Campo {
 	
 	private $titulo;
 	private $nome;
+	private $atributo;
 	private $tipo;
 	private $obrigatorio;
 	private $upperCase;
+	
+	private $controlador;
+	private $funcao;
 	
 	public function getTitulo() {
 		return $this->titulo;
@@ -45,6 +49,31 @@ class Campo {
 	
 	public function setUpperCase($upperCase) {
 		$this->upperCase = $upperCase;
+	}
+	
+	public function getAtribudo() {
+		return $this->atributo;
+	}
+	
+	public function setAtributo($atributo) {
+		$this->atributo = $atributo;
+	}
+	
+	
+	public function getControlador() {
+		return $this->controlador;
+	}
+	
+	public function setControlador($controlador) {
+		$this->controlador = $controlador;
+	}
+		
+	public function getFuncao() {
+		return $this->funcao;
+	}
+	
+	public function setFuncao($funcao) {
+		$this->funcao = $funcao;
 	}
 }
 ?>

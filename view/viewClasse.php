@@ -1,6 +1,6 @@
 <?php
 
-class ViewClasse{
+class ViewClasse extends ViewBase {
 	
 	//construtor
 	public function __construct(){}
@@ -8,6 +8,8 @@ class ViewClasse{
 	//destruidor
 	public function __destruct(){}
 	
+	const CONTROLADOR = 'ControladorClasse';
+	const TELA_LISTAR = 'telaListarClasse';
 	
 	public function telaCadastrarClasse($post){		
 		?>
@@ -202,7 +204,24 @@ class ViewClasse{
 	
 	
 	public function telaVisualizarClasse($objClasse){
-		?>
+		$campo = $this->criarCampo ( 'modulo', 'modulo', $this::LISTAGEM, ViewBase::VERDADEIRO, ViewBase::FALSO, 'nome' );
+		$campo->setControlador('ControladorModulo');
+		$campo->setFuncao('listarModulo');
+
+		$campos = array (
+				$this->criarCampo ( 'nome', 'nome', $this::TEXT, ViewBase::VERDADEIRO, ViewBase::VERDADEIRO ),
+				$this->criarCampo ( 'controlador', 'controlador_', $this::TEXT,ViewBase::VERDADEIRO, ViewBase::FALSO, 'controlador' ),
+				$this->criarCampo ( 'funcao', 'funcao_', $this::TEXT, ViewBase::VERDADEIRO, ViewBase::FALSO, 'funcao' ), 
+				$campo );		
+				
+		$tela = $this->criarTela ( null, null, null, null,
+				$this->montarBtnVoltar($this::CONTROLADOR, $this::TELA_LISTAR), $this->montarBotaoAcao($this::ALTERAR),
+				'Visualizar Classe', $campos );
+				return $this->criarTelaManter ( $tela, $post, ViewBase::VERDADEIRO, $objClasse[0], $objClasse[0]->getModulo()->getId());
+		
+		
+		
+		/*?>,
 <div class="row">
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		<div class="card">		
@@ -232,7 +251,7 @@ class ViewClasse{
 					<input id="funcao_" name="funcao_" type="text" disabled value="<?php echo $objClasse[0]->getFuncao();?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
 				</div>
 				<div class="form-group">
-					<label for="pais">Módulo *</label>
+					<label for="pais">Módulo2 *</label>
 					<select id="modulo" name="modulo"  disabled class="mgs_alerta form-control">
 					<?php 
 						$controladorModulo = new ControladorModulo();
@@ -255,7 +274,7 @@ class ViewClasse{
 		</div>
 	</div>
 </div>		
-		<?php
+		<?php*/
 	}
 	
 }
