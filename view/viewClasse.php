@@ -217,64 +217,8 @@ class ViewClasse extends ViewBase {
 		$tela = $this->criarTela ( null, null, null, null,
 				$this->montarBtnVoltar($this::CONTROLADOR, $this::TELA_LISTAR), $this->montarBotaoAcao($this::ALTERAR),
 				'Visualizar Classe', $campos );
-				return $this->criarTelaManter ( $tela, $post, ViewBase::VERDADEIRO, $objClasse[0], $objClasse[0]->getModulo()->getId());
-		
-		
-		
-		/*?>,
-<div class="row">
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-		<div class="card">		
-        <form action="#" method="post" id="formCadastro" class="">
-			<input type="hidden" name="retorno" id="retorno" value="div_central"/>
-			<input type="hidden" name="controlador" id="controlador" value="ControladorClasse"/>
-			<input type="hidden" name="funcao" id="funcao" value="alterarClasse"/>
-			<input type="hidden" name="mensagem" id="mensagem" value="2"/>
-			<input type="hidden" name="id" id="id" value="<?php echo $objClasse[0]->getId();?>"/>	
-			<div class="card-header d-flex">
-	            <h4 class="card-header-title">Visualizar Classe</h4>
-	            <div class="toolbar ml-auto">
-	            	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarClasse" controlador="ControladorClasse" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
-	            </div>
-            </div>
-			<div class="card-body">				
-				<div class="form-group">
-					<label for="nome" class="col-form-label">Nome *</label>
-					<input id="nome" name="nome" type="text" disabled value="<?php echo $objClasse[0]->getNome();?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
-				</div>
-				<div class="form-group">
-					<label for="nome" class="col-form-label">Controlador *</label>
-					<input id="controlador_" name="controlador_" disabled value="<?php echo $objClasse[0]->getControlador();?>" type="text" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
-				</div>
-				<div class="form-group">
-					<label for="nome" class="col-form-label">Função *</label>
-					<input id="funcao_" name="funcao_" type="text" disabled value="<?php echo $objClasse[0]->getFuncao();?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
-				</div>
-				<div class="form-group">
-					<label for="pais">Módulo2 *</label>
-					<select id="modulo" name="modulo"  disabled class="mgs_alerta form-control">
-					<?php 
-						$controladorModulo = new ControladorModulo();
-						$objModulo = $controladorModulo->listarModulo();
-					?>
-						<option value="">Selecione...</option>
-					<?php 
-					foreach ($objModulo as $catModulo){
-						if($catModulo->getId() == $objClasse[0]->getModulo()->getId()){
-							?><option value="<?php echo $catModulo->getId()?>" selected="selected"><?php echo $catModulo->getNome();?></option><?php 
-						}else{
-							?><option value="<?php echo $catModulo->getId()?>"><?php echo $catModulo->getNome();?></option><?php                                  	
-						}
-					 }
-					 ?>                                 
-					</select>
-				</div>				
-			</div>
-		</form>
-		</div>
-	</div>
-</div>		
-		<?php*/
+	
+		return $this->criarTelaManter ( $tela, $post, ViewBase::VERDADEIRO, $objClasse[0], $objClasse[0]->getModulo()->getId());
 	}
 	
 }

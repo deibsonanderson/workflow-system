@@ -209,7 +209,13 @@ abstract class ViewBase {
 								</div>';
 	}
 	
-		
+	/**
+	 * Operacao responsavel por montar campos input select baico de um objeto relacionado
+	 * @param unknown $campo
+	 * @param unknown $id
+	 * @param unknown $view
+	 * @return string
+	 */	
 	function montarSelectBasico($campo, $id, $view = null){
 		$disabled = ($view)?' disabled="disabled" ':'';
 		$html = '<div class="form-group">
