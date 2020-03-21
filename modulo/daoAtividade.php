@@ -54,6 +54,7 @@ class DaoAtividade extends DaoBase {
     public function listarAtividadeByCategoria($id = null, $id_usuario = null) {
     	try {
     		$sql = ($id != null) ? " AND id_categoria = " . $id : "";
+			$sql .= " ORDER BY vencimento ASC ";
     		return $this->executarQuery($this->sqlSelect(DaoBase::TABLE_ATIVIDADE, 
     						array('id', 'titulo','descricao','link','arquivo','imagem','valor','fixa','propriedade','status','id_categoria','vencimento'), 
     						false).$this->montarIdUsuario($id_usuario).$sql, 'Atividade');
