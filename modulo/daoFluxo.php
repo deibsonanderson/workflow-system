@@ -26,7 +26,7 @@ class DaoFluxo extends DaoBase {
         try {
         	$sql = ($id_titulo_fluxo != null) ? " AND id_titulo_fluxo = " . $id_titulo_fluxo : "";
         	$sql .= ' ORDER BY wf.ordenacao ASC ';
-        	$query = $this->executar("SELECT wf.id AS id_fluxo, wf.id_atividade, wa.fixa, wa.titulo, wf.status, wa.valor, wa.propriedade, wa.descricao AS atividade_descricao, wa.imagem
+        	$query = $this->executar("SELECT wf.id AS id_fluxo, wf.id_atividade, wa.fixa, wa.titulo, wf.status, wa.valor, wa.propriedade,wa.vencimento, wa.descricao, wa.imagem
                     FROM ".DaoBase::TABLE_FLUXO." wf
                     INNER JOIN ".DaoBase::TABLE_ATIVIDADE." wa ON (wf.id_atividade = wa.id )
                     WHERE wf.status = '1' ".$this->montarIdUsuario($id_usuario,'wf').$sql);
@@ -34,7 +34,8 @@ class DaoFluxo extends DaoBase {
           		$atividade = $this->modelMapper($objetoFluxoAtividade, new Atividade());
           		$atividade->setId($objetoFluxoAtividade->id_atividade);
                 $atividade->setIdFluxo($objetoFluxoAtividade->id_fluxo);
-                $atividade->setDescricao($objetoFluxoAtividade->atividade_descricao);
+                $atividade->setDescricao($objetoFluxoAtividade->descricao);
+				$atividade->setVencimento($objetoFluxoAtividade->vencimento);
 
                 $retorno[] = $atividade;
             }

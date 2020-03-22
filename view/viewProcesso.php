@@ -150,12 +150,12 @@ class ViewProcesso {
 							<div class="input-group-append">
 								<button type="button" onClick="filtrarTimeline('', false)" class="btn btn-light">Limpar</button>
 							</div>
+							<?php if($objProcesso != null && $objProcesso[0]->getId() != null ){ ?>
+							<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" retorno="div_central" class="btn btn-primary btn-sm formCadastro">
+								<img style="width: 30px;" src="./assets/images/order-btn.png" alt="Picture">
+							</a>
+							<?php } ?>								
 						</div>
-						<?php if($objProcesso != null && $objProcesso[0]->getId() != null ){ ?>
-						<a href="#" onclick="getId(this)" id="<?php echo $objProcesso[0]->getId(); ?>" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" retorno="div_central" class="btn btn-primary btn-sm formCadastro">
-							<img style="width: 30px;" src="./assets/images/order-btn.png" alt="Picture">
-						</a>
-						<?php } ?>						
 					</div>						
 		     	</div>
 		     </div>
