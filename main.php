@@ -98,7 +98,7 @@ if (isset($_SESSION["login"])) {
                     $('#div_central').html(result);
                 },
                 beforeSend: function() {
-                	showLoading();                 
+                	//showLoading();                 
                 },
                 complete: function() {
                 	hideLoading();

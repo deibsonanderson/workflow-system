@@ -1432,9 +1432,8 @@ function fncRecuperarMes(mes){
 
 function fncIncludeText(element){
 	if($(element).val() != undefined && $(element).val() != ''){
-		var data = new Date();
-		var periodo = fncRecuperarMes(data.getMonth())+' '+data.getFullYear(); 
-		
+		var data = $('#data_comentario').val();
+		var periodo = fncRecuperarMes((parseInt(data.substr(3,2)))-1)+' '+parseInt(data.substr(6,4)); 
 		switch($(element).val()){
 			case '1':
 				$('#descricao').html('Boleto - '+periodo);

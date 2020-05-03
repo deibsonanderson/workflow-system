@@ -1046,22 +1046,29 @@ class ViewAtividade {
 		<?php     	
     }
     
-    public function telaComboProcesso(){
+    public function telaComboProcesso($objetos = null){
     	?>
 		<div class="form-group col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mb-2">
 			<label for="pais">Processo</label>
 			<select id="processo" name="processo"  class="form-control">
 			<?php 
 			try {
-				$controladorProcesso = new ControladorProcesso();
-				$objetos = $controladorProcesso->listarDistinctProcesso();
+			    if($objetos == null){
+    				$controladorProcesso = new ControladorProcesso();
+    				$objetos = $controladorProcesso->listarDistinctProcesso();
+			    }
 			} catch (Exception $e) { echo 'erro no listar Processo'; }
 			?>
 				<option value="">Selecione...</option>
 			<?php 
-			 foreach ($objetos as $objetos){
+			foreach ($objetos as $key => $objeto){
+			    if($key == 0){
+			        $selected = 'selected="selected"';
+			    }else{
+			        $selected = '';
+			    }
 			?>
-				<option value="<?php echo $objetos->getId()?>"><?php echo $objetos->getTitulo();?></option>
+				<option <?php echo $selected; ?> value="<?php echo $objeto->getId(); ?>"><?php echo $objeto->getTitulo();?></option>
 			<?php                                  	
 			 }
 			 ?>                                 
@@ -1083,9 +1090,9 @@ class ViewAtividade {
 			?>
 				<option value="">Selecione...</option>
 			<?php 
-			 foreach ($objetos as $objetos){
+			 foreach ($objetos as $objeto){
 			?>
-				<option value="<?php echo $objetos->getId()?>"><?php echo $objetos->getTitulo();?></option>
+				<option value="<?php echo $objeto->getId()?>"><?php echo $objeto->getTitulo();?></option>
 			<?php                                  	
 			 }
 			 ?>                                 
@@ -1094,7 +1101,7 @@ class ViewAtividade {
 		<?php  
     }
     
-    public function telaListarComentariosAtividadeProcesso($listComentario){
+    public function telaListarComentariosAtividadeProcesso($listComentario, $processos = null){
     	?>
 		<script type="text/javascript">
 			//$.fn.DataTable.ext.pager.numbers_length = 10;
@@ -1158,7 +1165,7 @@ class ViewAtividade {
 					</div>
 					<div class="form-row">							
 		        		<?php 
-			        		echo $this->telaComboProcesso();
+		        		    echo $this->telaComboProcesso($processos);
 			        		echo $this->telaComboAtividade();
 		        		?>	
 	        		</div>

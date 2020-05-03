@@ -200,7 +200,8 @@ class DaoProcesso extends DaoBase {
     	try {
     		return $this->executarQuery(
     				$this->sqlSelect(DaoBase::TABLE_PROCESSO, array('id', 'titulo'), true).
-    				$this->montarIdUsuario($_SESSION["login"]->getId()),
+    				$this->montarIdUsuario($_SESSION["login"]->getId()).
+    		        $this->sqlOrderBy('id', DaoBase::DESC),
     				'Fluxo');
     	} catch (Exception $e) {
     		return $e;

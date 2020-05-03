@@ -18,7 +18,8 @@ abstract class DaoBase {
 	const TABLE_PROCESSO_FLUXO = 'tb_workflow_processo_fluxo';
 	const TABLE_TITULO_FLUXO = 'tb_workflow_titulo_fluxo';
 	const TABLE_USUARIO = 'tb_workflow_usuario';
-
+	const ASC = 'ASC';
+    const DESC = 'DESC';
 	/**
 	 * Paramentros de configuração do banco de dados
 	 */
@@ -274,6 +275,16 @@ abstract class DaoBase {
 		$sql = substr($sql, 0, -1);
 		return $sql .= " FROM $tabela WHERE status = '1' ";
 	} 
+	
+	/**
+	 * Operação responsavel por montar a estrutura order by
+	 * @param string $campo
+	 * @param string $asc = 'ASC' default or 'DESC'
+	 * @return string
+	 */
+	protected function sqlOrderBy($campo, $asc = 'ASC'){
+	    return ' ORDER BY '.$campo.' '.$asc;
+	}
 	
 	/**
 	 * Operação responsavel pela exclusão logica
