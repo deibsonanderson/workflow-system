@@ -229,11 +229,13 @@ class ControladorAtividade {
     		$viewAtividade = new ViewAtividade();
     		$controladorComentarioFluxoProcesso = new ControladorComentarioFluxoProcesso();
     		
-    		$controladorProcesso = new ControladorProcesso();
-    		$processos = $controladorProcesso->listarDistinctProcesso();
-    		if($processos != null && count($processos) > 0){
-    		    $post["processo"] = $processos[0]->getId();
-    		}
+			if(isset($post) && count($post) == 0){
+				$controladorProcesso = new ControladorProcesso();
+				$processos = $controladorProcesso->listarDistinctProcesso();
+				if($processos != null && count($processos) > 0){
+					$post["processo"] = $processos[0]->getId();
+				}
+			}
     		$retorno = $viewAtividade->telaListarComentariosAtividadeProcesso($controladorComentarioFluxoProcesso->listarComentarioFluxoProcessoByFilter($post), $processos);
     		$viewAtividade->__destruct();
     		return $retorno;
