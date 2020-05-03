@@ -119,6 +119,22 @@ $pastaArquivo = $_POST['pastaArquivo'];
 $largura = $_POST['largura'];
 $tipoArq = $_POST['tipoArq'];
 
+$prefixo = '';
+$processo = $_POST['processo'];
+if($processo != null && trim($processo) != ''){
+	$prefixo .=	$processo.'_';
+}
+
+$atividade = $_POST['atividade'];
+if($atividade != null && trim($atividade) != ''){
+	$prefixo .=	$atividade.'_';
+}
+
+$categoria_anexo = $_POST['categoria_anexo'];
+if($categoria_anexo != null && trim($categoria_anexo) != ''){
+	$prefixo .=	$categoria_anexo.'_';
+}
+
 if ($opcao === '1') {
 
     $permissao = is__writable($pastaArquivo . '/');
@@ -139,7 +155,9 @@ if ($opcao === '1') {
                     $ext = explode('.', $nome_arquivo);
                     $ext = '.' . $ext[sizeof($ext) - 1];
                     if (trim($nome_arquivo) === $ext) {
-                        $nome_arquivo = 'arquivo_sem_nome' . $ext;
+                        $nome_arquivo = $prefixo.'arquivo_sem_nome' . $ext;
+                    }else{
+                        $nome_arquivo = $prefixo.$nome_arquivo;                        
                     }
                     if (file_exists($pastaArquivo . '/' . $nome_arquivo)) {
                         $diretorio = opendir($pastaArquivo);

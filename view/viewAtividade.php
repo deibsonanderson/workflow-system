@@ -903,6 +903,9 @@ class ViewAtividade {
 												<input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
 												<input name="largura" type="hidden" value="640">
 												<input name="opcao" type="hidden" value="1">
+												<input id="categoria_anexo" name="categoria_anexo" type="hidden" value="">
+												<input name="processo" type="hidden" value="<?php echo ($objProcesso[0]->getTitulo() != null)?normalizaTexto(limitarTexto($objProcesso[0]->getTitulo(), 40)):''; ?>">
+												<input name="atividade" type="hidden" value="<?php echo ($objProcessoFluxo->getTitulo() != null)?normalizaTexto($objProcessoFluxo->getTitulo()):''; ?>">
 												<input name="tipoArq" type="hidden" value="arquivo">
 												<input style="width: 30px;" type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
 												<input type="submit" id="enviar_arquivo" style="display:none;">
@@ -938,9 +941,7 @@ class ViewAtividade {
 		</div>
         <?php
     }
-    
-    
-    
+           
     public function telaComentariosAtividadeProcesso($processoFluxoId, $isDelete){
         ?>
         <div class="table-responsive">

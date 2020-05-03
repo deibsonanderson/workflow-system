@@ -1434,15 +1434,19 @@ function fncIncludeText(element){
 	if($(element).val() != undefined && $(element).val() != ''){
 		var data = $('#data_comentario').val();
 		var periodo = fncRecuperarMes((parseInt(data.substr(3,2)))-1)+' '+parseInt(data.substr(6,4)); 
+		$('#categoria_anexo').val('');
 		switch($(element).val()){
 			case '1':
 				$('#descricao').html('Boleto - '+periodo);
+				$('#categoria_anexo').val('boleto');				
 			break;	
 			case '2':
 				$('#descricao').html('Comprovante de pagamento - '+periodo);
+				$('#categoria_anexo').val('comprovante');
 			break;
 			case '3':
 				$('#descricao').html('Fatura - '+periodo);
+				$('#categoria_anexo').val('fatura');
 			break;						
 			default:
 				$('#descricao').html('');
