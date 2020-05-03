@@ -222,7 +222,7 @@ class ViewAgenda {
         <div id="div_modal_agenda_retorno"></div>
         <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
-		<?
+		<?php
     	date_default_timezone_set('America/Sao_Paulo');
 		$dataIn = date("Y-m-d");
 		if($post["data"] !== null){
