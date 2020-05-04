@@ -1434,18 +1434,19 @@ function fncIncludeText(element){
 	if($(element).val() != undefined && $(element).val() != ''){
 		var data = $('#data_comentario').val();
 		var periodo = fncRecuperarMes((parseInt(data.substr(3,2)))-1)+' '+parseInt(data.substr(6,4)); 
+		var titulo_atividade = $('#input_titulo').val();
 		$('#categoria_anexo').val('');
 		switch($(element).val()){
 			case '1':
-				$('#descricao').html('Boleto - '+periodo);
+				$('#descricao').html('Boleto ('+titulo_atividade+') - '+periodo);
 				$('#categoria_anexo').val('boleto');				
 			break;	
 			case '2':
-				$('#descricao').html('Comprovante de pagamento - '+periodo);
+				$('#descricao').html('Comprovante de pagamento ('+titulo_atividade+') - '+periodo);
 				$('#categoria_anexo').val('comprovante');
 			break;
 			case '3':
-				$('#descricao').html('Fatura - '+periodo);
+				$('#descricao').html('Fatura ('+titulo_atividade+') - '+periodo);
 				$('#categoria_anexo').val('fatura');
 			break;						
 			default:
