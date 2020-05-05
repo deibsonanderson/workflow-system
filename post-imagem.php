@@ -120,7 +120,7 @@ $largura = $_POST['largura'];
 $tipoArq = $_POST['tipoArq'];
 
 $prefixo = '';
-$processo = $_POST['processo'];
+/*$processo = $_POST['processo'];
 if($processo != null && trim($processo) != ''){
 	$prefixo .=	$processo.'_';
 }
@@ -133,7 +133,7 @@ if($atividade != null && trim($atividade) != ''){
 $categoria_anexo = $_POST['categoria_anexo'];
 if($categoria_anexo != null && trim($categoria_anexo) != ''){
 	$prefixo .=	$categoria_anexo.'_';
-}
+}*/
 
 if ($opcao === '1') {
 
