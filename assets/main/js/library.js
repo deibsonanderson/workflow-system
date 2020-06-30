@@ -1425,7 +1425,7 @@ function fncSelecionados(elemento){
 
 function fncRecuperarMes(mes){
 	if(mes){
-		var meses = new Array ("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Agosto", "Outubro", "Novembro", "Dezembro");
+		var meses = new Array ("Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro");
 		return meses[mes];
 	}
 }
