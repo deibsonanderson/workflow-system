@@ -36,7 +36,7 @@ abstract class DaoBase {
 	
 	/**
 	 * Operação responsavel por abrir a conexão
-	 * @return DataSource
+	 * @return object
 	 */
 	protected function conectarBanco() {
 		try {
@@ -55,7 +55,7 @@ abstract class DaoBase {
 	
 	/**
 	 * Operação responsavel por fechar a conexão
-	 * @param DataSource $conexao
+	 * @param object $conexao
 	 */
 	protected function fecharBanco($conexao) {
 		try {
@@ -164,8 +164,8 @@ abstract class DaoBase {
 	
 	/**
 	 * Operação responsavel por converter um objeto simples em uma classe simples.
-	 * @param strClass $origem
-	 * @param Class $destino
+	 * @param object $origem
+	 * @param object $destino
 	 * @return $destino
 	 */
 	protected function modelMapper($origem, $destino){
@@ -181,7 +181,7 @@ abstract class DaoBase {
 	/**
 	 * Essa operação tem como finalidade montar inserções simples.
 	 * @param String $tabela
-	 * @param Objeto $objeto
+	 * @param object $objeto
 	 * @return string
 	 */
 	protected function sqlInserir($tabela, $objeto){
@@ -200,7 +200,7 @@ abstract class DaoBase {
 	/**
 	 * Essa operação tem como finalidade montar updates simples.
 	 * @param String $tabela
-	 * @param Objeto $objeto
+	 * @param object $objeto
 	 * @return string
 	 */
 	protected function sqlAtualizar($tabela, $objeto){
@@ -262,7 +262,7 @@ abstract class DaoBase {
 	
 	/**
 	 * Operação responsavel por montar um select basico
-	 * @param Sring $tabela
+	 * @param object $tabela
 	 * @param Array $campos
 	 * @return string
 	 */

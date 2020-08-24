@@ -1140,6 +1140,7 @@ class ViewAtividade {
 				<div class="card-header d-flex">
 		            <h4 class="card-header-title">Comentários e Anexos</h4>
 		            <div class="toolbar ml-auto">
+		            	<a href="#" onclick="fncBaixarTodosArquivos()" funcao="telaCadastrarAgenda" controlador="ControladorAgenda" retorno="div_central" class="btn btn-primary btn-sm buttonCadastro">Downloads</a>
 		            	<a href="#" id="btnFilter" onclick="showHideFilter(this)" show="D" class="btn btn-light btn-sm">Filtro</a>
 		             	<a href="#" onclick="fncButtonCadastro(this)" funcao="telaCadastrarAgenda" controlador="ControladorAgenda" retorno="div_central" class="btn btn-primary btn-sm buttonCadastro">Agenda</a>
 		            </div>
@@ -1180,6 +1181,7 @@ class ViewAtividade {
 						<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
 							<thead>
 								<tr>
+								    <th><input id="all-checkbox-file" onclick="fcnSelectAllFiles()" type="checkbox"></th>
 									<th>Data</th> 
 									<th>Atividade</th> 
 									<th>Processo</th> 
@@ -1198,6 +1200,7 @@ class ViewAtividade {
 					                ++$cont;
 					                ?>
 					                    <tr>
+					                        <td><input class="checkbox-file" type="checkbox" value="<?php echo $comentario->getArquivo(); ?>"  / <?php echo ($comentario->getArquivo() == '')?'disabled="disabled"':''; ?>></td>
 					                        <td><label style="width: 80px;"><?php echo recuperaData($comentario->getData()); ?></label></td>
 					                        <td><?php echo $comentario->getFluxoProcesso()->getTitulo(); ?></td>
 					                        <td><?php echo $comentario->getProcesso()->getTitulo(); ?></td>

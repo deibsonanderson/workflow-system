@@ -102,7 +102,7 @@ abstract class ViewBase {
 	
 	/**
 	 * Operacao responsavel por montar o botão cadastrar ou alterar padrão do formulario
-	 * @param unknown $tela
+	 * @param object $tela
 	 * @return string
 	 */
 	protected function montarBotaoCadastrarAlterar($tela){
@@ -211,9 +211,9 @@ abstract class ViewBase {
 	
 	/**
 	 * Operacao responsavel por montar campos input select baico de um objeto relacionado
-	 * @param unknown $campo
-	 * @param unknown $id
-	 * @param unknown $view
+	 * @param object $campo
+	 * @param object $id
+	 * @param object $view
 	 * @return string
 	 */	
 	function montarSelectBasico($campo, $id, $view = null){
@@ -453,10 +453,10 @@ abstract class ViewBase {
 	
 	/**
 	 * Operacao responsavel por criar toda a tela de incluir e alterar padrão
-	 * @param Table $tela
+	 * @param object $tela
 	 * @param $_POST $post
 	 * @param string $view
-	 * @param unknown $objeto
+	 * @param object $objeto
 	 */
 	protected function criarTelaManter($tela, $post, $view = false, $objeto = null, $id = null){
 		echo $this->montarGrowlUI($post);
