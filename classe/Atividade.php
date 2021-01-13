@@ -17,6 +17,7 @@ class Atividade {
     private $vencimento;
     private $fixa;
     private $comentarios;
+    private $outFlow;
     
     public function getUsuario() {
     	return $this->usuario;
@@ -149,6 +150,15 @@ class Atividade {
     public function setComentarios($comentarios) {
         $this->comentarios = $comentarios;
     }
+    
+    public function getOutFlow() {
+        return $this->outFlow;
+    }
+    
+    public function setOutFlow($outFlow) {
+        $this->outFlow = $outFlow;
+    }
+    
 }
 
 ?>

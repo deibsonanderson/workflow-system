@@ -459,30 +459,54 @@ class DaoProcesso extends DaoBase {
     
     private function montarSQlProcessoGeral(){
         return "SELECT     wpf.id AS id_processo_fluxo,
-                           wpf.id_processo AS id_processo_processo,
-						   wpf.status AS status_wpf,						   
+                           wpf.id_processo AS wpf_id_processo,
+						   wpf.status AS status_wpf,
+                           wpf.fixa_atividade AS fixa_atividade_wpf,
+                           wpf.atuante AS atuante_wpf,
+                           wpf.propriedade_atividade AS propriedade_atividade_wpf,
+                           wpf.titulo_atividade AS titulo_atividade_wpf,
+                           wpf.valor_atividade AS valor_atividade_wpf,
+                           wpf.vencimento_atividade AS vencimento_atividade_wpf,
+                           wpf.descricao_atividade AS descricao_atividade_wpf,
+                           wpf.out_flow AS out_flow_wpf,
+						   
 						   
                            wc.id AS id_comentario,
                            wc.descricao AS descricao_comentario,
                            wc.arquivo AS anexo_comentario,
-						   wc.categoria AS categoria_comentario,                           
+						   wc.categoria AS categoria_comentario,
+                           wc.data AS data_comentario,
+                           wc.status AS status_comentario,                           
 						   
                            wa.id AS id_atividade, 
                            wa.titulo AS titulo_atividade,
+                           wa.status AS status_atividade,
+                           wa.imagem AS imagem_atividade,
+                           wa.link AS link_atividade, 
+                           wca.nome AS nome_categoria_atividade, 
 						   
                            wtf.id AS id_fluxo,     
                            wtf.titulo AS titulo_fluxo,
+                           wtf.descricao AS descricao_fluxo, 
+                           wtf.status AS status_fluxo,
                            
                            wp.id AS id_processo, 
-                           wp.titulo as processo_titulo,
-						   wp.status AS status_wp
+                           wp.titulo AS processo_titulo,
+                           wp.provisao AS provisao_processo, 
+                           wp.descricao AS descricao_processo, 
+                           wp.data AS data_processo,
+						   wp.status AS status_processo
+
+
                  FROM ".DaoBase::TABLE_PROCESSO_FLUXO." wpf
                  LEFT JOIN ".DaoBase::TABLE_COMENTARIO." wc ON (wpf.id = wc.id_processo_fluxo)
 				 INNER JOIN ".DaoBase::TABLE_FLUXO." wf ON ( wf.id = wpf.id_fluxo )
                  INNER JOIN ".DaoBase::TABLE_TITULO_FLUXO." wtf ON ( wf.id_titulo_fluxo = wtf.id )
                  INNER JOIN ".DaoBase::TABLE_PROCESSO." wp ON (wp.id = wpf.id_processo)
                  INNER JOIN ".DaoBase::TABLE_ATIVIDADE." wa ON (wa.id = wf.id_atividade)
-                 WHERE wpf.status = '1' AND wp.status = '1' AND wc.status = '1' ";
+                 INNER JOIN ".DaoBase::TABLE_CATEGORIA_ATIVIDADE." wca ON (wa.id_categoria = wca.id)
+                 WHERE wpf.status = 1 AND wp.status = 1 AND wc.status = 1
+				 ORDER BY wp.id, wtf.id, wa.id, wc.id ASC ";
     }
 
     private function montarListarProcessoGeral($query) {
@@ -495,14 +519,20 @@ class DaoProcesso extends DaoBase {
         $processos = array();
         foreach ($objetos as $objeto) {
 
-            if ($processos[$objeto->id_processo] == null) {
+            if ($processos[$objeto->id_processo] == null && $objeto->status_processo == 1 && $objeto->status_wpf == 1 ) {
                 $processo = new Processo();
-                $processo->setId($objeto->id_processo_processo);
+                $processo->setId($objeto->id_processo);
                 $processo->setTitulo($objeto->processo_titulo);
+                $processo->setProvisao($objeto->provisao_processo);
+                $processo->setDescricao($objeto->descricao_processo);
+                $processo->setData($objeto->data_processo);
+                $processo->setStatus($this->formatterStatus($objeto->status_processo));
                 
                 $fluxo = new Fluxo();
                 $fluxo->setId(($objeto->id_fluxo != null)?$objeto->id_fluxo:"N/A");
                 $fluxo->setTitulo(($objeto->titulo_fluxo != null) ? $objeto->titulo_fluxo : "N/A");
+                $fluxo->setDescricao($objeto->descricao_fluxo);
+                $fluxo->setStatus($this->formatterStatus($objeto->status_fluxo));
                 $processo->setFluxo($fluxo);               
 
                 $processos[$objeto->id_processo] = $processo;
@@ -512,13 +542,29 @@ class DaoProcesso extends DaoBase {
         //Carregar Atividade
         foreach ($processos as $processo) {
             $atividades = array();
+            $ultimaAtividade = null;
             foreach ($objetos as $objeto) {
                 if ($processo->getId() == $objeto->id_processo) {
-                    $atividade = new Atividade();
-                    $atividade->setId($objeto->id_atividade);
-                    $atividade->setTitulo($objeto->titulo_atividade);
-                    $atividade->setIdFluxo($objeto->id_processo_fluxo);
-                    $atividades[] = $atividade;
+                    if($ultimaAtividade == null || $ultimaAtividade != $objeto->id_atividade){
+                        $atividade = new Atividade();
+                        $atividade->setId($objeto->id_atividade);
+                        $atividade->setTitulo($objeto->titulo_atividade_wpf);
+                        $atividade->setIdFluxo($objeto->id_processo_fluxo);
+                        $atividade->setCategoria($objeto->nome_categoria_atividade);
+                        $atividade->setFixa($this->formatterFixo($objeto->fixa_atividade_wpf));
+                        $atividade->setPropriedade(($objeto->propriedade_atividade_wpf == 1)?'Positivo':'Negativo');
+                        $atividade->setValor($this->formatterValor($objeto->propriedade_atividade_wpf, $objeto->valor_atividade_wpf));
+                        $atividade->setVencimento($objeto->vencimento_atividade_wpf);
+                        $atividade->setDescricao($objeto->descricao_atividade_wpf);
+                        $atividade->setStatus($objeto->status_atividade);
+                        $atividade->setImagem($objeto->imagem_atividade);
+                        $atividade->setLink($objeto->link_atividade);
+                        $atividade->setOutFlow($this->formatterOutFlow($objeto->out_flow_wpf));                      
+                        
+                        $atividades[] = $atividade;
+                        
+                        $ultimaAtividade = $objeto->id_atividade;
+                    }
                 }
             }
 
@@ -539,13 +585,15 @@ class DaoProcesso extends DaoBase {
                         $comentario->setId($objeto->id_comentario);
                         $comentario->setDescricao($objeto->descricao_comentario);
                         $comentario->setArquivo($objeto->anexo_comentario);
-                        $comentario->setCategoria($objeto->categoria_comentario);
+                        $comentario->setCategoria($this->getCategoriaAnexo($objeto->categoria_comentario));
+                        $comentario->setData($objeto->data_comentario);
+                        $comentario->setStatus($this->formatterStatus($objeto->status_comentario));
                         $comentarios[] = $comentario;
                     }
                 }
                 
+                $atividade->setIdFluxo(null);
                 $atividade->setComentarios($comentarios);
-                
             }
             
             $processo->getFluxo()->setAtividades($atividades);
@@ -556,12 +604,57 @@ class DaoProcesso extends DaoBase {
     
     public function listarProcessoGeral() {
         try {
-			//debug($this->montarSQlProcessoGeral());
+			//var_dump($this->montarSQlProcessoGeral());
             return $this->montarListarProcessoGeral($this->executar($this->montarSQlProcessoGeral()));
         } catch (Exception $e) {
             return $e;
         }
     }
+    
+    private function formatterStatus($status){
+        return ($status == '1')?'Ativo':'Inativo';        
+    }
+    
+    private function getCategoriaAnexo($categoria){
+        $return = "";
+        switch ($categoria) {
+            case '1' :
+                $return = 'Boleto';
+                break;
+            case '2' :
+                $return = 'Comprovante';
+                break;
+            case '3' :
+                $return =  'Fatura';
+                break;
+            case '4' :
+                $return = 'Documento';
+                break;
+            case '5' :
+                $return =  'Nota Fiscal';
+                break;
+            case '6' :
+                $return = 'Outros';
+                break;
+            default :
+                $return =  'Sem anexo';
+                break;
+        }
+        return $return;
+    }
+    
+    private function formatterValor($prop,$valor){
+        return ($prop == 0)?'-'.$valor:$valor;
+    }
+    
+    private function formatterFixo($fixo){
+        return ($fixo == 0)?'Fixo':'Variável';
+    }
+
+    private function formatterOutFlow($flow){
+        return ($flow == 0)?'Recorrente':'Avulso';
+    }
+    
     
 }
 
