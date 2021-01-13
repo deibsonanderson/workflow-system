@@ -456,6 +456,113 @@ class DaoProcesso extends DaoBase {
     	}
     }
     
+    
+    private function montarSQlProcessoGeral(){
+        return "SELECT     wpf.id AS id_processo_fluxo,
+                           wpf.id_processo AS id_processo_processo,
+						   wpf.status AS status_wpf,						   
+						   
+                           wc.id AS id_comentario,
+                           wc.descricao AS descricao_comentario,
+                           wc.arquivo AS anexo_comentario,
+						   wc.categoria AS categoria_comentario,                           
+						   
+                           wa.id AS id_atividade, 
+                           wa.titulo AS titulo_atividade,
+						   
+                           wtf.id AS id_fluxo,     
+                           wtf.titulo AS titulo_fluxo,
+                           
+                           wp.id AS id_processo, 
+                           wp.titulo as processo_titulo,
+						   wp.status AS status_wp
+                 FROM ".DaoBase::TABLE_PROCESSO_FLUXO." wpf
+                 LEFT JOIN ".DaoBase::TABLE_COMENTARIO." wc ON (wpf.id = wc.id_processo_fluxo)
+				 INNER JOIN ".DaoBase::TABLE_FLUXO." wf ON ( wf.id = wpf.id_fluxo )
+                 INNER JOIN ".DaoBase::TABLE_TITULO_FLUXO." wtf ON ( wf.id_titulo_fluxo = wtf.id )
+                 INNER JOIN ".DaoBase::TABLE_PROCESSO." wp ON (wp.id = wpf.id_processo)
+                 INNER JOIN ".DaoBase::TABLE_ATIVIDADE." wa ON (wa.id = wf.id_atividade)
+                 WHERE wpf.status = '1' AND wp.status = '1' AND wc.status = '1' ";
+    }
+
+    private function montarListarProcessoGeral($query) {
+        $objetos = array();
+        while ($objeto = mysqli_fetch_object($query)) {
+            $objetos[] = $objeto;
+        }      
+        //debug($objetos);
+        // Carregar Processos
+        $processos = array();
+        foreach ($objetos as $objeto) {
+
+            if ($processos[$objeto->id_processo] == null) {
+                $processo = new Processo();
+                $processo->setId($objeto->id_processo_processo);
+                $processo->setTitulo($objeto->processo_titulo);
+                
+                $fluxo = new Fluxo();
+                $fluxo->setId(($objeto->id_fluxo != null)?$objeto->id_fluxo:"N/A");
+                $fluxo->setTitulo(($objeto->titulo_fluxo != null) ? $objeto->titulo_fluxo : "N/A");
+                $processo->setFluxo($fluxo);               
+
+                $processos[$objeto->id_processo] = $processo;
+            }
+        }
+        
+        //Carregar Atividade
+        foreach ($processos as $processo) {
+            $atividades = array();
+            foreach ($objetos as $objeto) {
+                if ($processo->getId() == $objeto->id_processo) {
+                    $atividade = new Atividade();
+                    $atividade->setId($objeto->id_atividade);
+                    $atividade->setTitulo($objeto->titulo_atividade);
+                    $atividade->setIdFluxo($objeto->id_processo_fluxo);
+                    $atividades[] = $atividade;
+                }
+            }
+
+            //Carregar Comentarios
+            
+            foreach ($atividades as $atividade) {
+                $comentarios = null;
+                foreach ($objetos as $objeto) {
+                    if ($atividade->getId() == $objeto->id_atividade 
+                        && $objeto->id_comentario != null
+                        && $atividade->getIdFluxo() == $objeto->id_processo_fluxo) {
+                        
+                        if($comentarios == null){
+                            $comentarios = array();
+                        }
+                        
+                        $comentario = new ComentarioFluxoProcesso();
+                        $comentario->setId($objeto->id_comentario);
+                        $comentario->setDescricao($objeto->descricao_comentario);
+                        $comentario->setArquivo($objeto->anexo_comentario);
+                        $comentario->setCategoria($objeto->categoria_comentario);
+                        $comentarios[] = $comentario;
+                    }
+                }
+                
+                $atividade->setComentarios($comentarios);
+                
+            }
+            
+            $processo->getFluxo()->setAtividades($atividades);
+        }       
+
+        return $processos;
+    }
+    
+    public function listarProcessoGeral() {
+        try {
+			//debug($this->montarSQlProcessoGeral());
+            return $this->montarListarProcessoGeral($this->executar($this->montarSQlProcessoGeral()));
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    
 }
 
 ?>

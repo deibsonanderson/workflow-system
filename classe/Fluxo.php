@@ -8,6 +8,7 @@ class Fluxo{
     private $atividades;
     private $descricao;
 	private $usuario;
+	private $atividade; //armazena o id da atividade
 	
 	public function getUsuario() {
 		return $this->usuario;
@@ -76,7 +77,14 @@ class Fluxo{
             $this->descricao = $descricao;
         }
 
-
+        function getAtividade() {
+            return $this->atividade;
+        }
+        
+        function setAtividade($atividade) {
+            $this->atividade = $atividade;
+        }
+        
 	
 	
 	

@@ -16,7 +16,8 @@ if (isset ( $_SESSION ["login"] )) {
 			}
 		}
 		function from_camel_case($input) {
-			preg_match_all ( '!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches );
+		    $matches = array();
+		    preg_match_all ( '!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches );
 			$ret = $matches [0];
 			foreach ( $ret as &$match ) {
 				$match = $match == strtoupper ( $match ) ? strtolower ( $match ) : lcfirst ( $match );
@@ -26,13 +27,22 @@ if (isset ( $_SESSION ["login"] )) {
 		function montarObjetoParaArray($objeto) {
 			$array = array ();
 			foreach ( get_class_methods ( $objeto ) as $nomeMetodo ) {
-				if ('get' == substr ( $nomeMetodo, 0, 3 )) {
-					if (! is_object ( $objeto->$nomeMetodo () )) {
-						$array [from_camel_case ( substr ( $nomeMetodo, 3 ) )] = $objeto->$nomeMetodo ();
-					} else {
-						$array [from_camel_case ( substr ( $nomeMetodo, 3 ) )] = montarObjetoParaArray ( $objeto->$nomeMetodo () );
-					}
-				}
+			    
+			    if ('get' == substr ( $nomeMetodo, 0, 3 ) && $objeto->$nomeMetodo () != null) {
+ 					if (is_object ( $objeto->$nomeMetodo () )) {
+ 						$array [from_camel_case ( substr ( $nomeMetodo, 3 ) )] = montarObjetoParaArray ( $objeto->$nomeMetodo () );
+ 					} else if (is_array($objeto->$nomeMetodo ())) {
+				        $subArray = array();
+ 					    $count = 0;
+ 					    foreach ($objeto->$nomeMetodo() as $aux ){
+ 					        $subArray [$count] = montarObjetoParaArray ( $aux );
+ 					        $count++;
+ 					    } 					    
+ 					    $array [from_camel_case ( substr ( $nomeMetodo, 3 ) )] = $subArray;				    
+ 					} else {
+ 					    $array [from_camel_case ( substr ( $nomeMetodo, 3 ) )] = $objeto->$nomeMetodo (); 					    
+ 					} 
+ 				}
 			}
 			return $array;
 		}
@@ -64,10 +74,10 @@ if (isset ( $_SESSION ["login"] )) {
 		?>
 		<html>
 			<body>
-				<a href="http://dicaseprogramacao.com.br/workflowdx/api.php?f=listarAtividade&c=ControladorAtividade">Atividades</a>
-				</br>
-				<a href="http://dicaseprogramacao.com.br/workflowdx/api.php?f=listarProcesso&c=ControladorProcesso">Processos</a>
-				</br>
+				<a href="api.php?f=listarAtividade&c=ControladorAtividade">Atividades</a><br/>
+				<a href="api.php?f=listarProcesso&c=ControladorProcesso">Processos</a><br/>
+				<a href="api.php?f=listarModulo&c=ControladorModulo">Modulos</a><br/>
+				<a href="api.php?f=listarProcessoGeral&c=ControladorProcesso">Processo Geral</a><br/>				
 			</body>
 		</html>
 <?php

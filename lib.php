@@ -12,9 +12,9 @@ function selecao($valor1, $valor2) {
  * Função reponsavel para converter de Float para Monetario ou Monetario para Float
  * @author Deibson Anderson
  * @param $valor
- * @param $conversão 1 para versao US 2 para versão BR
+ * @param $conversao #$conversão 1 para versao US 2 para versão BR
  * @throws 
- * @return retorna o valor convertido.
+ * @return #retorna o valor convertido.
  * @version 1.0.0
  * @since 1.1.6
  */

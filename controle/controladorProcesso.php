@@ -337,6 +337,17 @@ class ControladorProcesso {
     		return $e;
     	}
     }
+    
+    public function listarProcessoGeral() {
+        try {
+            $daoProcesso = new DaoProcesso();
+            $retorno = $daoProcesso->listarProcessoGeral();
+            $daoProcesso->__destruct();
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
 
     public function telaCadastrarProcesso($post = null) {
         try {
@@ -457,6 +468,7 @@ class ControladorProcesso {
     	$viewProcesso->__destruct();
     	return $retorno;
     }
+    
 	public function telaModalComentariosProcessoFluxo($post = null) {
 		$viewProcesso = new ViewProcesso ();
 		$retorno = $viewProcesso->telaModalComentariosProcessoFluxo ( $post ["titulo_processo_fluxo"], $post ["id_processo_fluxo"] );
