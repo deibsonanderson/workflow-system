@@ -3,8 +3,13 @@ function normalizaTexto($str){
     $str = strtolower(utf8_decode($str)); $i=1;
     $str = strtr($str, utf8_decode('àáâãäåæçèéêëìíîïñòóôõöøùúûýýÿ'), 'aaaaaaaceeeeiiiinoooooouuuyyy');
     $str = preg_replace("/([^a-z0-9])/",'_',utf8_encode($str));
-    while($i>0) $str = str_replace('--','_',$str,$i);
-    if (substr($str, -1) == '_') $str = substr($str, 0, -1);
+    while($i>0){ 
+		$str = str_replace('--','_',$str,$i);
+		if (substr($str, -1) == '_'){ 
+			$str = substr($str, 0, -1);
+		}
+		$str = str_replace('__','_',$str,$i);
+	}
     return $str;
 }
 //if (isset($_SESSION["login"])) {
@@ -38,7 +43,7 @@ function updateNameFile($conexao,$path){
 									   FROM tb_workflow_comentario wc
 									   INNER JOIN tb_workflow_processo_fluxo wpf ON wc.id_processo_fluxo = wpf.id 
 									   INNER JOIN tb_workflow_processo wp ON wpf.id_processo = wp.id
-									   WHERE wc.arquivo IS NOT NULL ");
+									   WHERE wc.arquivo IS NOT NULL AND CHAR_LENGTH(wc.arquivo)>0 ");
 	$retorno = array();								   
 	while ($o = mysqli_fetch_object ( $query ) ) {
 		if($o->old_arquivo != null && trim($o->old_arquivo) != ''){
@@ -51,14 +56,12 @@ function updateNameFile($conexao,$path){
 			$c->titulo_atividade = $o->titulo_atividade;
 			
 			$c->new_name = '';
-			if($o->titulo_processo != null && trim($o->titulo_processo) != ''){
-				$c->new_name .= $o->titulo_processo.'-';
-			}		
-			if($o->titulo_atividade != null && trim($o->titulo_atividade) != ''){
-				$c->new_name .= $o->titulo_atividade.'-';
-			}
+			
 			if($o->categoria != null && trim($o->categoria) != ''){
 				switch($o->categoria){
+					case '0':
+						$c->new_name .= 'sem anexo-';						
+					break;						
 					case '1':
 						$c->new_name .= 'boleto-';						
 					break;	
@@ -67,17 +70,34 @@ function updateNameFile($conexao,$path){
 					break;
 					case '3':
 						$c->new_name .= 'fatura-';
-					break;		
+					break;	
+					case '4':
+						$c->new_name .= 'NF-';
+					break;	
+					case '5':
+						$c->new_name .= 'outros-';
+					break;						
 				}
 			}
+			
+			$c->new_name .= $c->id.'-';
+			
+			if($o->titulo_processo != null && trim($o->titulo_processo) != ''){
+				$c->new_name .= ajusteTitulo($o->titulo_processo).'-';
+			}		
+			if($o->titulo_atividade != null && trim($o->titulo_atividade) != ''){
+				$c->new_name .= $o->titulo_atividade;
+			}
+
 			if($o->old_arquivo != null && trim($o->old_arquivo) != ''){
-				$c->new_name .= $o->old_arquivo.'-';
+				//$c->new_name .= $o->old_arquivo.'-';
 			}			
 			$c->new_name = normalizaTexto($c->new_name);
+
 			
-			$ext = substr($c->new_name, -3);
-			$c->new_name = substr($c->new_name, 0, (strlen($c->new_name)-4));
-			$c->new_name .= '.'.$ext;
+			//$ext = substr($c->new_name, -3);
+			//$c->new_name = substr($c->new_name, 0, (strlen($c->new_name)-4));
+			//$c->new_name .= '.'.$ext;
 			//$c->exists = file_exists($path.'/'.$o->arquivo);
 			$c->msg = null;
 			
@@ -85,6 +105,25 @@ function updateNameFile($conexao,$path){
 		}
 	}
 	return $retorno;
+}
+
+function ajusteTitulo($titulo){
+	$texto = str_ireplace(array("despesas", "despesa"), '', $titulo);
+	$texto = str_ireplace(' DE ', '', $texto);
+	
+	$texto = str_ireplace('janeiro', 'jan', $texto);
+	$texto = str_ireplace('fevereiro', 'fev', $texto);
+	$texto = str_ireplace(array('março','marco'), 'mar', $texto);
+	$texto = str_ireplace('abril', 'abr', $texto);
+	$texto = str_ireplace('maio', 'mai', $texto);
+	$texto = str_ireplace('junho', 'jun', $texto);
+	$texto = str_ireplace('julho', 'jul', $texto);
+	$texto = str_ireplace('agosto', 'ago', $texto);
+	$texto = str_ireplace('setembro', 'set', $texto);
+	$texto = str_ireplace('outubro', 'out', $texto);
+	$texto = str_ireplace(array('novembro','nobembro'), 'nov', $texto);
+	$texto = str_ireplace('dezembro', 'dez', $texto);	
+	return $texto;
 }
 
 function update($com, $conexao) {
@@ -105,8 +144,10 @@ function setMsg($com, $m){
 $comentarios = updateNameFile($conexao,$path);
 
 echo 'INICIO<br/>';
+echo '<table border="1">';
 foreach($comentarios as $com){
-	if(file_exists($path.'/'.$com->old_name)){
+	echo '<tr><td>'.$com->old_name.'</td><td>'.$com->new_name.'</td></tr>';
+	/*if(file_exists($path.'/'.$com->old_name)){
 		if(update($com, $conexao)){	
 			if(rename($path.'/'.$com->old_name, $path.'/'.$com->new_name)){
 				setMsg($com, 'SUCESSO');	
@@ -118,8 +159,9 @@ foreach($comentarios as $com){
 		}
 	}else{
 		setMsg($com, 'não existe.');
-	}	
+	}*/	
 }
+echo '</table>';
 echo 'FIM';
 
 //FIM
