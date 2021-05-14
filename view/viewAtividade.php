@@ -902,7 +902,7 @@ class ViewAtividade {
 											<form action="./post-imagem.php" method="post" id="form_arquivo" style="cursor:pointer;">
 												<input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
 												<input name="largura" type="hidden" value="640">
-												<input name="opcao" type="hidden" value="1">
+												<input name="opcao" type="hidden" value="3">
 												<input id="categoria_anexo" name="categoria_anexo" type="hidden" value="">
 												<input name="processo" type="hidden" value="<?php echo ($objProcesso[0]->getTitulo() != null)?normalizaTexto(limitarTexto($objProcesso[0]->getTitulo(), 40)):''; ?>">
 												<input name="atividade" type="hidden" value="<?php echo ($objProcessoFluxo->getTitulo() != null)?normalizaTexto($objProcessoFluxo->getTitulo()):''; ?>">

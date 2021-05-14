@@ -114,28 +114,64 @@ function is__writable($path) {
     return true;
 }
 
+function ajusteTitulo($titulo){
+	$texto = str_ireplace(array("despesas", "despesa"), '', $titulo);
+	$texto = str_ireplace('DE ', '', $texto);
+	
+	$texto = str_ireplace('janeiro', 'jan', $texto);
+	$texto = str_ireplace('fevereiro', 'fev', $texto);
+	$texto = str_ireplace(array('março','marco'), 'mar', $texto);
+	$texto = str_ireplace('abril', 'abr', $texto);
+	$texto = str_ireplace('maio', 'mai', $texto);
+	$texto = str_ireplace('junho', 'jun', $texto);
+	$texto = str_ireplace('julho', 'jul', $texto);
+	$texto = str_ireplace('agosto', 'ago', $texto);
+	$texto = str_ireplace('setembro', 'set', $texto);
+	$texto = str_ireplace('outubro', 'out', $texto);
+	$texto = str_ireplace(array('novembro','nobembro'), 'nov', $texto);
+	$texto = str_ireplace('dezembro', 'dez', $texto);	
+	return $texto;
+}
+
+function normalizaTexto($str){
+    $str = strtolower(utf8_decode($str)); $i=1;
+    $str = strtr($str, utf8_decode('àáâãäåæçèéêëìíîïñòóôõöøùúûýýÿ'), 'aaaaaaaceeeeiiiinoooooouuuyyy');
+    $str = preg_replace("/([^a-z0-9])/",'_',utf8_encode($str));
+    while($i>0){ 
+		$str = str_replace('--','_',$str,$i);
+		if (substr($str, -1) == '_'){ 
+			$str = substr($str, 0, -1);
+		}
+		$str = str_replace('__','_',$str,$i);
+	}
+	$str = str_ireplace('_de_', '_', $str);
+    return $str;
+}
+
 $opcao = $_POST['opcao'];
 $pastaArquivo = $_POST['pastaArquivo'];
 $largura = $_POST['largura'];
 $tipoArq = $_POST['tipoArq'];
 
 $prefixo = '';
-/*$processo = $_POST['processo'];
+
+$categoria_anexo = $_POST['categoria_anexo'];
+if($categoria_anexo != null && trim($categoria_anexo) != ''){
+	$prefixo .=	$categoria_anexo.'-';
+}
+$processo = $_POST['processo'];
 if($processo != null && trim($processo) != ''){
-	$prefixo .=	$processo.'_';
+	$prefixo .=	ajusteTitulo($processo).'-';
 }
 
 $atividade = $_POST['atividade'];
 if($atividade != null && trim($atividade) != ''){
-	$prefixo .=	$atividade.'_';
+	$prefixo .= substr($atividade, 0, 20);
 }
 
-$categoria_anexo = $_POST['categoria_anexo'];
-if($categoria_anexo != null && trim($categoria_anexo) != ''){
-	$prefixo .=	$categoria_anexo.'_';
-}*/
+$prefixo = normalizaTexto($prefixo);
 
-if ($opcao === '1') {
+if ($opcao === '1' || $opcao === '3') {
 
     $permissao = is__writable($pastaArquivo . '/');
     if (!$permissao) {
@@ -152,12 +188,17 @@ if ($opcao === '1') {
                     $nome_arquivo = $_FILES['file']['name'];
                     $nome_arquivo = removeEspacosEmBranco($nome_arquivo);
                     $nome_arquivo = str_replace('[^a-zA-Z0-9_.]', '', strtr($nome_arquivo, 'áàãâéêíóôõúüçÁÀÃÂÉÊÍÓÔÕÚÜÇ ', 'aaaaeeiooouucAAAAEEIOOOUUC_'));
-                    $ext = explode('.', $nome_arquivo);
+					$ext = explode('.', $nome_arquivo);
                     $ext = '.' . $ext[sizeof($ext) - 1];
                     if (trim($nome_arquivo) === $ext) {
                         $nome_arquivo = $prefixo.'arquivo_sem_nome' . $ext;
                     }else{
-                        $nome_arquivo = $prefixo.$nome_arquivo;                        
+						if($opcao === '1'){
+							$nome_arquivo = $prefixo.$nome_arquivo;  
+						}else if($opcao === '3'){
+							$nome_arquivo = $prefixo.$ext;       
+						}
+						
                     }
                     if (file_exists($pastaArquivo . '/' . $nome_arquivo)) {
                         $diretorio = opendir($pastaArquivo);

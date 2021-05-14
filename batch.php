@@ -43,7 +43,7 @@ function updateNameFile($conexao,$path){
 									   FROM tb_workflow_comentario wc
 									   INNER JOIN tb_workflow_processo_fluxo wpf ON wc.id_processo_fluxo = wpf.id 
 									   INNER JOIN tb_workflow_processo wp ON wpf.id_processo = wp.id
-									   WHERE wc.arquivo IS NOT NULL AND CHAR_LENGTH(wc.arquivo)>0 ");
+									   WHERE wc.arquivo IS NOT NULL AND CHAR_LENGTH(wc.arquivo)>0 AND wc.categoria != 0");
 	$retorno = array();								   
 	while ($o = mysqli_fetch_object ( $query ) ) {
 		if($o->old_arquivo != null && trim($o->old_arquivo) != ''){
@@ -60,7 +60,7 @@ function updateNameFile($conexao,$path){
 			if($o->categoria != null && trim($o->categoria) != ''){
 				switch($o->categoria){
 					case '0':
-						$c->new_name .= 'sem anexo-';						
+						$c->new_name .= 'sem_anexo-';						
 					break;						
 					case '1':
 						$c->new_name .= 'boleto-';						
@@ -72,33 +72,30 @@ function updateNameFile($conexao,$path){
 						$c->new_name .= 'fatura-';
 					break;	
 					case '4':
-						$c->new_name .= 'NF-';
+						$c->new_name .= 'documento-';
 					break;	
 					case '5':
+						$c->new_name .= 'NF-';
+					break;	
+					case '6':
 						$c->new_name .= 'outros-';
 					break;						
 				}
 			}
 			
-			$c->new_name .= $c->id.'-';
-			
 			if($o->titulo_processo != null && trim($o->titulo_processo) != ''){
 				$c->new_name .= ajusteTitulo($o->titulo_processo).'-';
 			}		
 			if($o->titulo_atividade != null && trim($o->titulo_atividade) != ''){
-				$c->new_name .= $o->titulo_atividade;
+				$c->new_name .= substr($o->titulo_atividade, 0, 20);
 			}
 
-			if($o->old_arquivo != null && trim($o->old_arquivo) != ''){
-				//$c->new_name .= $o->old_arquivo.'-';
-			}			
 			$c->new_name = normalizaTexto($c->new_name);
 
 			
-			//$ext = substr($c->new_name, -3);
-			//$c->new_name = substr($c->new_name, 0, (strlen($c->new_name)-4));
-			//$c->new_name .= '.'.$ext;
-			//$c->exists = file_exists($path.'/'.$o->arquivo);
+			$ext = substr($o->old_arquivo, -3);
+			$c->new_name .= '.'.$ext;
+			$c->exists = file_exists($path.'/'.$o->arquivo);
 			$c->msg = null;
 			
 			$retorno [] = $c;
@@ -128,7 +125,7 @@ function ajusteTitulo($titulo){
 
 function update($com, $conexao) {
 	try {
-		$sql = "UPDATE tb_workflow_comentario SET arquivo = '".$com->new_name."' WHERE id = " . $com->id . "";
+		$sql = "UPDATE tb_workflow_comentario SET arquivo = '".$com->new_name."', old_arquivo = '".$com->old_name."' WHERE id = " . $com->id . "";
 		return mysqli_query($conexao,$sql);
 	} catch (Exception $e) {
 		return false;
@@ -144,7 +141,7 @@ function setMsg($com, $m){
 $comentarios = updateNameFile($conexao,$path);
 
 echo 'INICIO<br/>';
-echo '<table border="1">';
+//echo '<table border="1">';
 foreach($comentarios as $com){
 	echo '<tr><td>'.$com->old_name.'</td><td>'.$com->new_name.'</td></tr>';
 	/*if(file_exists($path.'/'.$com->old_name)){
@@ -161,7 +158,7 @@ foreach($comentarios as $com){
 		setMsg($com, 'não existe.');
 	}*/	
 }
-echo '</table>';
+//echo '</table>';
 echo 'FIM';
 
 //FIM
