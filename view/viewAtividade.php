@@ -624,7 +624,12 @@ class ViewAtividade {
 
     	        if(detectarMobile() == true){
     				$('.desktop').remove();
-    			}
+    			}				
+				$('#img-upload-dis').css('display','');
+				$('#img-upload-dis').css('opacity','0.5');
+				$('#form_arquivo').css('display','none');			
+				$('#img-remove-dis').css('opacity','0.5');
+				$('#anexo-btn').prop( "disabled", true );				
             });
 
    			function validarCampo(elemento){
@@ -899,7 +904,7 @@ class ViewAtividade {
 								<table border="0">
 									<tr>
 										<td>
-											<form action="./post-imagem.php" method="post" id="form_arquivo" style="cursor:pointer;">
+											<form style="display:none;" action="./post-imagem.php" method="post" id="form_arquivo" style="cursor:pointer;">
 												<input name="pastaArquivo" type="hidden" value="./arquivos/atividade/">
 												<input name="largura" type="hidden" value="640">
 												<input name="opcao" type="hidden" value="3">
@@ -910,10 +915,11 @@ class ViewAtividade {
 												<input style="width: 30px;" type="file" name="file" class="upload-file" onchange="javascript: fncSubmitArquivo('enviar_arquivo', this);" >
 												<input type="submit" id="enviar_arquivo" style="display:none;">
 												<img src="./assets/images/img_upload.png" class="upload-button" />
-											</form>										
+											</form>
+											<img src="./assets/images/img_upload.png" id="img-upload-dis" style="cursor:pointer;height:30px;width:30px;" class="" />
 										</td>
 										<td>
-											<img onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;" class="upload-button" />
+											<img id="img-remove-dis" onclick="fncRemoverArquivo('arquivo', './arquivos/atividade/', 'arquivo', 'arquivoAtual', '');" src="./assets/images/remove.png" border="0" title="Clique para remover" style="cursor:pointer;" class="upload-button" />
 										</td>
 										<td style="padding-left: 10px;">
 				                            <span title="" name="arquivoAtual" id="arquivoAtual" onClick="fnAbreArquivo('arquivo', './arquivos/atividade/')"   >Adicione um arquivo clicando no <img src="./assets/images/img_upload.png" border="0" style="float:none;margin:0;width: 20px;" /></span>
@@ -928,7 +934,7 @@ class ViewAtividade {
 			        </div>
 			        <div class="card-header d-flex">
 			            <div class="toolbar ml-auto">
-				            <button id="anexo-btn" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
+				            <button id="anexo-btn" disabled="true" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
 				            	<span id="anexo-btn-text" style="display: block;">
 				            		Adicionar Comentário/Anexo
 				            	</span>

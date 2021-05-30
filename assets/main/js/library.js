@@ -1551,6 +1551,22 @@ function fncIncludeText(element) {
 				+ parseInt(data.substr(6, 4));
 		var titulo_atividade = $('#input_titulo').val();
 		$('#categoria_anexo').val('');
+		
+		if($(element).val() == '0'){
+			$('#img-upload-dis').css('display','');
+			$('#img-upload-dis').css('opacity','0.5');
+			$('#form_arquivo').css('display','none');			
+			$('#img-remove-dis').css('opacity','0.5');
+			$('#anexo-btn').prop( "disabled", true );		
+		}else{
+			$('#img-upload-dis').css('display','none');
+			$('#img-upload-dis').css('opacity','1.0');
+			$('#form_arquivo').css('display','');
+			$('#anexo-btn').prop( "disabled", false );
+			$('#img-remove-dis').css('opacity','1.0');
+		}
+		
+		
 		switch ($(element).val()) {
 		case '1':
 			$('#descricao').html(
