@@ -1,5 +1,4 @@
 <?php 
-
 if($_GET['files'] != null && count($_GET['files']) > 0){
     $path = 'arquivos/atividade/';
     
@@ -7,12 +6,11 @@ if($_GET['files'] != null && count($_GET['files']) > 0){
     foreach ($_GET['files'] as $value) {
         $files[] = $path.$value;
     }   
-    
     $zipname = 'file.zip';
     $zip = new ZipArchive;
     $zip->open($zipname, ZipArchive::CREATE);
     foreach ($files as $file) {
-      $zip->addFile($file);
+	  $zip->addFromString(basename($file), file_get_contents($file));
     }
     $zip->close();
     
