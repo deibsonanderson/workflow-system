@@ -1,4 +1,7 @@
-<?php 
+<?php
+error_reporting (E_ALL & ~ E_NOTICE & ~ E_DEPRECATED);
+unlink('file.zip');
+ 
 if($_GET['files'] != null && count($_GET['files']) > 0){
     $path = 'arquivos/atividade/';
     
