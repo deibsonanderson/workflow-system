@@ -614,6 +614,13 @@ class ViewAtividade {
     	} else {
     		$imagem = "imagens/atividade/" . $objProcessoFluxo->getAtividade()->getImagem();
     	}
+		
+		$funcao = "telaTimeLineProcesso";
+		if($_SESSION["order"] == '1'){
+			$funcao = "telaTimeLineProcesso";
+		}else if($_SESSION["order"] == '2'){
+			$funcao = "telaTimeLineProcessoOrderAtivo";
+		}
     	?>
     	<script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
         <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
@@ -665,7 +672,7 @@ class ViewAtividade {
 			        <div class="card-header d-flex">
 			            <h4 class="card-header-title"><img class="" style="width: 32px; height: 33px; <?php echo $estilo; ?>" src="<?php echo $imagem; ?>" /></h4>
 			            <div class="toolbar ml-auto">
-			            	<a href="#" onclick="getId(this)" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" id="<?php echo $objProcessoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+			            	<a href="#" onclick="getId(this)" funcao="<?php echo $funcao; ?>" controlador="ControladorProcesso" id="<?php echo $objProcessoFluxo->getProcesso()->getId(); ?>" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
 			                <?php
 			                if ($objProcessoFluxo->getAtuante() == 1) {
 			                ?>

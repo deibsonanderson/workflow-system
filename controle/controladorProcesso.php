@@ -397,7 +397,8 @@ class ControladorProcesso {
     public function telaTimeLineProcesso($post = null) {
     	try {
     		$viewProcesso = new ViewProcesso();
-    		$retorno = $viewProcesso->telaTimeLineProcesso($this->buscarFluxoProcesso($post["id"]),'1');
+			$_SESSION["order"] = '1';
+    		$retorno = $viewProcesso->telaTimeLineProcesso($this->buscarFluxoProcesso($post["id"]),$_SESSION["order"]);
     		$viewProcesso->__destruct();
     		return $retorno;
     	} catch (Exception $e) {
@@ -408,8 +409,9 @@ class ControladorProcesso {
     public function telaTimeLineProcessoOrderAtivo($post = null) {
     	try {
     		$viewProcesso = new ViewProcesso();
+			$_SESSION["order"] = '2';
     		$order = " ORDER BY wpf.ativo DESC,wf.ordenacao ASC ";
-    		$retorno = $viewProcesso->telaTimeLineProcesso($this->buscarFluxoProcesso($post["id"],$order),'2');
+    		$retorno = $viewProcesso->telaTimeLineProcesso($this->buscarFluxoProcesso($post["id"],$order),$_SESSION["order"]);
     		$viewProcesso->__destruct();
     		return $retorno;
     	} catch (Exception $e) {
@@ -420,8 +422,9 @@ class ControladorProcesso {
     public function telaTimeLineProcessoOrderVencimento($post = null) {
     	try {
     		$viewProcesso = new ViewProcesso();
+			$_SESSION["order"] = '3';
     		$order = " ORDER BY wa.vencimento ASC, wpf.ativo ASC ";
-    		$retorno = $viewProcesso->telaTimeLineProcesso($this->buscarFluxoProcesso($post["id"],$order),'3');
+    		$retorno = $viewProcesso->telaTimeLineProcesso($this->buscarFluxoProcesso($post["id"],$order),$_SESSION["order"]);
     		$viewProcesso->__destruct();
     		return $retorno;
     	} catch (Exception $e) {
