@@ -119,7 +119,7 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->abrirFecharFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	if($post["ordem"] == '2'){
+            	if($_SESSION["order"] == '2'){
             		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
             	}else{
             		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
@@ -140,7 +140,7 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->abrirFecharFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	if($post["ordem"] == '2'){
+            	if($_SESSION["order"] == '2'){
             		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
             	}else{
             		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
@@ -159,7 +159,7 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->atuarFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	if($post["ordem"] == '2'){
+            	if($_SESSION["order"] == '2'){
             		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
             	}else{
             		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
@@ -178,7 +178,7 @@ class ControladorProcesso {
             $daoProcesso = new DaoProcesso();
             if ($daoProcesso->desatuarFluxoProcesso($fluxoProcesso)) {
             	$processo = $this->buscarProcessoByFluxoProcessoId($fluxoProcesso->getId());
-            	if($post["ordem"] == '2'){
+            	if($_SESSION["order"] == '2'){
             		return $this->telaTimeLineProcessoOrderAtivo(array("id" => $processo[0]->getId()));
             	}else{
             		return $this->telaTimeLineProcesso(array("id" => $processo[0]->getId()));
