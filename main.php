@@ -115,8 +115,10 @@ if (isset($_SESSION["login"])) {
         showLoading(); 
     </script>
     <?php 
-    	$controladorMain = new ControladorMain();
-    	echo $controladorMain->telaListarAtividadesProcessosHaVencer();
+		if($_SESSION["login"]->getPopup_vencimento() == '1'){
+			$controladorMain = new ControladorMain();		
+			echo $controladorMain->telaListarAtividadesProcessosHaVencer();
+		}
     ?>	
 </body>
  

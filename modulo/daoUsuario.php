@@ -10,7 +10,7 @@ class DaoUsuario extends DaoBase{
 	public function listarUsuario($id = null){
 		try {
 			$query = $this->executar($this->sqlSelect(
-					DaoBase::TABLE_USUARIO, array('id', 'nome', 'imagem', 'login', 'senha', 'status', 'id_perfil'), false)
+					DaoBase::TABLE_USUARIO, array('id', 'nome', 'imagem', 'login', 'senha', 'status', 'id_perfil', 'popup_vencimento'), false)
 					.$this->montarId($id));
 			while($objetoUsuario =  mysqli_fetch_object($query)){
 				$usuario = $this->modelMapper($objetoUsuario, new Usuario());
@@ -40,7 +40,7 @@ class DaoUsuario extends DaoBase{
         
 	public function incluirUsuario($usuario){
 		try {
-			return $this->executar("INSERT INTO ".DaoBase::TABLE_USUARIO." (nome,imagem,login,senha,id_perfil,status) VALUES ('".$usuario->getNome()."','".$usuario->getImagem()."','".$usuario->getLogin()."','".$usuario->getSenha()."','".$usuario->getPerfil()."','".$usuario->getStatus()."')");
+			return $this->executar("INSERT INTO ".DaoBase::TABLE_USUARIO." (nome,imagem,login,senha,id_perfil,popup_vencimento,status) VALUES ('".$usuario->getNome()."','".$usuario->getImagem()."','".$usuario->getLogin()."','".$usuario->getSenha()."','".$usuario->getPerfil()."',1,'".$usuario->getStatus()."')");
 		} catch (Exception $e) {
 			return $e;
 		}
@@ -53,7 +53,7 @@ class DaoUsuario extends DaoBase{
 					nome = '".$usuario->getNome()."',
 					imagem = '".$usuario->getImagem()."',
 					login = '".$usuario->getLogin()."',
-					senha = '".$usuario->getSenha()."',
+					popup_vencimento = '".$usuario->getPopup_vencimento()."',
 					id_perfil = '".$usuario->getPerfil()."',
 					status = '".$usuario->getStatus()."' 
 					WHERE id =".$usuario->getId();
@@ -71,6 +71,17 @@ class DaoUsuario extends DaoBase{
 			return $e;
 		}
 
+	}
+		
+	public function alterarSenhaUsuario($usuario){
+		try {	
+			$sql = "UPDATE ".DaoBase::TABLE_USUARIO." SET  
+					senha = '".$usuario->getSenha()."'
+					WHERE id =".$usuario->getId();
+			return $this->executar($sql);
+		} catch (Exception $e) {
+			return $e;
+		}
 	}
 
 

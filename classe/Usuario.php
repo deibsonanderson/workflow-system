@@ -9,6 +9,7 @@ class Usuario{
 	//private $empresa;
 	private $status;
 	private $perfil;
+	private $popup_vencimento;
 	
 	//construtor
 	public function __construct(){}
@@ -101,6 +102,14 @@ class Usuario{
 	
 	function getPerfil(){
 		return $this->perfil;
+	}
+	
+	function setPopup_vencimento($popup_vencimento){
+		$this->popup_vencimento = $popup_vencimento;
+	}
+	
+	function getPopup_vencimento(){
+		return $this->popup_vencimento;
 	}
 }
 ?>

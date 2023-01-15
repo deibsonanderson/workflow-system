@@ -153,6 +153,7 @@ class ViewUsuario {
 	                                        <button onclick="getId(this)" id="<?php echo $usuario->getId(); ?>" funcao="telaAlterarUsuario" controlador="ControladorUsuario" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>
 	                                        <button onclick="fcnModalDeleteId(this)" modal="question" id="<?php echo $usuario->getId(); ?>" funcao="excluirUsuario" controlador="ControladorUsuario" retorno="div_central" mensagem="4" class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button> 
 	                                        <button onclick="getId(this)" id="<?php echo $usuario->getId(); ?>" funcao="telaListarAcao" controlador="ControladorAcao"  retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-address-card"></i></button>
+											<button onclick="getId(this)" id="<?php echo $usuario->getId(); ?>" funcao="telaAlterarSenhaUsuario" controlador="ControladorUsuario" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>											
 	                                    </div> 
                                     </td> 
                                 </tr> 
@@ -241,15 +242,24 @@ class ViewUsuario {
 				<div class="form-group">
 					<label for="login" class="col-form-label">Login *</label>
 					<input id="login" name="login" type="text" value="<?php echo $objUsuario[0]->getLogin(); ?>" class="form-control mgs_alerta" >
-				</div>				
-				<div class="form-group">
-					<label for="senha" class="col-form-label">Senha *</label>
-					<input type="password" id="senha" name="senha" class="form-control mgs_alerta">
 				</div>
 				<div class="form-group">
-					<label for="senha2" class="col-form-label">Repetir a Senha *</label>
-					<input type="password" id="senha2" name="senha2" class="form-control mgs_alerta" >
-				</div>
+					<label for="popup_vencimento">PopUp à vencer *</label>
+					<select id="popup_vencimento" name="popup_vencimento"  class="mgs_alerta form-control" >
+                        <?php
+                        if ($objUsuario[0]->getPopup_vencimento() == 1) {
+                            $selected_1 = 'selected="selected"';
+                            $selected_2 = '';
+                        } else {
+                            $selected_1 = '';
+                            $selected_2 = 'selected="selected"';
+                        }
+                        ?>
+                        <option value="1" <?php echo $selected_1; ?> >Ativo</option>
+                        <option value="0" <?php echo $selected_2; ?> >Inativo</option>
+        			</select>						
+				</div>					
+				
 				<div class="form-group">
 					<label for="perfil">Perfil *</label>
 					<select id="perfil" name="perfil"  class="mgs_alerta form-control" >
@@ -314,7 +324,23 @@ class ViewUsuario {
 				<div class="form-group">
 					<label for="login" class="col-form-label">Login *</label>
 					<input id="login" name="login" type="text" disabled value="<?php echo $objUsuario[0]->getLogin(); ?>" class="form-control mgs_alerta" onkeyup="this.value=this.value.toUpperCase();">
-				</div>				
+				</div>
+				<div class="form-group">
+					<label for="popup_vencimento">PopUp à vencer *</label>
+					<select id="popup_vencimento" disabled name="popup_vencimento"  class="mgs_alerta form-control" >
+                        <?php
+                        if ($objUsuario[0]->getPopup_vencimento() == 1) {
+                            $selected_1 = 'selected="selected"';
+                            $selected_2 = '';
+                        } else {
+                            $selected_1 = '';
+                            $selected_2 = 'selected="selected"';
+                        }
+                        ?>
+                        <option value="1" <?php echo $selected_1; ?> >Ativo</option>
+                        <option value="0" <?php echo $selected_2; ?> >Inativo</option>
+        			</select>						
+				</div>					
 				<div class="form-group">
 					<label for="perfil">Perfil *</label>
 					<select id="perfil" disabled name="perfil"  class="mgs_alerta form-control" >
@@ -338,6 +364,54 @@ class ViewUsuario {
 </div>		        
         <?php
     }
+	
+	
+    public function telaAlterarSenhaUsuario($objUsuario) {
+    	if ($objUsuario[0]->getImagem()) {
+    		$imagem = "./imagens/usuario/thumbnail" . $objUsuario[0]->getImagem();
+    	} else {
+    		$imagem = "./assets/images/imagemPadrao.jpg";
+    	}
+    	?>
+        <script src="./assets/main/js/popup-upload.js" type="text/javascript"></script>
+        <script src="./assets/main/js/jquery.form.js" type="text/javascript" ></script>
+        <script type="text/javascript" >
+            $(document).ready(function() {                
+                fncInserirArquivo("form_imagem", "progress", "porcentagem", "imagem", "imagemAtual", "./imagens/usuario/", "imagem");
+            });
+        </script>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card">        
+				<div class="card-header d-flex">
+					<h4 class="card-header-title">Alterar Senha Usuário</h4>
+					<div class="toolbar ml-auto">
+						<a href="#" onclick="fncButtonCadastro(this)" funcao="telaListarUsuario" controlador="ControladorUsuario" retorno="div_central" class="btn btn-light btn-sm buttonCadastro">Voltar</a>
+						<a href="#" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro">Alterar</a>            	
+					</div>
+				</div>	
+				<div class="card-body">	
+					<form action="#" method="post" id="formCadastro" class="">
+						<input type="hidden" name="retorno" id="retorno" value="div_central"/>
+						<input type="hidden" name="controlador" id="controlador" value="ControladorUsuario"/>
+						<input type="hidden" name="funcao" id="funcao" value="alterarSenhaUsuario"/>
+						<input type="hidden" name="mensagem" id="mensagem" value="2"/>
+						<input type="hidden" name="id" id="id" value="<?php echo $objUsuario[0]->getId() ?>"/>                
+						<div class="form-group">
+							<label for="senha" class="col-form-label">Senha *</label>
+							<input type="password" id="senha" name="senha" class="form-control mgs_alerta">
+						</div>
+						<div class="form-group">
+							<label for="senha2" class="col-form-label">Repetir a Senha *</label>
+							<input type="password" id="senha2" name="senha2" class="form-control mgs_alerta" >
+						</div>				
+					</form>				
+				</div>
+				</div>
+			</div>
+		</div>		        
+        <?php
+    }	
 
 }
 ?>

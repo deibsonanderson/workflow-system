@@ -59,7 +59,7 @@ class ControladorUsuario {
 			$usuario->setId($post["id"]);
 			$usuario->setNome($post["nome"]);
 			$usuario->setLogin($post["login"]);
-			$usuario->setSenha(md5($post["senha"]));
+			$usuario->setPopup_vencimento($post["popup_vencimento"]);
 			$usuario->setImagem($post["imagem"]);
 			$usuario->setPerfil($post["perfil"]);			
 			$usuario->setStatus('1');
@@ -131,6 +131,35 @@ class ControladorUsuario {
 			return $e;
 		}
 	}
+	
+	public function alterarSenhaUsuario($post){
+		try {
+			
+			$usuario = new Usuario();
+			$usuario->setId($post["id"]);
+			$usuario->setSenha(md5($post["senha"]));
+			
+			$moduloUsuario = new DaoUsuario();
+			if($moduloUsuario->alterarSenhaUsuario($usuario)){
+				return $this->telaListarUsuario();
+			}
+			$moduloUsuario->__destruct();
+		} catch (Exception $e) {
+			return $e;
+		} 
+				
+	}	
+	
+	public function telaAlterarSenhaUsuario($post = null){
+		try {
+			$viewUsuario = new ViewUsuario();
+			$retorno = $viewUsuario->telaAlterarSenhaUsuario($this->listarUsuario($post["id"]));
+			$viewUsuario->__destruct();
+			return $retorno;
+		} catch (Exception $e) {
+			return $e;
+		}
+	}	
 		
 }
 ?>
