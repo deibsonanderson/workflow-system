@@ -636,7 +636,7 @@ class ViewAtividade {
 				$('#img-upload-dis').css('opacity','0.5');
 				$('#form_arquivo').css('display','none');			
 				$('#img-remove-dis').css('opacity','0.5');
-				$('#anexo-btn').prop( "disabled", true );				
+				
             });
 
    			function validarCampo(elemento){
@@ -941,7 +941,7 @@ class ViewAtividade {
 			        </div>
 			        <div class="card-header d-flex">
 			            <div class="toolbar ml-auto">
-				            <button id="anexo-btn" disabled="true" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
+				            <button id="anexo-btn" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
 				            	<span id="anexo-btn-text" style="display: block;">
 				            		Adicionar Comentário/Anexo
 				            	</span>
