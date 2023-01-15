@@ -468,8 +468,44 @@ class ViewProcesso {
 			                            <th class="sorting_disabled" style="text-align: center;" >A&ccedil;&atilde;o</th> 
 									</tr>
 								</thead>
-			                    <tbody>
+								<tbody>
 			                        <?php
+			                        if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+										foreach ($objProcesso as $processo) {
+
+											$styleCor = '';
+											if($processo->getTotalAtivo() > 0){
+												$styleCor = 'color:#FF407B;';
+											}
+											?>    
+			                                <tr style="<?php echo $styleCor; ?>">
+			                                    <td onclick="getId(this)"   class="getId dimensions" style="cursor:pointer;text-align: center;"  id="<?php echo $processo->getId(); ?>" funcao="telaTimeLineProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><img alt="time line" src="./assets/images/flow.png"></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer;text-align: center;"  id="<?php echo $processo->getId(); ?>" funcao="telaGraficoProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><img alt="gráfico" src="./assets/images/chart.png" style="width: 38px;"></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer;text-align: center;"  id="<?php echo $processo->getId(); ?>" funcao="telaRelatorioProcessosAtividades" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><img alt="gráfico" src="./assets/main/images/relatorio-logo.png" style="width: 38px;"></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><?php echo str_pad($processo->getId(), 5, '0', STR_PAD_LEFT); ?></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><?php echo recuperaData($processo->getData()); ?></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>"  ><?php echo limitarTexto($processo->getTitulo(), 40); ?></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><?php echo  ($processo->getTituloFluxo())?limitarTexto($processo->getTituloFluxo(), 40):''; ?></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><?php echo 'R$ '.number_format($processo->getProvisao(), 2, ',', '.'); ?></td>
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><?php echo 'R$ '.number_format($processo->getTotalValorAtividade(), 2, ',', '.'); ?></td> 
+			                                    <td onclick="getId(this)"  class="getId dimensions" style="cursor:pointer"  id="<?php echo $processo->getId(); ?>" funcao="telaVisualizarProcesso" controlador="ControladorProcesso" retorno="div_central" style="" title="<?php echo nl2br($processo->getDescricao()); ?>" ><?php echo 'R$ '.number_format(($processo->getProvisao()+$processo->getTotalValorAtividade()), 2, ',', '.'); ?></td> 
+			                                    <td style="text-align:center">
+						                            <div class="btn-group ml-auto">
+			                                        <?php
+			                                        echo ($perfil !== 'C')? '<button onclick="getId(this)" id="'.$processo->getId().'" funcao="telaAlterarProcesso" controlador="ControladorProcesso" retorno="div_central" class="getId btn btn-sm btn-outline-light"><i class="far fa-edit"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-edit"></i></button>';
+			                                        echo ($perfil === 'A')? '<button onclick="fcnModalDeleteId(this)"  modal="question" id="'.$processo->getId().'" funcao="excluirProcesso" controlador="ControladorProcesso" retorno="div_central" mensagem="4"  class="deleteId btn btn-sm btn-outline-light"><i class="far fa-trash-alt"></i></button>':'<button class="btn btn-sm" style="cursor: default;" ><i class="far fa-trash-alt"></i></button>'; 
+			                                        ?>
+			                                        </div>  	                               
+							    				</td>
+			                                </tr> 
+		                				<?php
+		            						}
+				        				}
+				        				?>    				
+			                    </tbody> 								
+								
+			                    <!-- tbody>
+			                        <?php /*
 			                        if ($objProcesso != null && $objProcesso[0]->getId() != null) {
 										foreach ($objProcesso as $processo) {
 											
@@ -518,9 +554,9 @@ class ViewProcesso {
 			                                </tr> 
 		                				<?php
 		            						}
-				        				}
+				        				} */
 				        				?>    				
-			                    </tbody> 
+			                    </tbody--> 
 							</table>
 						</div>
 					</div>

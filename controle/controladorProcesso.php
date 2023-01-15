@@ -44,6 +44,17 @@ class ControladorProcesso {
             return $e;
         }
     }
+  
+    public function listarFluxoProcessoSimplificado($id_usuario = null) {
+        try {
+            $daoProcesso = new DaoProcesso();
+            $retorno = $daoProcesso->listarFluxoProcessoSimplificado($id_usuario);
+            $daoProcesso->__destruct();
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
     
     public function listarAtividadesProcessosHaVencer($id_usuario = null) {
     	try {
@@ -364,7 +375,8 @@ class ControladorProcesso {
     public function telaListarProcesso($post = null) {
         try {
             $viewProcesso = new ViewProcesso();
-            $retorno = $viewProcesso->telaListarProcesso($this->listarFluxoProcesso($_SESSION["login"]->getId()));
+            //$retorno = $viewProcesso->telaListarProcesso($this->listarFluxoProcesso($_SESSION["login"]->getId()));
+            $retorno = $viewProcesso->telaListarProcesso($this->listarFluxoProcessoSimplificado($_SESSION["login"]->getId()));
             $viewProcesso->__destruct();
             return $retorno;
         } catch (Exception $e) {

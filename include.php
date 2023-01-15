@@ -53,6 +53,7 @@ require_once "view/viewProcesso.php";
 require_once "modulo/daoProcesso.php";
 require_once "controle/controladorProcesso.php";
 require_once "classe/Processo.php";
+require_once "classe/ProcessoSimplificado.php";
 
 require_once "modulo/daoComentarioFluxoProcesso.php";
 require_once "controle/controladorComentarioFluxoProcesso.php";

@@ -278,6 +278,71 @@ class DaoProcesso extends DaoBase {
     	}
     }
     
+    public function listarFluxoProcessoSimplificado($id_usuario = null) {
+        try {
+            //echo $this->montarSQLProcessoFluxo().$this->montarIdUsuario($id_usuario,'wp')." ORDER BY wp.data DESC, wpf.ativo ASC, wp.id DESC ";
+            //die();
+            return $this->montarListarProcessoFluxoSimplificado($this->executar(
+                $this->montarSQLProcessoFluxoSimplificado().
+                $this->montarIdUsuario($id_usuario,'wp').
+                " GROUP BY wp.id  ORDER BY wp.data DESC, wpf.ativo ASC, wp.id DESC "));
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    
+    private function montarSQLProcessoFluxoSimplificado(){
+        try {
+            return "SELECT  wp.id_titulo_fluxo,
+                            wtf.titulo AS titulo_fluxo,
+                            wp.id as id_processo,
+                            wp.descricao as descricao_processo,
+                            wp.titulo as titulo_processo,                            
+							wp.data as data_processo,                            
+							wp.provisao as provisao_processo,
+                    		SUM(CASE
+                        		WHEN wa.propriedade = '1' THEN wpf.valor_atividade ELSE -wpf.valor_atividade
+                    		END) AS total_valor_atividade,
+                    		SUM(CASE
+                        		WHEN wpf.ativo = '1' THEN 1 ELSE 0
+                    		END) AS total_ativo							
+                    FROM ".DaoBase::TABLE_PROCESSO_FLUXO." wpf
+                    INNER JOIN ".DaoBase::TABLE_PROCESSO." wp ON (wpf.id_processo = wp.id)
+                    INNER JOIN ".DaoBase::TABLE_TITULO_FLUXO." wtf ON (wtf.id = wp.id_titulo_fluxo)
+                    INNER JOIN ".DaoBase::TABLE_FLUXO." wf ON (wpf.id_fluxo = wf.id)
+                    INNER JOIN ".DaoBase::TABLE_ATIVIDADE." wa ON (wf.id_atividade = wa.id)					
+                    WHERE wpf.status = '1' AND wp.status = '1' ";
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    
+    private function montarListarProcessoFluxoSimplificado($query){
+        $retorno = array();        
+        $processo = null;
+        while ($objetoProcessoSimplificado = mysqli_fetch_object($query)) {
+            $processo = new ProcessoSimplificado();
+            $processo->setId($objetoProcessoSimplificado->id_processo);
+            $processo->setTitulo($objetoProcessoSimplificado->titulo_processo);            
+            $processo->setDescricao($objetoProcessoSimplificado->descricao_processo);
+            $processo->setData($objetoProcessoSimplificado->data_processo);
+            $processo->setProvisao($objetoProcessoSimplificado->provisao_processo);
+            
+            
+            $processo->setIdTituloFluxo($objetoProcessoSimplificado->id_titulo_fluxo);
+            $processo->setTituloFluxo($objetoProcessoSimplificado->titulo_fluxo);
+            
+            $processo->setTotalAtivo($objetoProcessoSimplificado->total_ativo);
+            $processo->setTotalValorAtividade($objetoProcessoSimplificado->total_valor_atividade);
+            
+            $retorno[] = $processo;
+            
+        }        
+        
+        return $retorno;
+    }
+    
+    
     private function montarListarProcessoFluxo($query){
     	$retorno = array();
     	$ultimo_id = 0;
