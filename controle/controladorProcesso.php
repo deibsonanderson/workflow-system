@@ -44,6 +44,17 @@ class ControladorProcesso {
             return $e;
         }
     }
+    
+    public function listarFluxoProcessoAgenda($id_usuario = null, $dataIn = null) {
+        try {
+            $daoProcesso = new DaoProcesso();
+            $retorno = $daoProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn );
+            $daoProcesso->__destruct();
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
   
     public function listarFluxoProcessoSimplificado($id_usuario = null) {
         try {

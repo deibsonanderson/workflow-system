@@ -34,9 +34,13 @@ class ControladorAgenda {
         }
     }
     
-    public function eventosAgenda($id_usuario){
-    	$controladorProcesso = new ControladorProcesso();
-    	$objProcesso = $controladorProcesso->listarFluxoProcesso($id_usuario);
+    public function ajaxEventsAgenda($post = null){
+        return $this->eventosAgenda($post["id_usuario"], $post["dataIn"]);
+    }
+    
+    public function eventosAgenda($id_usuario, $dataIn = null){
+        $controladorProcesso = new ControladorProcesso();
+    	$objProcesso = $controladorProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn);
     	
     	$eventos = "";
     	$processoFluxoIds = array();
@@ -47,18 +51,9 @@ class ControladorAgenda {
     					if(($fluxoProcesso->getVencimento() != null || $fluxoProcesso->getVencimento() != "" || $fluxoProcesso->getVencimento() != "00") 
     							&& ($fluxoProcesso->getTitulo() != null || trim($fluxoProcesso->getTitulo()) != "") ){
     										$date = strtotime($processo->getData());
-    										$eventos .= "{  id: '".$fluxoProcesso->getAtividade()->getId()."',
-									                        title: '".trim($fluxoProcesso->getTitulo())."-".trim($processo->getTitulo())."',
-									                        start: '".date('Y',$date)."-".date('m',$date)."-".$fluxoProcesso->getVencimento()."',
-									                        backgroundColor: '#4285F4',
-									                        borderColor: '#4285F4',
-															tipo: 'P',
-															id_processo_fluxo:'".$fluxoProcesso->getId()."',
-															ativo:'".$fluxoProcesso->getAtivo()."',
-															atuante:'".$fluxoProcesso->getAtuante()."',
-														    id_processo:'".$processo->getId()."' },";
+    										$eventos .= '{ "id": "'.$fluxoProcesso->getAtividade()->getId().'", "title": "'.trim($fluxoProcesso->getTitulo()).' - '.trim($processo->getTitulo()).'", "start": "'.date("Y",$date).'-'.date("m",$date).'-'.$fluxoProcesso->getVencimento().'", "backgroundColor": "#4285F4", "borderColor": "#4285F4", "tipo": "P", "id_processo_fluxo": "'.$fluxoProcesso->getId().'", "ativo": "'.$fluxoProcesso->getAtivo().'", "atuante": "'.$fluxoProcesso->getAtuante().'", "id_processo": "'.$processo->getId().'" },';
     					}
-    					$processoFluxoIds[] = $fluxoProcesso->getId();
+    					$processoFluxoIds[] = $fluxoProcesso->getId();    					    					
     				}
     			}
     		}
@@ -69,7 +64,7 @@ class ControladorAgenda {
     		$eventos = substr($eventos, 0, strlen($eventos)-1);
     	}
     	
-    	return $eventos;
+    	return '['.$eventos.']';
     }
     
     public function montarEventosAgenda(){
@@ -80,17 +75,11 @@ class ControladorAgenda {
     		foreach ($agendas as $agenda) {
     			if($agenda->getStatus() == '1'){
     				if($agenda->getAtivo()){
-    					$color = "#82db76";
+    					$color = '#82db76';
     				}else{
-    					$color = "#ef172c";
+    					$color = '#ef172c';
     				}
-    				$eventos .= "{  id: '".$agenda->getId()."',
-			                        title: '".trim($agenda->getDescricao())."',
-			                        start: '".$agenda->getData()."',
-			                        backgroundColor: '".$color."',
-			                        borderColor: '".$color."',
-									tipo: 'A' },";
-    				
+    				$eventos .= '{ "id": "'.$agenda->getId().'", "title": "'.trim($agenda->getDescricao()).'", "start": "'.$agenda->getData().'", "backgroundColor": "'.$color.'", "borderColor": "'.$color.'", "tipo": "A"},';
     			}
     		}
     	}
@@ -105,12 +94,7 @@ class ControladorAgenda {
     	if($listComentario != null){
     		foreach ($listComentario as $comentario){
     			$date = strtotime($comentario->getData());
-    			$eventos .= "{  id: '".$comentario->getId()."',
-		                        title: '".trim(limitarTexto(preg_replace("/[^a-zA-Z0-9-_ ]/", "", $comentario->getDescricao()),40))."',
-		                        start: '".date('Y-m-d',$date)."',
-		                        backgroundColor: '#FFC108',
-		                        borderColor: '#FFC108',
-								tipo: 'C' },";
+    			$eventos .= '{ "id": "'.$comentario->getId().'", "title": "'.trim(limitarTexto(preg_replace('/[^a-zA-Z0-9-_ ]/', '', $comentario->getDescricao()),40)).'", "start": "'.date("Y-m-d",$date).'", "backgroundColor": "#FFC108", "borderColor": "#FFC108", "tipo": "C" },';
     		}
     	}
     	return $eventos;

@@ -2713,11 +2713,11 @@ exports.globalDefaults = {
         next: 'next',
         prevYear: 'prev year',
         nextYear: 'next year',
-        year: 'year',
-        today: 'today',
-        month: 'month',
-        week: 'week',
-        day: 'day'
+        year: 'ano',
+        today: 'hoje',
+        month: 'mês',
+        week: 'semana',
+        day: 'dia'
     },
     // buttonIcons: null,
     allDayText: 'all-day',
@@ -14962,7 +14962,7 @@ ViewRegistry_1.defineView('list', {
     'class': ListView_1.default,
     buttonTextKey: 'list',
     defaults: {
-        buttonText: 'list',
+        buttonText: 'lista',
         listDayFormat: 'LL',
         noEventsMessage: 'No events to display'
     }

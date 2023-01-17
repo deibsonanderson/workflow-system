@@ -1625,3 +1625,24 @@ function fncBaixarTodosArquivos() {
 	}
 	
 }
+
+function fncAgendaAdd(calendar,id_usuario, data){
+	$.ajax({
+        url: 'controlador.php',
+        type: 'POST',
+        data: 'retorno=sortable&controlador=ControladorAgenda&funcao=ajaxEventsAgenda&id_usuario='+id_usuario+'&dataIn='+data,
+        success: function(result) {
+            $(calendar).fullCalendar('addEventSource', JSON.parse(result));
+        },
+        beforeSend: function() {
+        	showLoading();
+        },
+        complete: function() {
+        	hideLoading();		                
+        },
+        error: function(){
+        	hideLoading();
+        	msgSlide("18");
+	    }
+    });
+}

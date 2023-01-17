@@ -206,7 +206,19 @@ class DaoProcesso extends DaoBase {
     	} catch (Exception $e) {
     		return $e;
     	}
-    }    
+    }
+    
+    public function listarFluxoProcessoAgenda($id_usuario = null, $dataIn = null) {
+        try {
+            return $this->montarListarProcessoFluxo($this->executar(
+                $this->montarSQLProcessoFluxo().
+                $this->montarIdUsuario($id_usuario,'wp').
+                " AND (MONTH(wp.data) = MONTH('".$dataIn."') AND YEAR(wp.data) = YEAR('".$dataIn."')) ".
+                " ORDER BY wp.data DESC, wpf.ativo ASC, wp.id DESC "));
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
     
     public function listarFluxoProcesso($id_usuario = null) {
     	try {
