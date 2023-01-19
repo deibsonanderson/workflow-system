@@ -208,15 +208,43 @@ class DaoProcesso extends DaoBase {
     	}
     }
     
-    public function listarFluxoProcessoAgenda($id_usuario = null, $dataIn = null) {
+    public function listarFluxoProcessoAgenda($id_usuario = null, $dataIn = null, $tipo = null) {
         try {
+            /*
+            var_dump($this->montarSQLProcessoFluxo().
+            $this->montarIdUsuario($id_usuario,'wp').
+            $this->validaTipoDisplayAgenda($tipo, $dataIn).
+            " ORDER BY wp.data DESC, wpf.ativo ASC, wp.id DESC ");
+            die();
+            */
             return $this->montarListarProcessoFluxo($this->executar(
                 $this->montarSQLProcessoFluxo().
                 $this->montarIdUsuario($id_usuario,'wp').
-                " AND (MONTH(wp.data) = MONTH('".$dataIn."') AND YEAR(wp.data) = YEAR('".$dataIn."')) ".
+                $this->validaTipoDisplayAgenda($tipo, $dataIn).
+                //" AND (MONTH(wp.data) = MONTH('".$dataIn."') AND YEAR(wp.data) = YEAR('".$dataIn."')) ".
+                
+                
                 " ORDER BY wp.data DESC, wpf.ativo ASC, wp.id DESC "));
         } catch (Exception $e) {
             return $e;
+        }
+    }
+    
+    private function validaTipoDisplayAgenda($tipo = null, $dataIn = null){
+        $date = date_create($dataIn);
+        date_add($date, date_interval_create_from_date_string("6 days"));        
+        switch ($tipo) {
+            case 'agendaWeek':
+                return " AND CONCAT(YEAR(wp.data),'-',LPAD(MONTH(wp.data), 2, '0'),'-',LPAD(wpf.vencimento_atividade, 2, '0')) between date('".$dataIn."') and date('".date_format($date, "Y-m-d")."') ";
+                break;
+            case 'agendaDay':
+                return " AND CONCAT(YEAR(wp.data),'-',LPAD(MONTH(wp.data), 2, '0'),'-',LPAD(wpf.vencimento_atividade, 2, '0')) =  date('".$dataIn."') ";
+                break;
+            case 'listWeek':
+                return " AND CONCAT(YEAR(wp.data),'-',LPAD(MONTH(wp.data), 2, '0'),'-',LPAD(wpf.vencimento_atividade, 2, '0')) between date('".$dataIn."') and date('".date_format($date, "Y-m-d")."') ";
+                break;
+            default:
+                return " AND (MONTH(wp.data) = MONTH('".$dataIn."') AND YEAR(wp.data) = YEAR('".$dataIn."')) ";
         }
     }
     
@@ -275,7 +303,7 @@ class DaoProcesso extends DaoBase {
 							wp.provisao,
 							wf.ordenacao,
 							wpf.out_flow,
-                            wpf.vencimento_atividade AS vencimento_processo_fluxo,
+                            LPAD(wpf.vencimento_atividade, 2, '0') AS vencimento_processo_fluxo,
                             wpf.descricao_atividade AS descricao_processo_fluxo,
                             wc.nome AS titulo_categoria_atividade
                     FROM ".DaoBase::TABLE_PROCESSO_FLUXO." wpf

@@ -35,12 +35,12 @@ class ControladorAgenda {
     }
     
     public function ajaxEventsAgenda($post = null){
-        return $this->eventosAgenda($post["id_usuario"], $post["dataIn"]);
+        return $this->eventosAgenda($post["id_usuario"], $post["dataIn"], $post["tipo"]);
     }
     
-    public function eventosAgenda($id_usuario, $dataIn = null){
+    public function eventosAgenda($id_usuario, $dataIn = null, $tipo = null){
         $controladorProcesso = new ControladorProcesso();
-    	$objProcesso = $controladorProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn);
+    	$objProcesso = $controladorProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn, $tipo);
     	
     	$eventos = "";
     	$processoFluxoIds = array();

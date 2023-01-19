@@ -232,75 +232,14 @@ class ViewAgenda {
 		$eventos = $controladorAgenda->eventosAgenda($_SESSION["login"]->getId(), $dataIn);
 		?>
         <script type="text/javascript" >
-            function navegateCalendar(calendar, button){
-            	$(calendar).fullCalendar(button);
-    			var data = convertDataCalendarToDataBase(calendar);
-            	$(calendar).fullCalendar('removeEvents');
-            	fncAgendaAdd(calendar,<?php echo $_SESSION["login"]->getId(); ?>, data);    
-    		}
         
             $(document).ready(function() {
+                
                 $('#tooltip').hide();
                 fncInserirArquivo("form_arquivo", "progress_arquivo", "porcentagem_arquivo", "arquivo", "arquivoAtual", "./arquivos/agenda/", "arquivo");
-
-	            $('#calendar1').fullCalendar({
-	                header: {
-	                	left: 'prev,next today',
-	                    //left: 'prevYear,prev,next,nextYear today',
-	                    center: 'title',
-	                    right: 'month'//,agendaWeek,agendaDay,listWeek'
-	                },
-	                dayClick: function(date, jsEvent, view) {
-		                $("#txt_data_cad").val(fncRecuperarData(date.format()));
-	                	telaVisualizarEventosAgenda(date.format());
-	                	telaVisualizarComentariosAgenda(date.format());
-			        },
-					eventClick: function(info) {
-					  if (info.url != undefined && info.url) {
-						window.open(info.url);
-						info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
-					  } else {
-						  //salert('Clicked ' + info.id +'-'+info.title);
-						  if(info.tipo == 'P'){
-						  	telaModalAgendaProcessoFluxo(info);
-						  }
-					  }
-					},					
-					displayEventTime : false,
-					customButtons: {
-				      prev: {
-				        text: 'Prev',
-				        click: function() {
-				        	navegateCalendar('#calendar1', 'prev');
-				        }
-				      },
-				      next: {
-				        text: 'Next',
-				        click: function() {
-				        	navegateCalendar('#calendar1', 'next');
-				        }
-				      },
-				      prevYear: {
-				        text: 'Prev',
-				        click: function() {
-				        	navegateCalendar('#calendar1', 'prevYear');
-				        }
-				      },
-				      nextYear: {
-				        text: 'Next',
-				        click: function() {
-				        	navegateCalendar('#calendar1', 'nextYear');
-				        }
-				      }
-				    },
-	                defaultDate: '<?php echo $dataIn; ?>',//'2018-03-12',
-	                locale: 'pt-br',
-	                navLinks: true, // can click day/week names to navigate views
-	                editable: true,
-	                eventLimit: true, // allow "more" link when too many events
-	                events: <?php echo $eventos; ?>
-	            });
-                ordenarAgenda();
+                fncMontaAgenda('#calendar1', <?php echo $_SESSION["login"]->getId(); ?>, '<?php echo $dataIn; ?>', <?php echo $eventos; ?>);
+			    fncOrdenarAgenda();
+			    
             });
 
    			function validarCampo(elemento){
@@ -308,17 +247,8 @@ class ViewAgenda {
 					msgSlide("17");
 					$(elemento).val('<?php echo recuperaData($dataIn); ?>');
 				}
-			}			
-
-   			function convertDataCalendarToDataBase(calendar){
-   				var data = new Date($(calendar).fullCalendar('getDate'));
-				if((data.getMonth()+2) == 13){
-					return (data.getFullYear()+1)+'-1-1';
-				}else{   					
-   					return data.getFullYear()+'-'+(data.getMonth()+2)+'-1';
-				}
 			}
-		
+					
 		    if ($("#datetimepicker4").length) {
 		        $('#datetimepicker4').datetimepicker({
 		            format: 'L'

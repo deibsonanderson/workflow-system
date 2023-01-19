@@ -45,10 +45,10 @@ class ControladorProcesso {
         }
     }
     
-    public function listarFluxoProcessoAgenda($id_usuario = null, $dataIn = null) {
+    public function listarFluxoProcessoAgenda($id_usuario = null, $dataIn = null, $tipo = null) {
         try {
             $daoProcesso = new DaoProcesso();
-            $retorno = $daoProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn );
+            $retorno = $daoProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn, $tipo );
             $daoProcesso->__destruct();
             return $retorno;
         } catch (Exception $e) {

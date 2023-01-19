@@ -1167,7 +1167,7 @@ function telaVisualizarComentariosAgenda(dateText) {
 			});
 }
 
-function ordenarAgenda() {
+function fncOrdenarAgenda() {
 	$("#div_agenda")
 			.sortable(
 					{
@@ -1626,11 +1626,24 @@ function fncBaixarTodosArquivos() {
 	
 }
 
-function fncAgendaAdd(calendar,id_usuario, data){
+function fncConvertDataCalendarToDataBase(calendar){
+	var data = new Date($(calendar).fullCalendar('getDate'));
+	return $(calendar).fullCalendar('getDate').toISOString();
+}
+
+function fncNavegateCalendar(calendar, button, id_usuario){
+	$(calendar).fullCalendar(button);
+	var data = fncConvertDataCalendarToDataBase(calendar);
+	$(calendar).fullCalendar('removeEvents');
+	var tipo = $(calendar).fullCalendar('getView').type;
+	fncAgendaAdd(calendar,id_usuario, data, tipo);    
+}
+
+function fncAgendaAdd(calendar,id_usuario, data, tipo){
 	$.ajax({
         url: 'controlador.php',
         type: 'POST',
-        data: 'retorno=sortable&controlador=ControladorAgenda&funcao=ajaxEventsAgenda&id_usuario='+id_usuario+'&dataIn='+data,
+        data: 'retorno=sortable&controlador=ControladorAgenda&funcao=ajaxEventsAgenda&id_usuario='+id_usuario+'&dataIn='+data+'&tipo='+tipo,
         success: function(result) {
             $(calendar).fullCalendar('addEventSource', JSON.parse(result));
         },
@@ -1646,3 +1659,64 @@ function fncAgendaAdd(calendar,id_usuario, data){
 	    }
     });
 }
+
+function fncMontaAgenda(calendar, id_usuario, dataIn, eventos){            	
+	$(calendar).fullCalendar({
+        header: {
+        	//left: 'prev,next',// today',
+            left: 'prevYear,prev,next,nextYear today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay,listWeek'
+        },
+        dayClick: function(date, jsEvent, view) {
+            $("#txt_data_cad").val(fncRecuperarData(date.format()));
+        	telaVisualizarEventosAgenda(date.format());
+        	telaVisualizarComentariosAgenda(date.format());
+        },
+		eventClick: function(info) {
+		  if (info.url != undefined && info.url) {
+			window.open(info.url);
+			info.jsEvent.preventDefault(); // prevents browser from following link in current tab.
+		  } else {
+			  //salert('Clicked ' + info.id +'-'+info.title);
+			  if(info.tipo == 'P'){
+			  	telaModalAgendaProcessoFluxo(info);
+			  }
+		  }
+		},					
+		displayEventTime : false,
+		customButtons: {
+	      prev: {
+	        text: 'Prev',
+	        click: function() {
+	        	fncNavegateCalendar(calendar, 'prev', id_usuario);
+	        }
+	      },
+	      next: {
+	        text: 'Next',
+	        click: function() {
+	        	fncNavegateCalendar(calendar, 'next', id_usuario);
+	        }
+	      },
+	      prevYear: {
+	        text: 'Prev',
+	        click: function() {
+	        	fncNavegateCalendar(calendar, 'prevYear', id_usuario);
+	        }
+	      },
+	      nextYear: {
+	        text: 'Next',
+	        click: function() {
+	        	fncNavegateCalendar(calendar, 'nextYear', id_usuario);
+	        }
+	      }
+	    },
+        defaultDate: dataIn,//'2018-03-12',
+        locale: 'pt-br',
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        events: eventos
+    });
+}	
+
