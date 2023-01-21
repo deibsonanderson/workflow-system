@@ -221,9 +221,6 @@ class DaoProcesso extends DaoBase {
                 $this->montarSQLProcessoFluxo().
                 $this->montarIdUsuario($id_usuario,'wp').
                 $this->validaTipoDisplayAgenda($tipo, $dataIn).
-                //" AND (MONTH(wp.data) = MONTH('".$dataIn."') AND YEAR(wp.data) = YEAR('".$dataIn."')) ".
-                
-                
                 " ORDER BY wp.data DESC, wpf.ativo ASC, wp.id DESC "));
         } catch (Exception $e) {
             return $e;
@@ -231,17 +228,15 @@ class DaoProcesso extends DaoBase {
     }
     
     private function validaTipoDisplayAgenda($tipo = null, $dataIn = null){
-        $date = date_create($dataIn);
-        date_add($date, date_interval_create_from_date_string("6 days"));        
         switch ($tipo) {
+            case 'listWeek':
             case 'agendaWeek':
+                $date = date_create($dataIn);
+                date_add($date, date_interval_create_from_date_string("6 days"));                
                 return " AND CONCAT(YEAR(wp.data),'-',LPAD(MONTH(wp.data), 2, '0'),'-',LPAD(wpf.vencimento_atividade, 2, '0')) between date('".$dataIn."') and date('".date_format($date, "Y-m-d")."') ";
                 break;
             case 'agendaDay':
                 return " AND CONCAT(YEAR(wp.data),'-',LPAD(MONTH(wp.data), 2, '0'),'-',LPAD(wpf.vencimento_atividade, 2, '0')) =  date('".$dataIn."') ";
-                break;
-            case 'listWeek':
-                return " AND CONCAT(YEAR(wp.data),'-',LPAD(MONTH(wp.data), 2, '0'),'-',LPAD(wpf.vencimento_atividade, 2, '0')) between date('".$dataIn."') and date('".date_format($date, "Y-m-d")."') ";
                 break;
             default:
                 return " AND (MONTH(wp.data) = MONTH('".$dataIn."') AND YEAR(wp.data) = YEAR('".$dataIn."')) ";

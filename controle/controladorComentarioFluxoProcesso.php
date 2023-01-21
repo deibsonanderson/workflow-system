@@ -23,10 +23,10 @@ class ControladorComentarioFluxoProcesso {
         }
     }
     
-    public function listarComentarioByIdsFluxoProcesso($ids = null) {
+    public function listarComentarioByIdsFluxoProcesso($ids = null, $id_usuario = null, $dataIn = null, $tipo = null) {
     	try {
     		$daoComentarioFluxoProcesso = new DaoComentarioFluxoProcesso();
-    		$retorno = $daoComentarioFluxoProcesso->listarComentarioByIdsFluxoProcesso($ids);
+    		$retorno = $daoComentarioFluxoProcesso->listarComentarioByIdsFluxoProcesso($ids, $id_usuario, $dataIn, $tipo);
     		$daoComentarioFluxoProcesso->__destruct();
     		return $retorno;
     	} catch (Exception $e) {

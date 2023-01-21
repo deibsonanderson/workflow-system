@@ -12,10 +12,10 @@ class ControladorAgenda {
         
     }
 
-    public function listarAgenda($post = null) {
+    public function listarAgenda($post = null, $id_usuario = null, $dataIn = null, $tipo = null) {
         try {
         	$daoAgenda = new DaoAgenda();
-            $retorno = $daoAgenda->listarAgenda(desformataData($post["data"]));
+        	$retorno = $daoAgenda->listarAgenda(desformataData($post["data"]), null, $id_usuario, $dataIn, $tipo);
             $daoAgenda->__destruct();
             return $retorno;
         } catch (Exception $e) {
@@ -56,21 +56,21 @@ class ControladorAgenda {
     					$processoFluxoIds[] = $fluxoProcesso->getId();    					    					
     				}
     			}
-    		}
-    		$eventos .= $this->eventosAgendaComentarios($processoFluxoIds);
-    		
-    		$eventos .= $this->montarEventosAgenda();
-
-    		$eventos = substr($eventos, 0, strlen($eventos)-1);
+    		}    		
     	}
+    	$eventos .= $this->eventosAgendaComentarios($processoFluxoIds, $id_usuario, $dataIn, $tipo);
+    	
+    	$eventos .= $this->montarEventosAgenda($id_usuario, $dataIn, $tipo);
+    	
+    	$eventos = substr($eventos, 0, strlen($eventos)-1);
     	
     	return '['.$eventos.']';
     }
     
-    public function montarEventosAgenda(){
+    public function montarEventosAgenda($id_usuario = null, $dataIn = null, $tipo = null){
     	$eventos = "";
     	$controladorAgenda = new ControladorAgenda();
-    	$agendas = $controladorAgenda->listarAgenda(null);
+    	$agendas = $controladorAgenda->listarAgenda(null, $id_usuario, $dataIn, $tipo);
     	if ($agendas != null) {
     		foreach ($agendas as $agenda) {
     			if($agenda->getStatus() == '1'){
@@ -87,10 +87,10 @@ class ControladorAgenda {
     	return $eventos;
     }
     
-    public function eventosAgendaComentarios($processoFluxoIds){
+    public function eventosAgendaComentarios($processoFluxoIds, $id_usuario = null, $dataIn = null, $tipo = null){
     	$eventos = '';
     	$controladorComentario = new ControladorComentarioFluxoProcesso();
-    	$listComentario = $controladorComentario->listarComentarioByIdsFluxoProcesso($processoFluxoIds);
+    	$listComentario = $controladorComentario->listarComentarioByIdsFluxoProcesso($processoFluxoIds, $id_usuario, $dataIn, $tipo);
     	if($listComentario != null){
     		foreach ($listComentario as $comentario){
     			$date = strtotime($comentario->getData());

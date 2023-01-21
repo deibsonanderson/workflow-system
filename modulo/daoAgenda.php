@@ -12,12 +12,28 @@ class DaoAgenda extends DaoBase {
         
     }
 
-    public function listarAgenda($data = null, $ordem = null) {
+    public function listarAgenda($data = null, $ordem = null, $id_usuario = null, $dataIn = null, $tipo = null) {
         try {
+            $filter = '';
+        	switch ($tipo) {
+        	    case 'listWeek':
+        	    case 'agendaWeek':
+        	        $date = date_create($dataIn);
+        	        date_add($date, date_interval_create_from_date_string("6 days"));
+        	        $filter .= " AND data between date('".$dataIn."') and date('".date_format($date, "Y-m-d")."') AND id_usuario = ".$id_usuario." ";
+        	        break;
+        	    case 'agendaDay':
+        	        $filter .= " AND data = date('".$dataIn."') AND id_usuario = ".$id_usuario." ";
+        	        break;
+        	    default:
+        	        $filter .= ($dataIn != null)?" AND (MONTH(data) = MONTH('".$dataIn."') AND YEAR(data) = YEAR('".$dataIn."')) AND id_usuario = ".$id_usuario." ":" ";
+        	}
+        	
         	$sqlOrdem = ($ordem == null)?" ORDER BY data DESC ":" ORDER BY ordem ASC ";
+        	
         	return $this->executarQuery(
         			$this->sqlSelect(DaoBase::TABLE_AGENDA, array('id', 'data','descricao','arquivo','ordem','ativo','link','status'), false).
-        			$this->montarIdUsuario($_SESSION["login"]->getId()).$this->montarData($data).$sqlOrdem,
+        	    $this->montarIdUsuario($_SESSION["login"]->getId()).$this->montarData($data).$filter.$sqlOrdem,
         			'Agenda');
         } catch (Exception $e) {
             return $e;

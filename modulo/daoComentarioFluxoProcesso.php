@@ -39,11 +39,26 @@ class DaoComentarioFluxoProcesso extends DaoBase {
         }
     }
     
-    public function listarComentarioByIdsFluxoProcesso($ids = null) {
+    public function listarComentarioByIdsFluxoProcesso($ids = null, $id_usuario = null, $dataIn = null, $tipo = null) {
     	try {
-    		$sql = $this->montarSQlListarComentarioFluxoProcesso(" AND descricao != '' ");
-    		$sql .= ($ids != null) ? " AND id_processo_fluxo IN (" . implode(',', array_map('intval', $ids)). ")" : "";
-    		$sql .= " ORDER BY id DESC ";
+    	    
+    	    $sql = $this->montarSQlListarComentarioFluxoProcesso(" AND descricao != '' ");
+    	    switch ($tipo) {
+    	        case 'listWeek':
+    	        case 'agendaWeek':
+    	            $date = date_create($dataIn);
+    	            date_add($date, date_interval_create_from_date_string("6 days"));    	            
+    	            $sql .= " AND data between date('".$dataIn."') and date('".date_format($date, "Y-m-d")."') ";
+    	            break;
+    	        case 'agendaDay':
+    	            $sql .= " AND data = date('".$dataIn."') ";
+    	            break;
+    	        default:
+    	            $sql .= ($ids != null) ? " AND id_processo_fluxo IN (" . implode(',', array_map('intval', $ids)). ")" : "";
+    	    }
+    	            
+            $sql .= " ORDER BY id DESC ";
+
     		return $this->montarListarComentarioFluxoProcesso($this->executar($sql));
     	} catch (Exception $e) {
     		return $e;
