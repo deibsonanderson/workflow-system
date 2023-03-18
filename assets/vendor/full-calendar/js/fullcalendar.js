@@ -9409,12 +9409,14 @@ var Calendar = /** @class */ (function () {
     // Forces navigation to a view for the given date.
     // `viewType` can be a specific view name or a generic one like "week" or "day".
     Calendar.prototype.zoomTo = function (newDate, viewType) {
+      if(viewType != 'day'){ //if incluido para bloquear a mudança para visão dia
         var spec;
         viewType = viewType || 'day'; // day is default zoom
         spec = this.viewSpecManager.getViewSpec(viewType) ||
             this.viewSpecManager.getUnitViewSpec(viewType);
         this.currentDate = newDate.clone();
         this.renderView(spec ? spec.type : null);
+      }
     };
     // Current Date
     // -----------------------------------------------------------------------------------------------------------------

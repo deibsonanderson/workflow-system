@@ -1626,16 +1626,34 @@ function fncBaixarTodosArquivos() {
 	
 }
 
-function fncConvertDataCalendarToDataBase(calendar){
+
+function fncSubtractDays(data, days) {
+  data.setDate(data.getDate() - days);
+  return data;
+}
+
+function fncRemoverHora(data){
+	return data.toISOString().substring(0, 10);
+}
+
+function fncConvertDataCalendarToDataBase(calendar, button){
 	var data = new Date($(calendar).fullCalendar('getDate'));
-	return $(calendar).fullCalendar('getDate').toISOString();
+	if(button == 'agendaWeek'){
+		data = fncSubtractDays(data, 6);
+	}
+	return fncRemoverHora(data);
+	//return $(calendar).fullCalendar('getDate').toISOString();
 }
 
 function fncNavegateCalendar(calendar, button, id_usuario){
 	$(calendar).fullCalendar(button);
-	var data = fncConvertDataCalendarToDataBase(calendar);
+	var data = fncConvertDataCalendarToDataBase(calendar, button);
 	$(calendar).fullCalendar('removeEvents');
-	var tipo = $(calendar).fullCalendar('getView').type;
+	if (button == 'agendaWeek') {
+		var tipo = button;		
+	} else {
+		var tipo = $(calendar).fullCalendar('getView').type;
+	}
 	fncAgendaAdd(calendar,id_usuario, data, tipo);    
 }
 
@@ -1663,10 +1681,9 @@ function fncAgendaAdd(calendar,id_usuario, data, tipo){
 function fncMontaAgenda(calendar, id_usuario, dataIn, eventos){            	
 	$(calendar).fullCalendar({
         header: {
-        	//left: 'prev,next',// today',
-            left: 'prevYear,prev,next,nextYear today',
+        	left: 'prevYear,prev,next,nextYear today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay,listWeek'
+            right: 'month' //,agendaWeek,agendaDay,listWeek'
         },
         dayClick: function(date, jsEvent, view) {
             $("#txt_data_cad").val(fncRecuperarData(date.format()));
@@ -1708,6 +1725,17 @@ function fncMontaAgenda(calendar, id_usuario, dataIn, eventos){
 	        text: 'Next',
 	        click: function() {
 	        	fncNavegateCalendar(calendar, 'nextYear', id_usuario);
+	        }
+	      },
+	      agendaWeek: {
+	      	text: 'semana',
+	        click: function() {
+	           //TODO implementar a mesma regra para o month
+	        	var tipo = $(calendar).fullCalendar('getView').type;
+	        	if(tipo != 'agendaWeek'){
+	            	$(calendar).fullCalendar('changeView', 'agendaWeek');
+	            	fncNavegateCalendar(calendar, 'agendaWeek', id_usuario);
+	            }
 	        }
 	      }
 	    },
