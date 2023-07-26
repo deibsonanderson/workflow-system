@@ -10,6 +10,7 @@ class Usuario{
 	private $status;
 	private $perfil;
 	private $popup_vencimento;
+	private $classe;
 	
 	//construtor
 	public function __construct(){}
@@ -41,6 +42,14 @@ class Usuario{
 	
 	function getNome(){
 		return $this->nome;
+	}
+	
+	function setClasse($classe){
+	    $this->classe = $classe;	
+	}
+	
+	function getClasse(){
+		return $this->classe;
 	}
 	
 	function setLogin($login){

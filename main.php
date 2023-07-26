@@ -78,7 +78,20 @@ if (isset($_SESSION["login"])) {
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
-	<?php include('required.php') ?>
+	<?php 
+		include('required.php'); 
+		$init = 'controlador=ControladorProcesso&funcao=telaListarProcesso'; 
+		if($_SESSION["login"]->getClasse() != null && $_SESSION["login"]->getClasse() != ''){
+			try {
+				$controladorClasse = new ControladorClasse();
+				$objClasse = $controladorClasse->listarClasse($_SESSION["login"]->getClasse());
+				$init = 'controlador='.$objClasse[0]->getControlador().'&funcao='.$objClasse[0]->getFuncao().''; 
+			} catch (Exception $e) { 
+				echo 'erro no listarClasses '; 
+			}
+		}
+		
+	?>
 	
     <script type = "text/javascript" >
         var var_height = screen.height;
@@ -93,7 +106,7 @@ if (isset($_SESSION["login"])) {
             $.ajax({
                 url: 'controlador.php',
                 type: 'POST',
-                data: 'retorno=div_central&controlador=ControladorProcesso&funcao=telaListarProcesso',
+                data: 'retorno=div_central&<?php echo $init; ?>',
                 success: function(result) {
                     $('#div_central').html(result);
                 },

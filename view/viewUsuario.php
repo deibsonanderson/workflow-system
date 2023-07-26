@@ -258,7 +258,32 @@ class ViewUsuario {
                         <option value="1" <?php echo $selected_1; ?> >Ativo</option>
                         <option value="0" <?php echo $selected_2; ?> >Inativo</option>
         			</select>						
-				</div>					
+				</div>
+
+				<div class="form-group">
+					<label for="classe">Tela Inicial *</label>
+					<select id="classe" name="classe"  class="mgs_alerta form-control" >
+					<?php				
+					try {
+						$controladorClasse = new ControladorClasse();
+						$objClasse = $controladorClasse->listarClasse();
+					} catch (Exception $e) { 
+						echo 'erro no listarClasses '; 
+					}
+					
+					foreach ($objClasse as $catClasse){						 
+						 if ($objUsuario[0]->getClasse() == $catClasse->getId()) {
+                            $selected = 'selected="selected"';
+                        } else {
+                            $selected = '';                            
+                        }
+					?>
+						<option value="<?php echo $catClasse->getId()?>" <?php echo $selected; ?> ><?php echo $catClasse->getFuncao();?></option>
+					<?php                                  	
+					 }
+					 ?> 
+        			</select>						
+				</div>				
 				
 				<div class="form-group">
 					<label for="perfil">Perfil *</label>

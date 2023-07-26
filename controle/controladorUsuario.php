@@ -61,7 +61,8 @@ class ControladorUsuario {
 			$usuario->setLogin($post["login"]);
 			$usuario->setPopup_vencimento($post["popup_vencimento"]);
 			$usuario->setImagem($post["imagem"]);
-			$usuario->setPerfil($post["perfil"]);			
+			$usuario->setPerfil($post["perfil"]);
+			$usuario->setClasse($post["classe"]);		
 			$usuario->setStatus('1');
 			
 			$moduloUsuario = new DaoUsuario();
