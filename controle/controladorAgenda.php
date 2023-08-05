@@ -39,32 +39,46 @@ class ControladorAgenda {
     }
     
     public function eventosAgenda($id_usuario, $dataIn = null, $tipo = null){
-        $controladorProcesso = new ControladorProcesso();
-    	$objProcesso = $controladorProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn, $tipo);
-    	
     	$eventos = "";
-    	$processoFluxoIds = array();
-    	if ($objProcesso != null && $objProcesso[0]->getId() != null) {
-    		foreach ($objProcesso as $processo) {
-    			if ($processo->getFluxoProcesso() != null) {
-    				foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
-    					if(($fluxoProcesso->getVencimento() != null || $fluxoProcesso->getVencimento() != "" || $fluxoProcesso->getVencimento() != "00") 
-    							&& ($fluxoProcesso->getTitulo() != null || trim($fluxoProcesso->getTitulo()) != "") ){
-    										$date = strtotime($processo->getData());
-    										$eventos .= '{ "id": "'.$fluxoProcesso->getAtividade()->getId().'", "title": "'.trim($fluxoProcesso->getTitulo()).' - '.trim($processo->getTitulo()).'", "start": "'.date("Y",$date).'-'.date("m",$date).'-'.$fluxoProcesso->getVencimento().'", "backgroundColor": "#4285F4", "borderColor": "#4285F4", "tipo": "P", "id_processo_fluxo": "'.$fluxoProcesso->getId().'", "ativo": "'.$fluxoProcesso->getAtivo().'", "atuante": "'.$fluxoProcesso->getAtuante().'", "id_processo": "'.$processo->getId().'" },';
-    					}
-    					$processoFluxoIds[] = $fluxoProcesso->getId();    					    					
-    				}
-    			}
-    		}    		
-    	}
-    	$eventos .= $this->eventosAgendaComentarios($processoFluxoIds, $id_usuario, $dataIn, $tipo);
     	
+    	
+    	$fluxosProcessos = $this->montarFluxoProcessoAgenda($id_usuario, $dataIn, $tipo);
+    	$eventos .= $fluxosProcessos->eventos;
+    	
+    	$eventos .= $this->eventosAgendaComentarios($fluxosProcessos->ids, $id_usuario, $dataIn, $tipo);
+    	    	
     	$eventos .= $this->montarEventosAgenda($id_usuario, $dataIn, $tipo);
     	
     	$eventos = substr($eventos, 0, strlen($eventos)-1);
     	
     	return '['.$eventos.']';
+    }
+    
+    public function montarFluxoProcessoAgenda($id_usuario, $dataIn = null, $tipo = null){
+        $controladorProcesso = new ControladorProcesso();
+        $objProcesso = $controladorProcesso->listarFluxoProcessoAgenda($id_usuario, $dataIn, $tipo);
+        
+        $eventos = "";
+        $processoFluxoIds = array();
+        if ($objProcesso != null && $objProcesso[0]->getId() != null) {
+            foreach ($objProcesso as $processo) {
+                if ($processo->getFluxoProcesso() != null) {
+                    foreach ($processo->getFluxoProcesso() as $fluxoProcesso) {
+                        if(($fluxoProcesso->getVencimento() != null || $fluxoProcesso->getVencimento() != "" || $fluxoProcesso->getVencimento() != "00")
+                            && ($fluxoProcesso->getTitulo() != null || trim($fluxoProcesso->getTitulo()) != "") ){
+                                $date = strtotime($processo->getData());
+                                $cor = ($fluxoProcesso->getAtivo() == '1') ? '#4285F4' : '#D7D7DF';                                                                
+                                $eventos .= '{ "id": "'.$fluxoProcesso->getAtividade()->getId().'", "title": "'.trim($fluxoProcesso->getTitulo()).' - '.trim($processo->getTitulo()).'", "start": "'.date("Y",$date).'-'.date("m",$date).'-'.$fluxoProcesso->getVencimento().'", "backgroundColor": "'.$cor.'", "borderColor": "'.$cor.'", "tipo": "P", "id_processo_fluxo": "'.$fluxoProcesso->getId().'", "ativo": "'.$fluxoProcesso->getAtivo().'", "atuante": "'.$fluxoProcesso->getAtuante().'", "id_processo": "'.$processo->getId().'" },';
+                        }
+                        $processoFluxoIds[] = $fluxoProcesso->getId();
+                    }
+                }
+            }
+        }
+        $result = new stdClass;
+        $result->eventos = $eventos;
+        $result->ids = $processoFluxoIds;
+        return $result;
     }
     
     public function montarEventosAgenda($id_usuario = null, $dataIn = null, $tipo = null){
@@ -88,7 +102,7 @@ class ControladorAgenda {
     }
     
     public function eventosAgendaComentarios($processoFluxoIds, $id_usuario = null, $dataIn = null, $tipo = null){
-    	$eventos = '';
+        $eventos = '';
     	$controladorComentario = new ControladorComentarioFluxoProcesso();
     	$listComentario = $controladorComentario->listarComentarioByIdsFluxoProcesso($processoFluxoIds, $id_usuario, $dataIn, $tipo);
     	if($listComentario != null){

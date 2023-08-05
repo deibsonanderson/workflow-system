@@ -11,6 +11,8 @@ class Usuario{
 	private $perfil;
 	private $popup_vencimento;
 	private $classe;
+	private $auto_anexo;
+	private $auto_close;
 	
 	//construtor
 	public function __construct(){}
@@ -120,5 +122,22 @@ class Usuario{
 	function getPopup_vencimento(){
 		return $this->popup_vencimento;
 	}
+	
+	function getAuto_anexo(){
+	    return $this->auto_anexo;
+	}
+	
+	function getAuto_close(){
+	    return $this->auto_close;
+	}
+	
+	function setAuto_anexo($auto_anexo){
+	    $this->auto_anexo = $auto_anexo;
+	}
+	
+	function setAuto_close($auto_close){
+	    $this->auto_close = $auto_close;
+	}
+	
 }
 ?>

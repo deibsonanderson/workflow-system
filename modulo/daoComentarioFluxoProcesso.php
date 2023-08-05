@@ -54,7 +54,8 @@ class DaoComentarioFluxoProcesso extends DaoBase {
     	            $sql .= " AND data = date('".$dataIn."') ";
     	            break;
     	        default:
-    	            $sql .= ($ids != null) ? " AND id_processo_fluxo IN (" . implode(',', array_map('intval', $ids)). ")" : "";
+    	            //TODO o else é para evitar erro em PRD em breve sera tratado cosultando apenas pelo mês.
+    	            $sql .= ($ids != null) ? " AND id_processo_fluxo IN (" . implode(',', array_map('intval', $ids)). ")" : " AND id = 0 ";
     	    }
     	            
             $sql .= " ORDER BY id DESC ";

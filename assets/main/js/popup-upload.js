@@ -58,6 +58,9 @@ function fncInserirArquivo(fomulario, progress, porcentagem, inputFile, arquivoE
                     $('#' + arquivoExibicao).css('text-decoration', 'underline');
 
                 }
+                if($('#anexo-btn-auto').length != 0){
+                	$('#anexo-btn-auto').click();
+                }
 
             }
         });

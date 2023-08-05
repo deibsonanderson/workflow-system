@@ -10,7 +10,7 @@ class DaoUsuario extends DaoBase{
 	public function listarUsuario($id = null){
 		try {
 			$query = $this->executar($this->sqlSelect(
-					DaoBase::TABLE_USUARIO, array('id', 'nome', 'imagem', 'login', 'senha', 'status', 'id_perfil', 'popup_vencimento', 'classe'), false)
+					DaoBase::TABLE_USUARIO, array('id', 'nome', 'imagem', 'login', 'senha', 'status', 'id_perfil', 'popup_vencimento', 'classe', 'auto_anexo', 'auto_close'), false)
 					.$this->montarId($id));
 			while($objetoUsuario =  mysqli_fetch_object($query)){
 				$usuario = $this->modelMapper($objetoUsuario, new Usuario());
@@ -56,6 +56,8 @@ class DaoUsuario extends DaoBase{
 					popup_vencimento = '".$usuario->getPopup_vencimento()."',
 					id_perfil = '".$usuario->getPerfil()."',
 					status = '".$usuario->getStatus()."', 
+                    auto_anexo = '".$usuario->getAuto_anexo()."',
+                    auto_close = '".$usuario->getAuto_close()."',
 					classe = '".$usuario->getClasse()."' 
 					WHERE id =".$usuario->getId();
 			return $this->executar($sql);

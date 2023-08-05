@@ -665,6 +665,12 @@ class ViewAtividade {
 				var leftPos = $('.table-responsive').scrollLeft();
 				$(".table-responsive").animate({scrollLeft: leftPos + 999}, 100);
 			}
+
+			function fecharProcessoAuto(){
+				if($('#categoria_comentario').val() == '2'){
+					$('.fecharProcessoAuto').click();
+				}
+			}
         </script>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -686,7 +692,7 @@ class ViewAtividade {
 			
 			                if ($objProcessoFluxo->getAtivo() == 1) {
 			                ?>
-			                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $objProcessoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso btn btn-primary btn-sm" >Fechar</a>
+			                    <a href="#" onclick="getId(this)" funcao="fecharFluxoProcesso" controlador="controladorProcesso" id="<?php echo $objProcessoFluxo->getId(); ?>" retorno="div_central" class="fecharProcesso fecharProcessoAuto btn btn-primary btn-sm" >Fechar</a>
 			                <?php
 			                } else {
 			                ?>
@@ -933,7 +939,6 @@ class ViewAtividade {
 				                            <progress id="progress_arquivo" value="0" max="100" style="display:none;"></progress>
 				                            <span id="porcentagem_arquivo" style="display:none;">0%</span>	
 										</td>
-
 									</tr>
 								</table>
 							</div>
@@ -941,7 +946,11 @@ class ViewAtividade {
 			        </div>
 			        <div class="card-header d-flex">
 			            <div class="toolbar ml-auto">
-				            <button id="anexo-btn" onclick="fncFormCadastro(this)" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
+				            <?php
+				            $autoClose = ($_SESSION["login"]->getAuto_close() == '1')? 'fecharProcessoAuto();': '';
+				            echo ($_SESSION["login"]->getAuto_anexo() == '1') ? '<button id="anexo-btn-auto" onclick="fncFormCadastro(this); '.$autoClose.'" class="formCadastro" style="display: none;" ></button>' : '';
+				            ?>
+				            <button id="anexo-btn" onclick="fncFormCadastro(this); <?php echo $autoClose; ?>" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
 				            	<span id="anexo-btn-text" style="display: block;">
 				            		Adicionar Comentário/Anexo
 				            	</span>

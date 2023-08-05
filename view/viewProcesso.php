@@ -336,12 +336,13 @@ class ViewProcesso {
 							<a target="_blank" title="Link cadastrado na atividade" href="<?php echo $fluxoProcesso->getAtividade()->getLink(); ?>" class="btn <?php echo $btnEstilo; ?> btn-lg margin-box-top"><img src="./assets/images/<?php echo ($fluxoProcesso->getAtivo() == '1')?'external_link_enabade.png':'external_link29.png'; ?>" class="time-line-btn-action"></a>
 						<?php 
 	                	}
-	                	
-	                	if($fluxoProcesso->getVencimento() || $fluxoProcesso->getAtividade()->getVencimento()){
+                        
+	                	$venc = ($fluxoProcesso->getVencimento()) ? $fluxoProcesso->getVencimento() : $fluxoProcesso->getAtividade()->getVencimento();
+	                	if($venc != '00' && $venc != '0'){
 	                	?>
 							<a target="#" class="btn <?php echo $btnEstilo; ?> btn-lg margin-box-top">
 								<span title="Data de vencimento" style="font-size:15px;color:<?php echo ($fluxoProcesso->getAtivo() == '1')?'#ffffff':'#6c757d'; ?>">
-								<?php echo str_pad(($fluxoProcesso->getVencimento())?$fluxoProcesso->getVencimento():$fluxoProcesso->getAtividade()->getVencimento(), 2, "0", STR_PAD_LEFT); ?>
+								<?php echo str_pad($venc, 2, "0", STR_PAD_LEFT); ?>
 								</span>
 							</a>
 						<?php 

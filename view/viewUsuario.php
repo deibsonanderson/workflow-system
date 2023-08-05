@@ -300,7 +300,39 @@ class ViewUsuario {
                         <option value="1" <?php echo $selected_1; ?> >Adiministrador</option>
                         <option value="2" <?php echo $selected_2; ?> >Usuário</option>
         			</select>						
-				</div>					
+				</div>				
+				<div class="form-group">
+					<label for="auto_anexo">Auto Anexo *</label>
+					<select id="auto_anexo" name="auto_anexo"  class="mgs_alerta form-control" >
+                        <?php
+                        if ($objUsuario[0]->getAuto_anexo() == 1) {
+                            $selected_aa_1 = 'selected="selected"';
+                            $selected_aa_2 = '';
+                        } else {
+                            $selected_aa_1 = '';
+                            $selected_aa_2 = 'selected="selected"';
+                        }
+                        ?>
+                        <option value="1" <?php echo $selected_aa_1; ?> >Ativo</option>
+                        <option value="0" <?php echo $selected_aa_2; ?> >Inativo</option>
+        			</select>						
+				</div>
+				<div class="form-group">
+					<label for="auto_close">Auto Close *</label>
+					<select id="auto_close" name="auto_close"  class="mgs_alerta form-control" >
+                        <?php
+                        if ($objUsuario[0]->getAuto_close() == 1) {
+                            $selected_ac_1 = 'selected="selected"';
+                            $selected_ac_2 = '';
+                        } else {
+                            $selected_ac_1 = '';
+                            $selected_ac_2 = 'selected="selected"';
+                        }
+                        ?>
+                        <option value="1" <?php echo $selected_ac_1; ?> >Ativo</option>
+                        <option value="0" <?php echo $selected_ac_2; ?> >Inativo</option>
+        			</select>						
+				</div>			
 			</form>				
 		</div>
 		</div>
@@ -365,7 +397,32 @@ class ViewUsuario {
                         <option value="1" <?php echo $selected_1; ?> >Ativo</option>
                         <option value="0" <?php echo $selected_2; ?> >Inativo</option>
         			</select>						
-				</div>					
+				</div>
+				<div class="form-group">
+					<label for="classe">Tela Inicial *</label>
+					<select id="classe" disabled name="classe"  class="mgs_alerta form-control" >
+					<?php				
+					try {
+						$controladorClasse = new ControladorClasse();
+						$objClasse = $controladorClasse->listarClasse();
+					} catch (Exception $e) { 
+						echo 'erro no listarClasses '; 
+					}
+					
+					foreach ($objClasse as $catClasse){						 
+						 if ($objUsuario[0]->getClasse() == $catClasse->getId()) {
+                            $selected = 'selected="selected"';
+                        } else {
+                            $selected = '';                            
+                        }
+					?>
+						<option value="<?php echo $catClasse->getId()?>" <?php echo $selected; ?> ><?php echo $catClasse->getFuncao();?></option>
+					<?php                                  	
+					 }
+					 ?> 
+        			</select>						
+				</div>	
+									
 				<div class="form-group">
 					<label for="perfil">Perfil *</label>
 					<select id="perfil" disabled name="perfil"  class="mgs_alerta form-control" >
@@ -381,7 +438,39 @@ class ViewUsuario {
                         <option value="1" <?php echo $selected_1; ?> >Adiministrador</option>
                         <option value="2" <?php echo $selected_2; ?> >Usuário</option>
         			</select>						
-				</div>					
+				</div>
+				<div class="form-group">
+					<label for="auto_anexo">Auto Anexo *</label>
+					<select id="auto_anexo" disabled name="auto_anexo"  class="mgs_alerta form-control" >
+                        <?php
+                        if ($objUsuario[0]->getAuto_anexo() == 1) {
+                            $selected_aa_1 = 'selected="selected"';
+                            $selected_aa_2 = '';
+                        } else {
+                            $selected_aa_1 = '';
+                            $selected_aa_2 = 'selected="selected"';
+                        }
+                        ?>
+                        <option value="1" <?php echo $selected_aa_1; ?> >Ativo</option>
+                        <option value="0" <?php echo $selected_aa_2; ?> >Inativo</option>
+        			</select>						
+				</div>
+				<div class="form-group">
+					<label for="auto_close">Auto Close *</label>
+					<select id="auto_close" disabled name="auto_close"  class="mgs_alerta form-control" >
+                        <?php
+                        if ($objUsuario[0]->getAuto_close() == 1) {
+                            $selected_ac_1 = 'selected="selected"';
+                            $selected_ac_2 = '';
+                        } else {
+                            $selected_ac_1 = '';
+                            $selected_ac_2 = 'selected="selected"';
+                        }
+                        ?>
+                        <option value="1" <?php echo $selected_ac_1; ?> >Ativo</option>
+                        <option value="0" <?php echo $selected_ac_2; ?> >Inativo</option>
+        			</select>						
+				</div>									
 			</form>				
 		</div>
 		</div>

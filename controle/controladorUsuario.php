@@ -62,7 +62,9 @@ class ControladorUsuario {
 			$usuario->setPopup_vencimento($post["popup_vencimento"]);
 			$usuario->setImagem($post["imagem"]);
 			$usuario->setPerfil($post["perfil"]);
-			$usuario->setClasse($post["classe"]);		
+			$usuario->setClasse($post["classe"]);
+			$usuario->setAuto_anexo($post["auto_anexo"]);
+			$usuario->setAuto_close($post["auto_close"]);			
 			$usuario->setStatus('1');
 			
 			$moduloUsuario = new DaoUsuario();
