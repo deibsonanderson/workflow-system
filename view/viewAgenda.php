@@ -72,7 +72,7 @@ class ViewAgenda {
 												<th>Processo</th>
 												<th>Fluxo</th>
 												<th>Vencimento</th>
-												<th>Processos</th>
+												<th>Imagem</th>
 												<th>Valor</th>
 											</tr>
 										</thead>
@@ -272,12 +272,13 @@ class ViewAgenda {
 		</div>
 		
 		<div id="div_agenda_retorno">
-		<?php 
-			echo $controladorAgenda->telaVisualizarEventosAgenda(array("data" => $dataIn)); 
-		?>
+			<?php echo $controladorAgenda->telaVisualizarEventosAgenda(array("data" => $dataIn)); ?>
 		</div>
 		<div id="div_comentario_retorno">
-		<?php echo $controladorAgenda->telaVisualizarComentariosAgenda(array("data" => $dataIn)); ?>
+			<?php echo $controladorAgenda->telaVisualizarComentariosAgenda(array("data" => $dataIn)); ?>
+		</div>		
+		<div id="div_fluxo_processo_retorno">
+			<?php echo $controladorAgenda->telaVisualizarFluxoProcessoAgenda(array("data" => $dataIn)); ?>
 		</div>
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -428,7 +429,7 @@ class ViewAgenda {
 								<?php 
 									$cont = 0;
 									foreach ($listComentario as $comentario) {
-										$getIdProcessoStr = 'class="getIdProcesso" funcao="telaVisualizarAtividadeProcesso" controlador="controladorAtividade" retorno="div_central" id_processo_fluxo="' . $comentario->getFluxoProcesso()->getId() . '"  id_processo="' . $comentario->getProcesso()->getId() . '"   id="' . $comentario->getFluxoProcesso()->getAtividade()->getId() . '" ativo="' . $comentario->getFluxoProcesso()->getAtivo() . '" atuante="' . $comentario->getFluxoProcesso()->getAtuante() . '"';
+										$getIdProcessoStr = 'onclick="getIdProcesso(this);" class="getIdProcesso" funcao="telaVisualizarAtividadeProcesso" controlador="controladorAtividade" retorno="div_central" id_processo_fluxo="' . $comentario->getFluxoProcesso()->getId() . '"  id_processo="' . $comentario->getProcesso()->getId() . '"   id="' . $comentario->getFluxoProcesso()->getAtividade()->getId() . '" ativo="' . $comentario->getFluxoProcesso()->getAtivo() . '" atuante="' . $comentario->getFluxoProcesso()->getAtuante() . '"';
 										++$cont;
 			                    ?>    
 									<tr>
@@ -439,6 +440,86 @@ class ViewAgenda {
 										<td style="text-align: center;"><?php echo ($comentario->getArquivo() != '') ? '<img src="assets/images/arrow.png" style="cursor: pointer;" title="Arquivo: ' . $comentario->getArquivo() . '" onClick="fnAbreArquivo(\'arquivo' . $cont . '\', \'./arquivos/atividade\')" >' : ''; ?>
 											<input type="hidden" name="arquivo<?php echo $cont; ?>" id="arquivo<?php echo $cont; ?>" value="<?php echo $comentario->getArquivo(); ?>" /> 
 										</td>
+									</tr>	
+								<?php
+			                        }
+			                    ?>   	
+								</tbody>
+							</table>
+						</div>			
+					</div>
+				</div>				
+			</div>
+		</div>	
+	<?php     	
+    	}
+    }
+    
+    public function telaVisualizarFluxoProcessoAgenda($listFluxoProcesso){
+        if ($listFluxoProcesso && $listFluxoProcesso[0]->getFluxoProcesso())  {
+            //debug($listFluxoProcesso[0]);
+    ?>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card module_content">
+					<div class="card-header d-flex">
+						<h4 class="card-header-title">Atividades com Vencimento</h4>
+					</div>
+					<div class="card-body">	
+						<div class="table-responsive">
+							<table id="example" class="tablesorter table table-striped table-bordered second" style="width:100%">
+								<thead>
+									<tr>
+										<th>Data</th>
+										<th>Atividade</th>
+										<th>Processo</th>
+										<th>Fluxo</th>																				
+										<th>Imagem</th>
+										<th>Valor</th> 
+										<th>Ativo</th>
+									</tr>
+								</thead>
+								<tbody>
+								<?php 
+									foreach ($listFluxoProcesso[0]->getFluxoProcesso() as $fluxoProcesso) {
+									    $getIdProcessoStr = 'onclick="getIdProcesso(this);"  class="getIdProcesso" funcao="telaVisualizarAtividadeProcesso" controlador="controladorAtividade" retorno="div_central" id_processo_fluxo="' . $fluxoProcesso->getId() . '"  id_processo="' . $listFluxoProcesso[0]->getId() . '"   id="' . $fluxoProcesso->getAtividade()->getId() . '" ativo="' . $fluxoProcesso->getAtivo() . '" atuante="' . $fluxoProcesso->getAtuante() . '"';
+									    $date = strtotime($listFluxoProcesso[0]->getData());
+			                    ?>    
+									<tr>
+										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 100px;cursor: pointer;" ><?php echo $fluxoProcesso->getAtividade()->getVencimento().'/'.date('m',$date).'/'.date('Y',$date); ?></label></td>
+										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 170px;cursor: pointer;"><?php echo limitarTexto($fluxoProcesso->getAtividade()->getTitulo(), 40); ?></label></td>
+										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 170px;cursor: pointer;"><?php echo limitarTexto($listFluxoProcesso[0]->getTitulo(), 40); ?></label></td>
+										<td <?php echo $getIdProcessoStr; ?> ><label style="width: 170px;cursor: pointer;"><?php echo limitarTexto($listFluxoProcesso[0]->getFluxo()->getTitulo(), 40); ?></label></td>
+										<td class="" style="text-align: center;">
+											<span>
+			                                    <?php
+			                                    if ($fluxoProcesso->getAtividade()->getImagem() == "" || $fluxoProcesso->getAtividade()->getImagem() == null) {
+	                                                $imagem = "assets/images/atividade.png";
+	                                            } else {
+	                                                $imagem = "imagens/atividade/" . $fluxoProcesso->getAtividade()->getImagem();
+	                                            }
+	                                            ?>
+                                            	<a class="dimensions"
+													atuante="<?php echo $fluxoProcesso->getAtuante(); ?>"
+													style="text-decoration: none;"
+													title="<?php echo 'Título: ' . $fluxoProcesso->getTitulo() . '<br/>Descrição: ' . nl2br($fluxoProcesso->getDescricao()); ?>">
+                                                    <img class="" style="width: 32px; height: 33px;z-index: 1;border: 3px solid #00F;cursor:pointer;" src="<?php echo $imagem; ?>" />
+												</a>											   
+						                    </span>
+						                </td>
+						                <td <?php echo $getIdProcessoStr; ?> style="cursor: pointer" >
+											<div>
+			                                    <?php
+			                                    if($fluxoProcesso->getAtividade()->getPropriedade() == '1'){
+				                                    	$simbolo = '';
+				                                    }else{
+				                                    	$simbolo = '-';
+				                                    }
+				                                    echo 'R$ '.$simbolo.valorMonetario($fluxoProcesso->getAtividade()->getValor(),'2');
+			                                    ?>
+					                        </div>
+										</td>
+										<td <?php echo $getIdProcessoStr; ?> ><label style="cursor: pointer;"><?php echo ($fluxoProcesso->getAtivo() == '1') ? 'Aberto' : 'Fechado'; ?></label></td>
 									</tr>	
 								<?php
 			                        }

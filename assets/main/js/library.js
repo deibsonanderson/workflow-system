@@ -1167,6 +1167,25 @@ function telaVisualizarComentariosAgenda(dateText) {
 			});
 }
 
+function telaVisualizarFluxoProcessoAgenda(dateText) {
+	$
+			.ajax({
+				url : 'controlador.php',
+				type : 'POST',
+				data : 'retorno=div_fluxo_processo_retorno&controlador=controladorAgenda&funcao=telaVisualizarFluxoProcessoAgenda&data='
+						+ dateText,
+				success : function(result) {
+					$('#div_fluxo_processo_retorno').html(result);
+				},
+				beforeSend : function() {
+					showLoading();
+				},
+				complete : function() {
+					hideLoading();
+				}
+			});
+}
+
 function fncOrdenarAgenda() {
 	$("#div_agenda")
 			.sortable(
@@ -1689,6 +1708,7 @@ function fncMontaAgenda(calendar, id_usuario, dataIn, eventos){
             $("#txt_data_cad").val(fncRecuperarData(date.format()));
         	telaVisualizarEventosAgenda(date.format());
         	telaVisualizarComentariosAgenda(date.format());
+        	telaVisualizarFluxoProcessoAgenda(date.format());
         },
 		eventClick: function(info) {
 		  if (info.url != undefined && info.url) {

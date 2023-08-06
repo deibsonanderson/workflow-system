@@ -229,6 +229,17 @@ class ControladorAgenda {
     		return $e;
     	}
     }
+    
+    public function listarFluxoProcessoAgendaByFilterAndData($post = null) {
+        try {
+            $daoProcesso = new DaoProcesso();
+            $retorno = $daoProcesso->listarFluxoProcessoAgendaByFilterAndData($_SESSION["login"]->getId(), $post["data"]);
+            $daoProcesso->__destruct();
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
 
     public function telaCadastrarAgenda($post = null) {
         try {
@@ -262,6 +273,17 @@ class ControladorAgenda {
     	} catch (Exception $e) {
     		return $e;
     	}
+    }
+    
+    public function telaVisualizarFluxoProcessoAgenda($post = null){
+        try {
+            $viewAgenda = new ViewAgenda();
+            $retorno = $viewAgenda->telaVisualizarFluxoProcessoAgenda($this->listarFluxoProcessoAgendaByFilterAndData($post));
+            $viewAgenda->__destruct();
+            return $retorno;
+        } catch (Exception $e) {
+            return $e;
+        }
     }
      
     public function telaListarAgenda($post = null) {
