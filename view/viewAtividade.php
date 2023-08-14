@@ -950,7 +950,7 @@ class ViewAtividade {
 				            $autoClose = ($_SESSION["login"]->getAuto_close() == '1')? 'fecharProcessoAuto();': '';
 				            echo ($_SESSION["login"]->getAuto_anexo() == '1') ? '<button id="anexo-btn-auto" onclick="fncFormCadastro(this); '.$autoClose.'" class="formCadastro" style="display: none;" ></button>' : '';
 				            ?>
-				            <button id="anexo-btn" onclick="fncFormCadastro(this); <?php echo $autoClose; ?>" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;">
+				            <button id="anexo-btn" onclick="fncFormCadastro(this); <?php echo $autoClose; ?>" class="btn btn-primary btn-sm formCadastro" style="width: 210px;text-align: center;" <?php echo ($_SESSION["login"]->getAuto_anexo() == '1')?'disabled="disabled"':''; ?>>
 				            	<span id="anexo-btn-text" style="display: block;">
 				            		Adicionar Comentário/Anexo
 				            	</span>
