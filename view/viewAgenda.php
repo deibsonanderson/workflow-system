@@ -254,6 +254,19 @@ class ViewAgenda {
 		            format: 'L'
 		        });
 		    }  
+
+            function showHideFilter(element){
+				var isShow = $(element).attr("show");
+				if(isShow == 'D'){
+					$('#calendar1').slideDown('slow');
+					$(element).attr("show", 'U');
+					$(element).html("Esconder");
+				}else if(isShow == 'U'){
+					$('#calendar1').slideUp('slow');
+					$(element).attr("show", 'D');
+					$(element).html("Exibir");
+				}				
+            }
         </script>
         <div style="display: none;" id="script"></div>
 		<div class="row">
@@ -261,6 +274,9 @@ class ViewAgenda {
 				<div class="card">
 					<div class="card-header d-flex">
 						<h4 class="card-header-title">Cadatro de Agenda</h4>
+						<div class="toolbar ml-auto">
+			            	<a href="#" id="btnFilter" onclick="showHideFilter(this)" show="U" class="btn btn-light btn-sm">Esconder</a>
+			            </div>
 					</div>
 					<div class="card-body">	
 						<div class="form-group">
