@@ -31,3 +31,5 @@
 	<!--script src="./assets/vendor/datepicker/datepicker.js"></script-->
 	
 	<script src="./assets/main/js/jquery-loading/loading.js"></script>
+	
+	<script src="./assets/main/js/jquery.ui.touch-punch.js"></script>	
