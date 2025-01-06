@@ -131,6 +131,7 @@ if (isset($_SESSION["login"])) {
 		if($_SESSION["login"]->getPopup_vencimento() == '1'){
 			$controladorMain = new ControladorMain();		
 			echo $controladorMain->telaListarAtividadesProcessosHaVencer();
+			$_SESSION["login"]->setPopup_vencimento('0');
 		}
     ?>	
 </body>
