@@ -50,7 +50,7 @@ class DaoAcao extends DaoBase{
 					FROM ".DaoBase::TABLE_CLASSE." c
 					INNER JOIN ".DaoBase::TABLE_MODULO." m ON (c.id_modulo = m.id)
 					LEFT JOIN ".DaoBase::TABLE_ACAO_USUARIO." a ON (a.id_classe = c.id AND a.id_usuario = ".$usuario->getId().")
-					WHERE c.status = '1' ORDER BY c.nome ";
+					WHERE c.status = '1' ORDER BY c.id_modulo ASC, c.nome ASC ";
 			
 			return $this->montarClasseAcao($this->executar($sql));
 		} catch (Exception $e) {
