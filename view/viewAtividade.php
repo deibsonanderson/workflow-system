@@ -13,7 +13,7 @@ class ViewAtividade {
     }
 
     public function telaCadastrarAtividade($post) {
-    	?>
+	?>
         <script type="text/javascript">
         <?php
         echo ($post) ? "$.growlUI2('" . $post . "', '&nbsp;');" : "";
@@ -28,7 +28,7 @@ class ViewAtividade {
                 fncInserirArquivo("form_imagem", "progress", "porcentagem", "imagem", "imagemAtual", "./imagens/atividade/", "imagem");
             });
         </script>
-<div class="row">
+		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
 		        
@@ -175,14 +175,14 @@ class ViewAtividade {
 				</div>
 				</div>
 			</div>
-</div>		        	
-        <?php
+		</div>		        	
+	<?php
     }
 
     public function telaListarAtividade($objAtividade, $pagina) {
     	$controladorAcao = new ControladorAcao();
         $perfil = $controladorAcao->retornaPerfilClasseAcao($_SESSION["login"], 'telaListarAtividade');
-        ?>
+	?>
         <script type="text/javascript">
             $('.tablesorter').dataTable({
 				"sPaginationType": "full_numbers"
@@ -196,7 +196,7 @@ class ViewAtividade {
                 fixTableLayout('example');            
             });
         </script>
-<div class="row">
+		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="card">        
 			        <div class="card-header d-flex">
@@ -280,7 +280,7 @@ class ViewAtividade {
 					</div>
 				</div>
 			</div>
-</div>		
+		</div>		
     <?php
     }
 

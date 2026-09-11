@@ -42,6 +42,10 @@ require_once "modulo/daoAtividade.php";
 require_once "controle/controladorAtividade.php";
 require_once "classe/Atividade.php";
 
+require_once "view/viewDividas.php";
+require_once "modulo/daoDividas.php";
+require_once "controle/controladorDividas.php";
+require_once "classe/Dividas.php";
 
 require_once "view/viewFluxo.php";
 require_once "modulo/daoFluxo.php";

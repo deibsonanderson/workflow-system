@@ -18,6 +18,7 @@ abstract class DaoBase {
 	const TABLE_PROCESSO_FLUXO = 'tb_workflow_processo_fluxo';
 	const TABLE_TITULO_FLUXO = 'tb_workflow_titulo_fluxo';
 	const TABLE_USUARIO = 'tb_workflow_usuario';
+	const TABLE_DIVIDAS = 'tb_workflow_dividas';
 	const ASC = 'ASC';
     const DESC = 'DESC';
 	/**

@@ -59,8 +59,7 @@
                                     <ul class="nav flex-column">
 										<li onclick="fncButtonMenu(this)" funcao="telaListarUsuario" controlador="ControladorUsuario" retorno="div_central" secao="usuario" class="nav-item buttonMenu"  ><a href="#" class="nav-link">Usuários</a></li>
 										<li onclick="fncButtonMenu(this)" funcao="telaListarClasse" controlador="ControladorClasse" retorno="div_central" secao="classe" class="nav-item buttonMenu"><a href="#" class="nav-link">Classes</a></li>
-										<li onclick="fncButtonMenu(this)" funcao="telaListarModulo" controlador="ControladorModulo" retorno="div_central" secao="modulo" class="nav-item buttonMenu"><a href="#" class="nav-link">Módulos</a>
-										</li>
+										<li onclick="fncButtonMenu(this)" funcao="telaListarModulo" controlador="ControladorModulo" retorno="div_central" secao="modulo" class="nav-item buttonMenu"><a href="#" class="nav-link">Módulos</a></li>
                                     </ul>
                                 </div>
                             </li>								

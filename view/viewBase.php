@@ -18,6 +18,7 @@ abstract class ViewBase {
 	const TEXT = 'text';
 	const TEXT_AREA = 'textarea';
 	const LISTAGEM = 'listagem';
+	const DATE = 'date';
 	
 	/**
 	 * Operacao responsavel por montar o script batão de informacao de growlUI2
@@ -423,6 +424,8 @@ abstract class ViewBase {
 					if(method_exists(get_class($objeto), $method) ){
 						if($campo->getTipo() == $this::CODIGO){
 							$html .= '<td '.$this->montarTdVisualizar($id, $tela).' >'.str_pad($objeto->$method(), 5, "0", STR_PAD_LEFT).'</td>';
+						}elseif ($campo->getTipo() == $this::DATE){
+							$html .= '<td '.$this->montarTdVisualizar($id, $tela).' >'.recuperaData($objeto->$method()).'</td>';
 						}else{
 							$html .= '<td '.$this->montarTdVisualizar($id, $tela).' >'.$objeto->$method().'</td>';
 						}
