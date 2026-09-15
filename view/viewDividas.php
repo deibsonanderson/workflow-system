@@ -318,7 +318,7 @@ class ViewDividas extends ViewBase {
 											
 												$saldoDevedor = $this->saldoDevedorRestante($periodo, $divida->getValor());
 												$totalGeral += $saldoDevedor;
-												$totalParcelaMes += $divida->getValor();
+												$totalParcelaMes += $this->totalParcelaMesAtual($periodo, $divida->getValor(), $inicioNormalizado, $fimNormalizado);
 												echo $this->montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual, $saldoDevedor);
 											} 
 											?>
@@ -348,16 +348,11 @@ class ViewDividas extends ViewBase {
 		$anoAtual = date('Y');
 		$mesAtual = date('m');
 
-		$totalParcelas = $this->totalParcelas($periodo);
+		$totalParcelas = $this->totalParcelas($periodo, $inicioNormalizado, $fimNormalizado);
 		foreach ($periodo as $ano => $meses) { 
 			foreach ($meses as $mes) {
-				$dataAtual = new DateTime("$ano-$mes-01 00:00:00");
+				$isAtivo = $this->checarMesAnoAtivo($ano, $mes, $inicioNormalizado, $fimNormalizado);
 				
-				$isAtivo = false;
-				if ($dataAtual >= $inicioNormalizado && $dataAtual <= $fimNormalizado) {
-					$isAtivo = true;
-				}
-			
 				if ($isAtivo) { 
 
 					$opacidade = ($mes < $mesAtual && $ano <= $anoAtual)?'opacity:50%;':'';
@@ -396,11 +391,38 @@ class ViewDividas extends ViewBase {
 		return $total;
 	}
 
-	private function totalParcelas($periodo){
+	private function totalParcelaMesAtual($periodo, $valor, $inicioNormalizado, $fimNormalizado){
+		$anoAtual = date('Y');
+		$mesAtual = date('m');
+
 		$total = 0;
 		foreach ($periodo as $ano => $meses) { 
 			foreach ($meses as $mes) {
-				$total++;
+				$isAtivo = $this->checarMesAnoAtivo($ano, $mes, $inicioNormalizado, $fimNormalizado);
+				if($mes == $mesAtual && $ano == $anoAtual && $isAtivo){
+					$total += $valor;
+				}
+			}
+		}
+		return $total;
+	}
+
+	private function checarMesAnoAtivo($ano, $mes, $inicioNormalizado, $fimNormalizado){
+		$dataAtual = new DateTime("$ano-$mes-01 00:00:00");
+		$isAtivo = false;
+		if ($dataAtual >= $inicioNormalizado && $dataAtual <= $fimNormalizado) {
+			$isAtivo = true;
+		}
+		return $isAtivo;
+	}
+
+	private function totalParcelas($periodo, $inicioNormalizado, $fimNormalizado ){
+		$total = 0;
+		foreach ($periodo as $ano => $meses) { 
+			foreach ($meses as $mes) {
+				if($this->checarMesAnoAtivo($ano, $mes, $inicioNormalizado, $fimNormalizado)){
+					$total++;
+				}
 			}
 		}
 		return $total;
