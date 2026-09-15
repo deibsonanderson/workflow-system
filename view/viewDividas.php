@@ -300,6 +300,8 @@ class ViewDividas extends ViewBase {
 											<?php 
 											$cores = ['#e6b8af', '#f4cccc', '#d9ead3', '#cfe2f3', '#fce5cd', '#fff2cc'];
 											$corIndex = 0;
+											$totalGeral = 0;
+											$totalParcelaMes = 0;
 											
 											foreach ($objDividas as $divida){ 
 												$dataIni = new DateTime($divida->getDataInicial());
@@ -314,7 +316,10 @@ class ViewDividas extends ViewBase {
 												$corAtual = $cores[$corIndex % count($cores)];
 												$corIndex++;
 											
-												echo $this->montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual);
+												$saldoDevedor = $this->saldoDevedorRestante($periodo, $divida->getValor());
+												$totalGeral += $saldoDevedor;
+												$totalParcelaMes += $divida->getValor();
+												echo $this->montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual, $saldoDevedor);
 											} 
 											?>
 										</tbody>
@@ -323,17 +328,20 @@ class ViewDividas extends ViewBase {
 							</div>							
 						</div>
 					</div>
+					<div class="card-header d-flex">
+			            <h4 class="card-header-title">Total de Parcela no mês: <?php echo moneyFormat($totalParcelaMes); ?> / Saldo Devedor Geral R$ <?php echo moneyFormat($totalGeral); ?></h4>
+			        </div>
 				</div>
 			</div>
 		</div>	
 	<?php 			
 	}
 
-	private function montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual){
+	private function montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual, $saldoDevedor){
 											
-		$html = '<tr><td class="gantt-td-nome">'.$divida->getDescricao().'
-		<br/>Valor por parcela: '.moneyFormat($divida->getValor()).'
-		<br/>Saldo Devedor R$ '.$this->saldoDevedorRestante($periodo, $divida->getValor()).'
+		$html = '<tr><td class="gantt-td-nome"><b>'.$divida->getDescricao().'</b>
+		<br/>Valor por parcela: <b>'.moneyFormat($divida->getValor()).'</b>
+		<br/>Saldo Devedor R$ <b>'.moneyFormat($saldoDevedor).'</b>
 		</td>';
 		
 		$parcela = 1;
@@ -361,7 +369,7 @@ class ViewDividas extends ViewBase {
 							  </td>';
 
 				} else { 
-					$html .= '<td class="gantt-td-vazio"></td>';
+					$html .= '<td class="gantt-td-vazio" '.$this->marcarDataAtual($mesAtual, $mes).'></td>';
 				}
 			} 
 		}		
@@ -385,11 +393,11 @@ class ViewDividas extends ViewBase {
 				}
 			}
 		}
-		return moneyFormat($total);
+		return $total;
 	}
 
 	private function totalParcelas($periodo){
-		$total = 1;
+		$total = 0;
 		foreach ($periodo as $ano => $meses) { 
 			foreach ($meses as $mes) {
 				$total++;
