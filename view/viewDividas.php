@@ -13,118 +13,6 @@ class ViewDividas extends ViewBase {
     const CONTROLADOR = 'ControladorDividas';
     const TELA_LISTAR = 'telaListarDividas';
 
-	public function telaDiagramaDividas($objDividas, $periodo){
-
-		if($objDividas == null) {
-			$cabecalhoAno = '<th rowspan="2" class="gantt-th-divida text-center">Não ha dados encontrados...</th>';
-		} else {
-			$cabecalhoAno = '<th rowspan="2" class="gantt-th-divida">Dívida</th>';
-			foreach ($periodo as $ano => $meses){ 
-				$cabecalhoAno .= '<th colspan="'.count($meses).'" class="text-center gantt-th-ano">'.$ano.'</th>';
-			}
-
-			$cabecalhoMes = '';
-			foreach ($periodo as $ano => $meses){
-				foreach ($meses as $mes){
-					$cabecalhoMes .= '<th class="text-center gantt-th-mes">'.$mes.'</th>';
-				}
-			}
-		}
-	?>
-		<div class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div class="card">        
-					<div class="card-header d-flex">
-			            <h4 class="card-header-title">Diagramas das dividias Futuras</h4>
-			            <?php
-			            if ($perfil !== 'C') {
-			            ?>            
-			            <div class="toolbar ml-auto">
-			            	<a href="#" onclick="fncButtonCadastro(this)" 
-							funcao="telaDiagramaDividas" 
-							controlador="ControladorDividas" 
-							retorno="div_central" 
-							class="btn btn-primary btn-sm buttonCadastro">Listar Dividas</a>
-			            </div>
-			            <?php
-			            }
-			            ?>            
-			        </div>		
-					<div class="card-body">
-						<div class="rowtable-responsive" >
-							<div id="gantt" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >								
-								<div class="gantt-container">
-									<table class="table table-bordered table-sm gantt-table">
-										<thead class="thead-light">
-											<tr>												
-												<?php echo $cabecalhoAno; ?>
-											</tr>
-											<tr>
-												<?php echo $cabecalhoMes; ?>
-											</tr>
-										</thead>
-										<tbody>
-											<?php 
-											$cores = ['#e6b8af', '#f4cccc', '#d9ead3', '#cfe2f3', '#fce5cd', '#fff2cc'];
-											$corIndex = 0;
-											
-											foreach ($objDividas as $divida){ 
-												$dataIni = new DateTime($divida->getDataInicial());
-												$dataFim = new DateTime($divida->getDataFinal());
-												
-												$inicioNormalizado = clone $dataIni;
-												$inicioNormalizado->modify('first day of this month 00:00:00');
-												
-												$fimNormalizado = clone $dataFim;
-												$fimNormalizado->modify('last day of this month 23:59:59');
-												
-												$corAtual = $cores[$corIndex % count($cores)];
-												$corIndex++;
-											
-												echo $this->montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual);
-											} 
-											?>
-										</tbody>
-									</table>								
-								</div>	
-							</div>							
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>	
-	<?php 			
-	}
-
-	private function montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual){
-											
-		$html = '<tr><td class="gantt-td-nome">'.$divida->getDescricao().'</td>';
-		$parcela = 1;
-		foreach ($periodo as $ano => $meses) { 
-			foreach ($meses as $mes) {
-				$dataAtual = new DateTime("$ano-$mes-01 00:00:00");
-				
-				$isAtivo = false;
-				if ($dataAtual >= $inicioNormalizado && $dataAtual <= $fimNormalizado) {
-					$isAtivo = true;
-				}
-			
-				if ($isAtivo) { 
-					$html .= '<td class="text-center gantt-td-parcela">
-								<div class="gantt-div-parcela" style="background-color: '.$corAtual.';" title="'.$divida->getDescricao().'">
-									'.$parcela++.'
-								</div>
-							  </td>';
-
-				} else { 
-					$html .= '<td class="gantt-td-vazio"></td>';
-				 }
-			} 
-		}		
-		$html .= '</tr>';
-		return $html;	
-	}
-
     public function telaCadastrarDividas($post) {
 		echo $this->montarGrowlUI($post);
     	?>
@@ -356,6 +244,159 @@ class ViewDividas extends ViewBase {
 		</div>
 		<?php
     }
+
+	public function telaDiagramaDividas($objDividas, $periodo){
+		$mesAtual = date('m');
+
+		if($objDividas == null) {
+			$cabecalhoAno = '<th rowspan="2" class="gantt-th-divida text-center">Não ha dados encontrados...</th>';
+		} else {
+			$cabecalhoAno = '<th rowspan="2" class="gantt-th-divida">Dívida</th>';
+			foreach ($periodo as $ano => $meses){ 
+				$cabecalhoAno .= '<th colspan="'.count($meses).'" class="text-center gantt-th-ano">'.$ano.'</th>';
+			}
+
+			$cabecalhoMes = '';
+			foreach ($periodo as $ano => $meses){
+				foreach ($meses as $mes){
+					$cabecalhoMes .= '<th class="text-center gantt-th-mes" '.$this->marcarDataAtual($mesAtual, $mes).'  >'.obterSiglaMes($mes).'</th>';
+				}
+			}
+		}
+	?>
+		<div class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="card">        
+					<div class="card-header d-flex">
+			            <h4 class="card-header-title">Diagramas das dividias Futuras</h4>
+			            <?php
+			            if ($perfil !== 'C') {
+			            ?>            
+			            <div class="toolbar ml-auto">
+			            	<a href="#" onclick="fncButtonCadastro(this)" 
+							funcao="telaListarDividas" 
+							controlador="ControladorDividas" 
+							retorno="div_central" 
+							class="btn btn-primary btn-sm buttonCadastro">Listar Dividas</a>
+			            </div>
+			            <?php
+			            }
+			            ?>            
+			        </div>		
+					<div class="card-body">
+						<div class="rowtable-responsive" >
+							<div id="gantt" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >								
+								<div class="gantt-container">
+									<table class="table table-bordered table-sm gantt-table">
+										<thead class="thead-light">
+											<tr>												
+												<?php echo $cabecalhoAno; ?>
+											</tr>
+											<tr>
+												<?php echo $cabecalhoMes; ?>
+											</tr>
+										</thead>
+										<tbody>
+											<?php 
+											$cores = ['#e6b8af', '#f4cccc', '#d9ead3', '#cfe2f3', '#fce5cd', '#fff2cc'];
+											$corIndex = 0;
+											
+											foreach ($objDividas as $divida){ 
+												$dataIni = new DateTime($divida->getDataInicial());
+												$dataFim = new DateTime($divida->getDataFinal());
+												
+												$inicioNormalizado = clone $dataIni;
+												$inicioNormalizado->modify('first day of this month 00:00:00');
+												
+												$fimNormalizado = clone $dataFim;
+												$fimNormalizado->modify('last day of this month 23:59:59');
+												
+												$corAtual = $cores[$corIndex % count($cores)];
+												$corIndex++;
+											
+												echo $this->montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual);
+											} 
+											?>
+										</tbody>
+									</table>								
+								</div>	
+							</div>							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	<?php 			
+	}
+
+	private function montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual){
+											
+		$html = '<tr><td class="gantt-td-nome">'.$divida->getDescricao().'
+		<br/>Valor por parcela: '.moneyFormat($divida->getValor()).'
+		<br/>Saldo Devedor R$ '.$this->saldoDevedorRestante($periodo, $divida->getValor()).'
+		</td>';
+		
+		$parcela = 1;
+		$anoAtual = date('Y');
+		$mesAtual = date('m');
+
+		$totalParcelas = $this->totalParcelas($periodo);
+		foreach ($periodo as $ano => $meses) { 
+			foreach ($meses as $mes) {
+				$dataAtual = new DateTime("$ano-$mes-01 00:00:00");
+				
+				$isAtivo = false;
+				if ($dataAtual >= $inicioNormalizado && $dataAtual <= $fimNormalizado) {
+					$isAtivo = true;
+				}
+			
+				if ($isAtivo) { 
+
+					$opacidade = ($mes < $mesAtual && $ano <= $anoAtual)?'opacity:50%;':'';
+
+					$html .= '<td class="text-center gantt-td-parcela" '.$this->marcarDataAtual($mesAtual, $mes).'  >
+								<div class="gantt-div-parcela" style="background-color: '.$corAtual.';'.$opacidade.'" title="'.$divida->getDescricao().'">
+									'.$parcela++.' / '.$totalParcelas.'
+								</div>
+							  </td>';
+
+				} else { 
+					$html .= '<td class="gantt-td-vazio"></td>';
+				}
+			} 
+		}		
+		$html .= '</tr>';
+		return $html;	
+	}
+
+	private function marcarDataAtual($atual, $momento){
+		return ($atual == $momento)?'style="background-color: #b4b4b4;"':'';
+	}
+
+	private function saldoDevedorRestante($periodo, $valor){
+		$anoAtual = date('Y');
+		$mesAtual = date('m');
+
+		$total = 0;
+		foreach ($periodo as $ano => $meses) { 
+			foreach ($meses as $mes) {
+				if($mes >= $mesAtual && $ano >= $anoAtual){
+					$total += $valor;
+				}
+			}
+		}
+		return moneyFormat($total);
+	}
+
+	private function totalParcelas($periodo){
+		$total = 1;
+		foreach ($periodo as $ano => $meses) { 
+			foreach ($meses as $mes) {
+				$total++;
+			}
+		}
+		return $total;
+	}	
 
 }
 ?>

@@ -122,7 +122,6 @@ div.dataTables_paginate a {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 10px;
     height: 40px;
     width: 40px;
 }
