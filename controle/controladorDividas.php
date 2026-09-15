@@ -115,5 +115,35 @@ class ControladorDividas {
 			return $e;
 		}
 	}
+
+	public function telaDiagramaDividas($post = null){
+		try {
+
+			$controladorDividas = new ControladorDividas();
+			$objDividas = $controladorDividas->listarDividas();
+
+			if($objDividas != null){
+
+				$iniciais = [];
+				$finais = [];
+				foreach ($objDividas as $divida){
+					$iniciais[] = $divida->getDataInicial();
+					$finais[] = $divida->getDataFinal();
+				}
+
+				$inicial = min($iniciais);
+				$final = max($finais);
+
+				$periodo = obterAnosMesesEntreDatas($inicial,$final);
+			}
+			
+			$viewDividas = new ViewDividas();
+			$retorno = $viewDividas->telaDiagramaDividas($objDividas, $periodo);
+			$viewDividas->__destruct();
+			return $retorno;
+		} catch (Exception $e) {
+			return $e;
+		}
+	}
 }
 ?>

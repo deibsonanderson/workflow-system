@@ -150,4 +150,29 @@ function normalizaTexto($str){
     return $str;
 }
 
+function obterAnosMesesEntreDatas($dataInicio, $dataFinal) {
+    $inicio = new DateTime($dataInicio);
+    $final = new DateTime($dataFinal);
+    
+    $inicio->modify('first day of this month');
+    $final->modify('last day of this month');
+
+    $resultado = [];
+
+    while ($inicio <= $final) {
+        $ano = (int) $inicio->format('Y');
+        $mes = (int) $inicio->format('n'); 
+        
+        if (!isset($resultado[$ano])) {
+            $resultado[$ano] = [];
+        }
+        
+        $resultado[$ano][] = $mes;
+        
+        $inicio->modify('+1 month');
+    }
+
+    return $resultado;
+}
+
 ?>
