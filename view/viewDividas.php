@@ -247,6 +247,7 @@ class ViewDividas extends ViewBase {
 
 	public function telaDiagramaDividas($objDividas, $periodo){
 		$mesAtual = date('m');
+		$anoAtual = date('Y');
 
 		if($objDividas == null) {
 			$cabecalhoAno = '<th rowspan="2" class="gantt-th-divida text-center">Não ha dados encontrados...</th>';
@@ -259,7 +260,8 @@ class ViewDividas extends ViewBase {
 			$cabecalhoMes = '';
 			foreach ($periodo as $ano => $meses){
 				foreach ($meses as $mes){
-					$cabecalhoMes .= '<th class="text-center gantt-th-mes" '.$this->marcarDataAtual($mesAtual, $mes).'  >'.obterSiglaMes($mes).'</th>';
+					$classeDestaque = $this->marcarDataAtual($mesAtual, $mes, $anoAtual, $ano);
+					$cabecalhoMes .= '<th class="text-center gantt-th-mes gantt-col-header '.$classeDestaque.'" data-ano="'.$ano.'" data-mes="'.$mes.'" data-sigla="'.obterSiglaMes($mes).'" title="Clique para recalcular a partir de '.obterSiglaMes($mes).'/'.$ano.'">'.obterSiglaMes($mes).'</th>';
 				}
 			}
 		}
@@ -316,7 +318,7 @@ class ViewDividas extends ViewBase {
 												$corAtual = $cores[$corIndex % count($cores)];
 												$corIndex++;
 											
-												$saldoDevedor = $this->saldoDevedorRestante($periodo, $divida->getValor());
+												$saldoDevedor = $this->saldoDevedorRestante($periodo, $divida->getValor(), $inicioNormalizado, $fimNormalizado);
 												$totalGeral += $saldoDevedor;
 												$totalParcelaMes += $this->totalParcelaMesAtual($periodo, $divida->getValor(), $inicioNormalizado, $fimNormalizado);
 												echo $this->montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual, $saldoDevedor);
@@ -329,61 +331,159 @@ class ViewDividas extends ViewBase {
 						</div>
 					</div>
 					<div class="card-header d-flex">
-			            <h4 class="card-header-title">Total de Parcela no mês: <?php echo moneyFormat($totalParcelaMes); ?> / Saldo Devedor Geral R$ <?php echo moneyFormat($totalGeral); ?></h4>
+			            <h4 class="card-header-title" id="gantt-header-totais">Total de Parcela no mês<span id="gantt-rotulo-mes"> (<?php echo obterSiglaMes((int)$mesAtual).'/'.$anoAtual; ?>)</span>: <span id="gantt-total-mes"><?php echo moneyFormat($totalParcelaMes); ?></span> / Saldo Devedor Geral R$ <span id="gantt-saldo-geral"><?php echo moneyFormat($totalGeral); ?></span></h4>
 			        </div>
 				</div>
 			</div>
 		</div>	
+		<script type="text/javascript">
+		$(document).ready(function() {
+			function formatarMoeda(valor) {
+				var num = parseFloat(valor);
+				if (isNaN(num)) num = 0;
+				var partes = num.toFixed(2).split('.');
+				partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+				return partes.join(',');
+			}
+
+			function recalcularTotaisGantt(ano, mes, sigla) {
+				if (!ano || !mes) return;
+
+				var refAno = parseInt(ano);
+				var refMes = parseInt(mes);
+				var refVal = (refAno * 12) + refMes;
+				var totalMes = 0;
+				var totalGeral = 0;
+
+				// Atualiza destaque visual da coluna selecionada
+				$('#gantt .gantt-col-header, #gantt .gantt-col-cell').removeClass('gantt-col-selecionada');
+				$('#gantt .gantt-col-header[data-ano="' + refAno + '"][data-mes="' + refMes + '"], #gantt .gantt-col-cell[data-ano="' + refAno + '"][data-mes="' + refMes + '"]').addClass('gantt-col-selecionada');
+
+				// Total de parcelas do mês selecionado
+				$('#gantt .gantt-col-cell[data-ano="' + refAno + '"][data-mes="' + refMes + '"]').each(function() {
+					var valor = parseFloat($(this).attr('data-valor')) || 0;
+					totalMes += valor;
+				});
+
+				// Saldo Devedor Geral a partir do mês selecionado em diante
+				$('#gantt .gantt-col-cell').each(function() {
+					var cAno = parseInt($(this).attr('data-ano'));
+					var cMes = parseInt($(this).attr('data-mes'));
+					if ((cAno * 12 + cMes) >= refVal) {
+						var valor = parseFloat($(this).attr('data-valor')) || 0;
+						totalGeral += valor;
+					}
+				});
+
+				// Atualiza o Saldo Devedor individual de cada dívida (na linha) e a Parcela no mês selecionado
+				$('#gantt tbody tr').each(function() {
+					var $tr = $(this);
+
+					// Atualiza a parcela da dívida correspondente ao mês selecionado
+					var $cellSel = $tr.find('.gantt-col-cell[data-ano="' + refAno + '"][data-mes="' + refMes + '"]');
+					var numParcela = $cellSel.attr('data-parcela') || '-';
+					$tr.find('.gantt-parcela-atual').text(numParcela);
+
+					// Saldo Devedor a partir do mês selecionado em diante
+					var rowTotal = 0;
+					$tr.find('.gantt-col-cell').each(function() {
+						var cAno = parseInt($(this).attr('data-ano'));
+						var cMes = parseInt($(this).attr('data-mes'));
+						if ((cAno * 12 + cMes) >= refVal) {
+							var valor = parseFloat($(this).attr('data-valor')) || 0;
+							rowTotal += valor;
+						}
+					});
+					$tr.find('.gantt-saldo-devedor-divida').text(formatarMoeda(rowTotal));
+				});
+
+				// Atualiza os títulos no cabeçalho
+				var rotulo = sigla ? (sigla + '/' + refAno) : (String(refMes).padStart(2, '0') + '/' + refAno);
+				$('#gantt-rotulo-mes').text(' (' + rotulo + ')');
+				$('#gantt-total-mes').text(formatarMoeda(totalMes));
+				$('#gantt-saldo-geral').text(formatarMoeda(totalGeral));
+			}
+
+			// Delegação de evento de clique para os cabeçalhos e células do gantt
+			$('#gantt').off('click', '.gantt-col-header, .gantt-col-cell').on('click', '.gantt-col-header, .gantt-col-cell', function(e) {
+				var $el = $(this);
+				var ano = $el.attr('data-ano');
+				var mes = $el.attr('data-mes');
+				var sigla = $el.attr('data-sigla') || $('#gantt .gantt-col-header[data-ano="' + ano + '"][data-mes="' + mes + '"]').attr('data-sigla');
+
+				if (ano && mes) {
+					recalcularTotaisGantt(ano, mes, sigla);
+				}
+			});
+		});
+		</script>
 	<?php 			
 	}
 
 	private function montarCorpoDiagramaDividas($periodo, $divida, $inicioNormalizado, $fimNormalizado, $corAtual, $saldoDevedor){
-											
-		$html = '<tr><td class="gantt-td-nome"><b>'.$divida->getDescricao().'</b>
-		<br/>Valor por parcela: <b>'.moneyFormat($divida->getValor()).'</b>
-		<br/>Saldo Devedor R$ <b>'.moneyFormat($saldoDevedor).'</b>
-		</td>';
-		
 		$parcela = 1;
-		$anoAtual = date('Y');
-		$mesAtual = date('m');
+		$anoAtual = (int)date('Y');
+		$mesAtual = (int)date('m');
 
 		$totalParcelas = $this->totalParcelas($periodo, $inicioNormalizado, $fimNormalizado);
+		$parcelaAtual = '-';
+		$cellsHtml = '';
+
 		foreach ($periodo as $ano => $meses) { 
 			foreach ($meses as $mes) {
 				$isAtivo = $this->checarMesAnoAtivo($ano, $mes, $inicioNormalizado, $fimNormalizado);
+				$classeDestaque = $this->marcarDataAtual($mesAtual, $mes, $anoAtual, $ano);
 				
 				if ($isAtivo) { 
+					if ((int)$ano == $anoAtual && (int)$mes == $mesAtual) {
+						$parcelaAtual = $parcela;
+					}
 
-					$opacidade = ($mes < $mesAtual && $ano <= $anoAtual)?'opacity:50%;':'';
+					$opacidade = ($ano < $anoAtual || ($ano == $anoAtual && $mes < $mesAtual)) ? 'opacity:50%;' : '';
 
-					$html .= '<td class="text-center gantt-td-parcela" '.$this->marcarDataAtual($mesAtual, $mes).'  >
-								<div class="gantt-div-parcela" style="background-color: '.$corAtual.';'.$opacidade.'" title="'.$divida->getDescricao().'">
-									'.$parcela++.' / '.$totalParcelas.'
+					$cellsHtml .= '<td class="text-center gantt-td-parcela gantt-col-cell '.$classeDestaque.'" data-ano="'.$ano.'" data-mes="'.$mes.'" data-valor="'.$divida->getValor().'" data-parcela="'.$parcela.'">
+								<div class="gantt-div-parcela" style="background-color: '.$corAtual.';'.$opacidade.'" title="'.$divida->getDescricao().' - Parcela '.$parcela.'/'.$totalParcelas.'">
+									'.moneyFormat($divida->getValor()).'
 								</div>
 							  </td>';
+					$parcela++;
 
 				} else { 
-					$html .= '<td class="gantt-td-vazio" '.$this->marcarDataAtual($mesAtual, $mes).'></td>';
+					$cellsHtml .= '<td class="gantt-td-vazio gantt-col-cell '.$classeDestaque.'" data-ano="'.$ano.'" data-mes="'.$mes.'" data-valor="0" data-parcela="-"></td>';
 				}
 			} 
-		}		
+		}
+
+		$html = '<tr><td class="gantt-td-nome"><b>'.$divida->getDescricao().'</b>
+		<br/>Parcela: <b><span class="gantt-parcela-atual">'.$parcelaAtual.'</span>/<span class="gantt-parcela-total">'.$totalParcelas.'</span></b>
+		<br/>Saldo Devedor R$ <b class="gantt-saldo-devedor-divida">'.moneyFormat($saldoDevedor).'</b>
+		</td>';
+		
+		$html .= $cellsHtml;
 		$html .= '</tr>';
 		return $html;	
 	}
 
-	private function marcarDataAtual($atual, $momento){
-		return ($atual == $momento)?'style="background-color: #b4b4b4;"':'';
+	private function marcarDataAtual($atual, $momento, $anoAtual = null, $ano = null){
+		if ($anoAtual !== null && $ano !== null) {
+			return ((int)$atual == (int)$momento && (int)$anoAtual == (int)$ano) ? 'gantt-col-selecionada' : '';
+		}
+		return ((int)$atual == (int)$momento) ? 'gantt-col-selecionada' : '';
 	}
 
-	private function saldoDevedorRestante($periodo, $valor){
-		$anoAtual = date('Y');
-		$mesAtual = date('m');
+	private function saldoDevedorRestante($periodo, $valor, $inicioNormalizado = null, $fimNormalizado = null){
+		$anoAtual = (int)date('Y');
+		$mesAtual = (int)date('m');
 
 		$total = 0;
 		foreach ($periodo as $ano => $meses) { 
 			foreach ($meses as $mes) {
-				if($mes >= $mesAtual && $ano >= $anoAtual){
+				$validaData = ($ano > $anoAtual || ($ano == $anoAtual && (int)$mes >= $mesAtual));
+				$isAtivo = ($inicioNormalizado && $fimNormalizado) 
+					? $this->checarMesAnoAtivo($ano, $mes, $inicioNormalizado, $fimNormalizado) 
+					: true;
+
+				if ($validaData && $isAtivo) {
 					$total += $valor;
 				}
 			}

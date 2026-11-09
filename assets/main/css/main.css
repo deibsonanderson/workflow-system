@@ -94,9 +94,24 @@ div.dataTables_paginate a {
 }
 
 .gantt-th-mes {
-    width: 40px;
+    min-width: 65px;
     background-color: #f8f9fa;
     font-weight: normal;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.gantt-th-mes:hover {
+    background-color: #e2e6ea !important;
+}
+
+.gantt-col-cell {
+    cursor: pointer;
+}
+
+.gantt-col-selecionada {
+    background-color: #b4b4b4 !important;
 }
 
 .gantt-table {
@@ -117,13 +132,14 @@ div.dataTables_paginate a {
 
 .gantt-div-parcela {
     border-radius: 4px;
-    padding: 13px 5px;
+    padding: 12px 4px;
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 11px;
     height: 40px;
-    width: 40px;
+    min-width: 60px;
 }
 
 .gantt-td-vazio {
